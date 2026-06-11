@@ -214,6 +214,50 @@ function ok(cond, label) {
   await mob.locator('.ex[data-ex="3.1"] .btn-primary').click();
   ok(await mob.locator('.ex[data-ex="3.1"] .gap-input.ok').count() === 1, 'mobile: exercise interaction works');
 
+  // ---------- IPA quick-reference drawer ----------
+  console.log('IPA drawer');
+  await page.goto(BASE + 'unit/5');
+  ok(await page.locator('#ipaTab').isVisible(), 'IPA tab visible on a unit page');
+  let offscreen = await page.locator('#ipaDrawer').evaluate(el => el.getBoundingClientRect().left >= window.innerWidth - 2);
+  ok(offscreen, 'drawer starts off-screen');
+  await page.click('#ipaTab');
+  await page.waitForTimeout(300);
+  const drawerText = await page.locator('#ipaDrawer').textContent();
+  ok(/Vowels/.test(drawerText) && /golden rule/i.test(drawerText) && /Consonants/.test(drawerText),
+    'drawer holds the condensed IPA tables + golden rule');
+  ok(await page.locator('#ipaDrawer .say').count() > 10, 'drawer examples have speaker buttons');
+  await page.locator('#ipaBackdrop').click({ position: { x: 20, y: 300 } });
+  await page.waitForTimeout(300);
+  offscreen = await page.locator('#ipaDrawer').evaluate(el => el.getBoundingClientRect().left >= window.innerWidth - 2);
+  ok(offscreen, 'backdrop click closes the drawer');
+  await page.click('#ipaTab');
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(300);
+  offscreen = await page.locator('#ipaDrawer').evaluate(el => el.getBoundingClientRect().left >= window.innerWidth - 2);
+  ok(offscreen, 'Escape closes the drawer');
+  ok(await page.locator('#ipaTab').isVisible(), 'tab still visible after closing');
+  // glossary page too — available on every page
+  await page.goto(BASE + 'glossary');
+  ok(await page.locator('#ipaTab').isVisible(), 'IPA tab visible on the glossary page');
+
+  // mobile drawer at 380px
+  await mob.goto(BASE + 'unit/2');
+  ok(await mob.locator('#ipaTab').isVisible(), 'mobile: IPA tab visible');
+  await mob.click('#ipaTab');
+  await mob.waitForTimeout(300);
+  const fits = await mob.locator('#ipaDrawer').evaluate(el => {
+    const r = el.getBoundingClientRect();
+    return r.left >= 0 && r.right <= window.innerWidth + 1;
+  });
+  ok(fits, 'mobile: drawer fits the 380px viewport');
+  ok((await mob.locator('#ipaDrawer').textContent()).includes('Vowels'), 'mobile: drawer content rendered');
+  await mob.click('#ipaDrawer .ipa-close');
+  await mob.waitForTimeout(300);
+  const mobClosed = await mob.locator('#ipaDrawer').evaluate(el => el.getBoundingClientRect().left >= window.innerWidth - 2);
+  ok(mobClosed, 'mobile: × closes the drawer');
+  const hscroll2 = await mob.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  ok(hscroll2 <= 1, 'mobile: no horizontal scroll with drawer mounted (overflow ' + hscroll2 + 'px)');
+
   // ---------- resource links open in new tabs ----------
   await page.goto(BASE + 'unit/2');
   const extLinks = await page.locator('.res a[href^="http"]').count();

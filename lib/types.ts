@@ -61,6 +61,8 @@ export interface Course {
   counts: { units: number; exercises: number; glossary: number };
   introHtml: string;
   ipaGuideHtml: string;
+  /** Condensed IPA reference (vowel + consonant tables, golden rule, habits note) for the slide-out drawer. */
+  ipaCheatHtml: string;
   examInfoHtml: string;
   units: Unit[];
   glossary: GlossaryRow[];

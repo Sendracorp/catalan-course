@@ -11,10 +11,15 @@ import { cleanSpeak, speak, stopSpeak } from '@/lib/speech';
 export default function SpeechScope({ html, className }: { html: string; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
 
+  // No dependency array: re-check after every commit. React may re-apply the
+  // dangerouslySetInnerHTML content on subtree re-renders (e.g. hydration
+  // click-replay), which silently removes injected buttons — so idempotence
+  // is judged from the actual content, not a flag on the container.
   useEffect(() => {
     const root = ref.current;
-    if (!root || root.dataset.enhanced === '1') return;
-    root.dataset.enhanced = '1';
+    if (!root) return;
+    if (root.querySelector('.say, .dialogue-controls')) return;
+    if (!root.querySelector('td.ca, span.ca, p .ca, .dialogue')) return;   // nothing to enhance
 
     function caTextOf(el: Element): string {
       const clone = el.cloneNode(true) as Element;
@@ -81,7 +86,7 @@ export default function SpeechScope({ html, className }: { html: string; classNa
       });
       stop.addEventListener('click', () => { stopped = true; stopSpeak(); done(); });
     });
-  }, []);
+  });
 
   return <div ref={ref} className={className} dangerouslySetInnerHTML={{ __html: html }} />;
 }

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import Sidebar from '@/components/Sidebar';
 import CharStrip from '@/components/CharStrip';
+import IpaDrawer from '@/components/IpaDrawer';
 import { getCourse } from '@/lib/course';
 
 export const metadata: Metadata = {
@@ -17,6 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Sidebar units={units} />
         <main className="content">{children}</main>
+        <IpaDrawer html={course.ipaCheatHtml} />
         <CharStrip />
       </body>
     </html>

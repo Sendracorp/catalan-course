@@ -250,6 +250,56 @@ ol.q li { margin: 8px 0; }
 .tts-notice a { color: var(--gold); }
 .tts-notice button { background: none; border: 1px solid rgba(255,255,255,.5); color: #fff; border-radius: 5px; cursor: pointer; padding: 2px 9px; }
 
+/* IPA quick-reference drawer */
+.ipa-tab {
+  position: fixed; right: 0; top: 45%; z-index: 80;
+  transform: translateY(-50%);
+  writing-mode: vertical-rl; text-orientation: mixed;
+  background: var(--red); color: var(--gold);
+  border: 2px solid var(--gold); border-right: 0;
+  border-radius: 10px 0 0 10px;
+  font-weight: 800; font-size: .9rem; letter-spacing: 1px;
+  padding: 14px 7px; cursor: pointer;
+  box-shadow: -2px 2px 8px rgba(0,0,0,.25);
+  transition: right .22s ease;
+}
+.ipa-tab:hover { background: var(--red-dark); }
+.ipa-tab.open { right: min(440px, 94vw); }
+.ipa-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.25); z-index: 84; }
+.ipa-backdrop.show { display: block; }
+.ipa-drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 85;
+  width: min(440px, 94vw);
+  background: var(--card); border-left: 3px solid var(--gold);
+  box-shadow: -4px 0 18px rgba(0,0,0,.25);
+  transform: translateX(102%); transition: transform .22s ease;
+  display: flex; flex-direction: column;
+}
+.ipa-drawer.open { transform: translateX(0); }
+.ipa-drawer-head {
+  background: var(--red); color: #fff;
+  padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;
+  font-family: Arial, sans-serif; flex-shrink: 0;
+}
+.ipa-drawer-head a { color: var(--gold); font-size: .85rem; margin-right: 12px; }
+.ipa-close {
+  background: none; border: 1px solid rgba(255,255,255,.5); color: #fff;
+  border-radius: 6px; font-size: 1.05rem; line-height: 1; padding: 2px 9px; cursor: pointer;
+}
+.ipa-close:hover { background: rgba(255,255,255,.15); }
+.ipa-drawer-body { overflow-y: auto; padding: 4px 16px 24px; -webkit-overflow-scrolling: touch; }
+.ipa-drawer-body h3 { margin-top: 1.1em; font-size: 1rem; color: var(--red); }
+.ipa-drawer-body table { font-size: .84rem; }
+.ipa-drawer-body td, .ipa-drawer-body th { padding: 4px 7px; }
+.ipa-drawer-body .tip { font-size: .85rem; }
+.ipa-drawer-body .note { font-size: .82rem; }
+
+@media (max-width: 480px) {
+  .ipa-tab { font-size: .8rem; padding: 11px 6px; top: 55%; }
+  .ipa-tab.open { right: 0; opacity: 0; pointer-events: none; } /* drawer covers the edge; close via × or backdrop */
+  .ipa-drawer-body table { display: block; overflow-x: auto; }
+}
+
 /* character strip */
 .char-strip {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 90;

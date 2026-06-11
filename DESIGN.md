@@ -105,3 +105,20 @@ search/sort, mock listening/matching/timers/attempt history, 380 px viewport
 (hamburger nav, no horizontal scroll), reset.
 Run: `npm run build && npx next start -p 3411 &`, then
 `cd qa && npm i && node test.js http://localhost:3411/`.
+
+## IPA quick-reference drawer
+
+A tab fixed to the right edge of **every** page (`components/IpaDrawer.tsx`,
+mounted in the root layout) slides out a drawer with the condensed IPA
+reference, so the student can check a symbol at any moment without leaving
+the exercise. Content is extracted at build time (`ipaCheatHtml` in
+`lib/course.ts`): everything from the "Vowels" heading to the resources box
+of the IPA guide — both sound tables, the golden-rule tip and the
+pronunciation-habits note — and passed through `SpeechScope`, so every
+example word keeps its 🔊 button. Closes via the ×, the backdrop, or Escape;
+links to the full `/ipa` guide. At ≤480 px the drawer takes 94 vw and its
+tables scroll horizontally. SpeechScope idempotence is judged from the
+actual content (`.say`/`.dialogue-controls` present?) on every commit, not a
+one-shot flag — React can re-apply `dangerouslySetInnerHTML` content on
+subtree re-renders (hydration click-replay), which would otherwise silently
+strip the injected buttons.

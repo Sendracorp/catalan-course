@@ -308,10 +308,24 @@ function parse(): Course {
     p4roleModel: answerKey['Paper 4 role-play skeleton'],
   };
 
+  // condensed IPA cheat sheet for the always-available drawer: everything
+  // from the "Vowels" heading up to (not including) the resources box.
+  const ipaCheatParts: string[] = [];
+  let collecting = false;
+  for (const b of topLevel(ipaGuideDiv.inner)) {
+    if (b.tag === 'h3' && /Vowels/.test(b.inner)) collecting = true;
+    if (b.tag === 'div' && b.cls === 'res') collecting = false;
+    if (collecting) ipaCheatParts.push(b.outer);
+  }
+  const ipaCheatHtml = ipaCheatParts.join('\n');
+  assert(/Vowels/.test(ipaCheatHtml) && /golden rule/.test(ipaCheatHtml) && /Consonants/.test(ipaCheatHtml),
+    'IPA cheat sheet extraction failed');
+
   return {
     counts: { units: 12, exercises: totalEx, glossary: glossary.length },
     introHtml,
     ipaGuideHtml: extBlank(ipaGuideDiv.inner),
+    ipaCheatHtml,
     examInfoHtml: extBlank(examPrepDiv.inner),
     units, glossary, checklist,
     checklistFootHtml: checklistFootM ? checklistFootM[0] : '',
