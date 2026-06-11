@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Catalan from Scratch — A1 Exam Course</title>
+<style>
+  @page {
+    size: A4; margin: 20mm 18mm 18mm 18mm;
+    @bottom-center { content: counter(page); font-family:'DejaVu Sans',sans-serif; font-size:9pt; color:#888; }
+    @top-right { content: "Catalan A1"; font-family:'DejaVu Sans',sans-serif; font-size:8pt; color:#b9b9b9; }
+  }
+  @page cover { margin:0; @bottom-center{content:none;} @top-right{content:none;} }
+  html { font-size: 10.5pt; }
+  body { font-family:'DejaVu Serif',Georgia,serif; color:#20242b; line-height:1.48; }
+  h1,h2,h3,h4,.unit-num,.label,th,.cover-sub,.toc-line,.checklist li b { font-family:'DejaVu Sans',Arial,sans-serif; }
+
+  .cover { page: cover; height:297mm; width:210mm; box-sizing:border-box; background:#8a0b1e; color:#fff; padding:42mm 22mm; position:relative; }
+  .cover h1 { font-size:38pt; line-height:1.05; margin:0 0 6mm 0; font-weight:800; }
+  .cover .cover-sub { font-size:14pt; font-weight:400; opacity:.95; margin-bottom:26mm; }
+  .cover .meta { font-family:'DejaVu Sans',sans-serif; font-size:11pt; line-height:1.8; opacity:.95; }
+  .cover .badge { display:inline-block; border:2px solid #f4c430; color:#f4c430; padding:3mm 7mm; font-family:'DejaVu Sans',sans-serif; font-weight:700; border-radius:3px; letter-spacing:1px; margin-bottom:8mm; }
+  .cover .foot { position:absolute; bottom:20mm; left:22mm; right:22mm; font-family:'DejaVu Sans',sans-serif; font-size:9pt; opacity:.85; border-top:1px solid rgba(255,255,255,.3); padding-top:4mm; }
+
+  h1.page-title { font-size:21pt; color:#8a0b1e; margin:0 0 2mm 0; }
+  h2 { font-size:14.5pt; color:#8a0b1e; border-bottom:2px solid #f4c430; padding-bottom:1.5mm; margin-top:8mm; }
+  h3 { font-size:12pt; color:#2a2f38; margin-top:5mm; margin-bottom:1mm; }
+  h4 { font-size:10.5pt; color:#8a0b1e; margin:4mm 0 1mm 0; text-transform:uppercase; letter-spacing:.5px; }
+  p { margin:2mm 0; }
+
+  .unit { page-break-before:always; }
+  .unit-head { background:#8a0b1e; color:#fff; padding:4.5mm 6mm; border-radius:4px; margin-bottom:4mm; }
+  .unit-head .unit-num { font-size:9pt; letter-spacing:2px; text-transform:uppercase; opacity:.85; }
+  .unit-head h2 { color:#fff; border:0; margin:1mm 0 0 0; font-size:17pt; }
+  .can-do { background:#fff7e0; border-left:4px solid #f4c430; padding:2.5mm 5mm; margin:3mm 0; font-family:'DejaVu Sans',sans-serif; font-size:9.7pt; }
+  .can-do b { color:#8a0b1e; }
+
+  table { width:100%; border-collapse:collapse; margin:2.5mm 0; font-size:9.6pt; }
+  th { background:#f3e6e8; color:#8a0b1e; text-align:left; padding:1.8mm 2.5mm; border:1px solid #e0c9cd; font-size:9.2pt; }
+  td { padding:1.6mm 2.5mm; border:1px solid #e6e6e6; vertical-align:top; }
+  tr:nth-child(even) td { background:#faf7f2; }
+  .ca { font-weight:600; color:#1a1d23; }
+  .pron { color:#5b8c5b; font-family:'DejaVu Sans',sans-serif; font-size:9.2pt; }
+  .en { color:#555; }
+
+  .dialogue { background:#f6f8fb; border:1px solid #dde4ee; border-radius:4px; padding:3mm 5mm; margin:3mm 0; font-size:10pt; }
+  .dialogue p { margin:1.1mm 0; } .dialogue .spk { font-weight:700; color:#8a0b1e; font-family:'DejaVu Sans',sans-serif; }
+  .gloss { color:#777; font-style:italic; font-size:9.2pt; }
+  .gloss .pron { font-style:normal; }
+
+  .res { background:#eef7ee; border:1px solid #cfe3cf; border-left:4px solid #4a8f4a; border-radius:4px; padding:2.5mm 5mm; margin:3.5mm 0; font-family:'DejaVu Sans',sans-serif; font-size:9.3pt; line-height:1.6; }
+  .res .rh { color:#2f6b2f; font-weight:700; text-transform:uppercase; font-size:8.4pt; letter-spacing:.6px; display:block; margin-bottom:1mm; }
+  .res b { color:#2f6b2f; }
+  a { color:#1b6ca8; text-decoration:none; word-break:break-all; }
+
+  .ex { margin:3mm 0 2mm 0; }
+  .ex .label { display:inline-block; background:#8a0b1e; color:#fff; font-size:8.4pt; padding:.9mm 2.8mm; border-radius:3px; font-weight:700; letter-spacing:.5px; }
+  .ex h4 { display:inline; margin-left:2mm; color:#2a2f38; text-transform:none; letter-spacing:0; font-size:10pt; }
+  ol.q { margin:1.8mm 0 1.8mm 6mm; padding:0; } ol.q li { margin:1.2mm 0; }
+  .fill { color:#8a0b1e; letter-spacing:1px; }
+  .note { font-size:9.2pt; color:#666; font-style:italic; }
+  .tip { background:#f3f1fb; border-left:4px solid #6b5bd1; padding:2.5mm 5mm; margin:3mm 0; font-size:9.7pt; }
+  .tip b { color:#6b5bd1; font-family:'DejaVu Sans',sans-serif; }
+
+  .toc-line { display:flex; justify-content:space-between; font-family:'DejaVu Sans',sans-serif; font-size:10pt; padding:1.5mm 0; border-bottom:1px dotted #ccc; }
+  .toc-line .t { color:#222; } .toc-line .u { color:#8a0b1e; font-weight:700; width:24mm; }
+
+  .checklist { list-style:none; padding-left:0; }
+  .checklist li { padding:1.7mm 0 1.7mm 9mm; position:relative; border-bottom:1px solid #eee; font-size:10pt; }
+  .checklist li:before { content:"\2610"; position:absolute; left:0; font-size:12pt; color:#8a0b1e; }
+
+  .answers { page-break-before:always; }
+  .answers h3 { color:#8a0b1e; border-bottom:1px solid #eedcdf; padding-bottom:1mm; }
+  .ans-block { font-size:9.6pt; margin-bottom:2mm; }
+  .ans-block .ak { font-family:'DejaVu Sans',sans-serif; font-weight:700; color:#8a0b1e; }
+  small.cite { color:#999; font-size:8.4pt; }
+
+  .exam { background:#fdf3f4; border:1px solid #ecc8cd; border-radius:4px; padding:3mm 5mm; margin:3mm 0; }
+  .exam h4 { margin-top:1mm; }
+  .glos td { font-size:9pt; padding:1.2mm 2.2mm; }
+  .glos td:first-child { width:30%; font-weight:600; }
+  .glos td:nth-child(2) { width:30%; color:#5b8c5b; font-family:'DejaVu Sans',sans-serif; }
+
+  /* ---- page-break control ---- */
+  h1.page-title, h2, h3, h4 { page-break-after: avoid; }
+  .unit-head, .can-do { page-break-after: avoid; page-break-inside: avoid; }
+  .ex, .res, .tip, .dialogue, .ans-block { page-break-inside: avoid; }
+  table { page-break-inside: auto; }
+  tr { page-break-inside: avoid; }
+  thead { display: table-header-group; }
+  p { orphans: 3; widows: 3; }
+  .exam h4 { page-break-after: avoid; }
+  ol.q li { page-break-inside: avoid; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="badge">CEFR · LEVEL A1 · EXAM PREPARATION</div>
+  <h1>Catalan<br>from Scratch</h1>
+  <div class="cover-sub">A complete beginner's course in Central Catalan for English-speaking adults — built to pass the official A1 exam.</div>
+  <div class="meta">
+    12 progressive units · cumulative vocabulary (300+ words)<br>
+    Full IPA pronunciation on every word, phrase and dialogue<br>
+    80+ exercises · full mock A1 exam · complete glossary<br>
+    Verified clickable links · answer key &amp; model answers
+  </div>
+  <div class="foot">
+    Goal: pass the Certificat de nivell inicial de català (A1).<br>
+    Central (standard) Catalan · links verified June 2026.
+  </div>
+</div>
+
+<!-- INTRO -->
+<h1 class="page-title">How to use this course</h1>
+<p>This workbook takes you from zero to <b>CEFR A1</b> in Central Catalan, with one explicit goal: <b>passing the official A1 exam</b> (the <i>Certificat de nivell inicial de català</i>). Every unit builds towards the four exam skills — listening, reading, writing and speaking — and the book ends with a full mock exam, model answers and examiner tips.</p>
+
+<h3>The rhythm of a unit</h3>
+<p>One unit = one focused session (60–90 min). Read the theory, learn the <b>New vocabulary</b> (every unit adds 20–25 new words and 5–8 new phrases that are never repeated, so your stock grows to 300+ by the end), work the dialogue aloud, then do all the exercises in writing before checking the answer key. Each unit ends with a <b>Resources</b> box: one verified listening link and one online practice link.</p>
+
+<h3>Pronunciation: this book uses the IPA</h3>
+<p>Every Catalan word, phrase, example and dialogue line in this book carries a transcription in the <b>International Phonetic Alphabet (IPA)</b>, between slashes, e.g. <span class="ca">llibre</span> <span class="pron">/ˈʎiβɾə/</span>. The IPA is the international standard for writing sounds; learn the symbols once (next section) and you can pronounce any word in this book — and in any dictionary — without guesswork. The stress mark <span class="pron">ˈ</span> goes <i>before</i> the stressed syllable.</p>
+
+<h3>Finding &amp; using the links</h3>
+<div class="res">
+  <span class="rh">How to use the links</span>
+  • Every link is <b>clickable</b> in a PDF reader, and the address is printed so it works on paper too.<br>
+  • <b>On a LingoHut lesson page</b>, the audio word-list comes with activities — look for <i>Listening game</i>, <i>Matching game</i>, <i>Flashcards</i>, <i>Dictation</i> — and click one to practise.<br>
+  • <b>No account needed</b> for LingoHut, Loecsen, Intercat, verbs.cat, Talkpal or Forvo. <b>Parla.cat</b> (A2+) asks for free registration.<br>
+  • <b>If a link stops working</b>, open the site's index below and search the topic title shown next to the link — titles stay stable even when addresses change.<br>
+  • <b>Index pages:</b> LingoHut → <a href="https://www.lingohut.com/en/l114/learn-catalan">lingohut.com/en/l114/learn-catalan</a> · Loecsen → <a href="https://www.loecsen.com/en/learn-catalan">loecsen.com/en/learn-catalan</a> · Easy Catalan (subtitled videos) → <a href="https://www.youtube.com/c/EasyCatalan">youtube.com/c/EasyCatalan</a> · Intercat resources → <a href="https://www.intercat.cat/en/resources">intercat.cat/en/resources</a> · verbs.cat → <a href="https://www.verbs.cat/en/">verbs.cat</a> · Talkpal → <a href="https://talkpal.ai/catalan-grammar-exercises/">talkpal.ai/catalan-grammar-exercises</a> · Generalitat → <a href="https://llengua.gencat.cat/en/serveis/aprendre_catala/a-catalunya/">llengua.gencat.cat</a>
+</div>
+
+<!-- IPA GUIDE -->
+<div class="unit">
+<h1 class="page-title">Reading the IPA — your pronunciation key</h1>
+<p>These are <b>all</b> the IPA symbols used in this book, with the closest English approximation. Central Catalan has a small, regular sound system: master this page and the transcriptions do the rest.</p>
+
+<h3>Vowels</h3>
+<table>
+  <thead><tr><th>IPA</th><th>Sounds like</th><th>Example</th></tr></thead>
+  <tr><td class="pron">a</td><td>"a" in <i>father</i> (short)</td><td class="ca">casa <span class="pron">/ˈkazə/</span> — first a</td></tr>
+  <tr><td class="pron">ə</td><td>"a" in <i>sofa</i> (the schwa — very common!)</td><td class="ca">casa <span class="pron">/ˈkazə/</span> — second a</td></tr>
+  <tr><td class="pron">ɛ</td><td>"e" in <i>bed</i> (open)</td><td class="ca">set <span class="pron">/ˈsɛt/</span></td></tr>
+  <tr><td class="pron">e</td><td>"ay" in <i>say</i>, but short, no glide</td><td class="ca">més <span class="pron">/ˈmes/</span></td></tr>
+  <tr><td class="pron">i</td><td>"ee" in <i>see</i></td><td class="ca">sis <span class="pron">/ˈsis/</span></td></tr>
+  <tr><td class="pron">ɔ</td><td>"o" in British <i>hot</i> (open)</td><td class="ca">bo <span class="pron">/ˈbɔ/</span></td></tr>
+  <tr><td class="pron">o</td><td>"o" in <i>note</i>, short, no glide</td><td class="ca">tot <span class="pron">/ˈtot/</span></td></tr>
+  <tr><td class="pron">u</td><td>"oo" in <i>food</i></td><td class="ca">tu <span class="pron">/ˈtu/</span></td></tr>
+  <tr><td class="pron">w, j</td><td>glides: "w" in <i>cow</i> /aw/, "y" in <i>boy</i> /ɔj/</td><td class="ca">nou <span class="pron">/ˈnɔw/</span>, mai <span class="pron">/ˈmaj/</span></td></tr>
+</table>
+<div class="tip"><b>The golden rule of Central Catalan:</b> unstressed <i>a</i> and <i>e</i> are pronounced <span class="pron">/ə/</span>, and unstressed <i>o</i> is pronounced <span class="pron">/u/</span>. That's why <i>Barcelona</i> is <span class="pron">/bəɾsəˈlonə/</span> and <i>color</i> is <span class="pron">/kuˈlo/</span>.</div>
+
+<h3>Consonants that differ from English</h3>
+<table>
+  <thead><tr><th>IPA</th><th>Sounds like</th><th>Example</th></tr></thead>
+  <tr><td class="pron">ʎ</td><td>"lli" in <i>million</i> (spelt ll)</td><td class="ca">lluny <span class="pron">/ˈʎuɲ/</span></td></tr>
+  <tr><td class="pron">ɲ</td><td>"ni" in <i>onion</i> (spelt ny)</td><td class="ca">any <span class="pron">/ˈaɲ/</span></td></tr>
+  <tr><td class="pron">ʃ</td><td>"sh" in <i>shop</i> (spelt x)</td><td class="ca">peix <span class="pron">/ˈpeʃ/</span></td></tr>
+  <tr><td class="pron">ʒ</td><td>"s" in <i>measure</i> (spelt j, g+e/i)</td><td class="ca">jo <span class="pron">/ˈʒɔ/</span></td></tr>
+  <tr><td class="pron">tʃ</td><td>"ch" in <i>church</i> (spelt tx, final -ig)</td><td class="ca">cotxe <span class="pron">/ˈkɔtʃə/</span>, maig <span class="pron">/ˈmatʃ/</span></td></tr>
+  <tr><td class="pron">dʒ</td><td>"j" in <i>jam</i> (spelt tj/tg)</td><td class="ca">formatge <span class="pron">/fuɾˈmadʒə/</span></td></tr>
+  <tr><td class="pron">β</td><td>a soft "b" with lips barely touching</td><td class="ca">avi <span class="pron">/ˈaβi/</span></td></tr>
+  <tr><td class="pron">ð</td><td>"th" in <i>this</i>, soft</td><td class="ca">cada <span class="pron">/ˈkaðə/</span></td></tr>
+  <tr><td class="pron">ɣ</td><td>a soft "g", throat relaxed</td><td class="ca">amiga <span class="pron">/əˈmiɣə/</span></td></tr>
+  <tr><td class="pron">ɾ</td><td>single tap, like American "tt" in <i>butter</i></td><td class="ca">cara <span class="pron">/ˈkaɾə/</span></td></tr>
+  <tr><td class="pron">r</td><td>rolled/trilled r (rr, or word-initial r)</td><td class="ca">carrer <span class="pron">/kəˈre/</span></td></tr>
+  <tr><td class="pron">ŋ</td><td>"ng" in <i>sing</i></td><td class="ca">cinc <span class="pron">/ˈsiŋk/</span></td></tr>
+  <tr><td class="pron">ˈ</td><td>stress mark — the NEXT syllable is stressed</td><td class="ca">català <span class="pron">/kətəˈla/</span></td></tr>
+</table>
+<p class="note">Three habits worth knowing: written <b>v</b> sounds like b <span class="pron">(/b/ or /β/)</span>; <b>b/d/g between vowels</b> soften to <span class="pron">/β ð ɣ/</span>; and the <b>final -r of infinitives is silent</b>: parlar <span class="pron">/pəɾˈla/</span>, dormir <span class="pron">/duɾˈmi/</span>.</p>
+
+<div class="res">
+  <span class="rh">Learn the IPA itself (verified links)</span>
+  • <b>Wikipedia "Help:IPA/Catalan"</b> — the exact symbol key for Catalan, with English example words → <a href="https://en.wikipedia.org/wiki/Help:IPA/Catalan">en.wikipedia.org/wiki/Help:IPA/Catalan</a><br>
+  • <b>Interactive IPA charts with audio</b> — click any symbol to hear it (find the Catalan sounds using the table below) → <a href="https://jbdowse.com/ipa/">jbdowse.com/ipa</a><br>
+  • <b>Full interactive IPA chart with sounds</b> (all languages) → <a href="https://www.internationalphoneticalphabet.org/ipa-sounds/ipa-chart-with-sounds/">internationalphoneticalphabet.org/ipa-sounds/ipa-chart-with-sounds</a><br>
+  • <b>What the IPA is</b> (background) → <a href="https://en.wikipedia.org/wiki/International_Phonetic_Alphabet">en.wikipedia.org/wiki/International_Phonetic_Alphabet</a><br>
+  • <b>Hear real words</b>: Forvo's Catalan dictionary, ~125,000 native recordings → <a href="https://forvo.com/languages/ca/">forvo.com/languages/ca</a>
+</div>
+</div>
+
+<!-- TOC -->
+<h1 class="page-title" style="page-break-before:always;">Contents</h1>
+<div class="toc-line"><span class="u">Guide</span><span class="t">Reading the IPA — your pronunciation key</span></div>
+<div class="toc-line"><span class="u">Unit 1</span><span class="t">Sounds &amp; spelling through the IPA</span></div>
+<div class="toc-line"><span class="u">Unit 2</span><span class="t">Greetings, introductions, <i>ser</i> &amp; <i>dir-se</i></span></div>
+<div class="toc-line"><span class="u">Unit 3</span><span class="t">Pronouns, <i>tenir</i> &amp; <i>hi ha</i>, numbers, articles</span></div>
+<div class="toc-line"><span class="u">Unit 4</span><span class="t">Nouns &amp; adjectives; colours and the home</span></div>
+<div class="toc-line"><span class="u">Unit 5</span><span class="t">The present tense; everyday verbs</span></div>
+<div class="toc-line"><span class="u">Unit 6</span><span class="t">Family, jobs, describing people, possessives</span></div>
+<div class="toc-line"><span class="u">Unit 7</span><span class="t">Time, days, meals, daily routine, reflexives</span></div>
+<div class="toc-line"><span class="u">Unit 8</span><span class="t">Food, shopping, prices, the pronoun <i>en</i></span></div>
+<div class="toc-line"><span class="u">Unit 9</span><span class="t">The city, directions, place prepositions</span></div>
+<div class="toc-line"><span class="u">Unit 10</span><span class="t"><i>Agradar</i>, free time, seasons &amp; weather</span></div>
+<div class="toc-line"><span class="u">Unit 11</span><span class="t">The recent past: <i>vaig</i> + infinitive</span></div>
+<div class="toc-line"><span class="u">Unit 12</span><span class="t">Consolidation &amp; exam language</span></div>
+<div class="toc-line"><span class="u">Exam</span><span class="t">The official A1 exam: what it is &amp; how to register</span></div>
+<div class="toc-line"><span class="u">Exam</span><span class="t">Full mock A1 exam (4 papers) + examiner tips</span></div>
+<div class="toc-line"><span class="u">Appendix</span><span class="t">Glossary: every word with IPA &amp; translation</span></div>
+<div class="toc-line"><span class="u">Appendix</span><span class="t">Answer key &amp; model answers · A1 checklist</span></div>
+
+<!-- ===== UNIT 1 ===== -->
+<div class="unit">
+  <div class="unit-head"><div class="unit-num">Unit 1</div><h2>Sounds &amp; Spelling through the IPA</h2></div>
+  <div class="can-do"><b>By the end you can:</b> read any Catalan word aloud from its spelling or its IPA — the foundation for the oral exam.</div>
+
+  <h3>From spelling to sound</h3>
+  <table>
+    <thead><tr><th>Spelling</th><th>IPA</th><th>Example</th></tr></thead>
+    <tr><td class="ca">ç ; c+e,i</td><td class="pron">/s/</td><td class="ca">plaça <span class="pron">/ˈplasə/</span> <span class="en">square</span>; cinc <span class="pron">/ˈsiŋk/</span> <span class="en">five</span></td></tr>
+    <tr><td class="ca">ny</td><td class="pron">/ɲ/</td><td class="ca">any <span class="pron">/ˈaɲ/</span> <span class="en">year</span></td></tr>
+    <tr><td class="ca">ll</td><td class="pron">/ʎ/</td><td class="ca">llibre <span class="pron">/ˈʎiβɾə/</span> <span class="en">book</span></td></tr>
+    <tr><td class="ca">l·l</td><td class="pron">/l/</td><td class="ca">paral·lel <span class="pron">/pəɾəˈlɛl/</span> <span class="en">parallel</span></td></tr>
+    <tr><td class="ca">x</td><td class="pron">/ʃ/</td><td class="ca">xocolata <span class="pron">/ʃukuˈlatə/</span> <span class="en">chocolate</span></td></tr>
+    <tr><td class="ca">tx ; -ig final</td><td class="pron">/tʃ/</td><td class="ca">cotxe <span class="pron">/ˈkɔtʃə/</span> <span class="en">car</span>; maig <span class="pron">/ˈmatʃ/</span> <span class="en">May</span></td></tr>
+    <tr><td class="ca">j ; g+e,i</td><td class="pron">/ʒ/</td><td class="ca">jo <span class="pron">/ˈʒɔ/</span> <span class="en">I</span>; gent <span class="pron">/ˈʒen/</span> <span class="en">people</span></td></tr>
+    <tr><td class="ca">h</td><td class="pron">(silent)</td><td class="ca">hola <span class="pron">/ˈɔlə/</span> <span class="en">hello</span></td></tr>
+    <tr><td class="ca">v</td><td class="pron">/b, β/</td><td class="ca">vi <span class="pron">/ˈbi/</span> <span class="en">wine</span></td></tr>
+    <tr><td class="ca">unstressed a, e</td><td class="pron">/ə/</td><td class="ca">setembre <span class="pron">/səˈtɛmbɾə/</span> <span class="en">September</span></td></tr>
+    <tr><td class="ca">unstressed o</td><td class="pron">/u/</td><td class="ca">color <span class="pron">/kuˈlo/</span> <span class="en">colour</span></td></tr>
+  </table>
+
+  <h3>Accents &amp; stress</h3>
+  <p>A written accent marks the stressed syllable: grave è/ò = open <span class="pron">/ɛ ɔ/</span> (cafè <span class="pron">/kəˈfɛ/</span> <span class="en">coffee</span>), acute é/ó = closed <span class="pron">/e o/</span> (camió <span class="pron">/kəmiˈo/</span> <span class="en">lorry</span>). No accent? Words ending in a vowel, -s or -en are stressed on the second-to-last syllable; others on the last: hospital <span class="pron">/uspiˈtal/</span> <span class="en">hospital</span>, taula <span class="pron">/ˈtawlə/</span> <span class="en">table</span>.</p>
+
+  <h3>New vocabulary — first survival words</h3>
+  <table>
+    <thead><tr><th>Catalan</th><th>IPA</th><th>English</th></tr></thead>
+    <tr><td class="ca">sí / no</td><td class="pron">/ˈsi/ /ˈno/</td><td class="en">yes / no</td></tr>
+    <tr><td class="ca">i / o</td><td class="pron">/i/ /o/</td><td class="en">and / or</td></tr>
+    <tr><td class="ca">què?</td><td class="pron">/ˈkɛ/</td><td class="en">what?</td></tr>
+    <tr><td class="ca">qui?</td><td class="pron">/ˈki/</td><td class="en">who?</td></tr>
+    <tr><td class="ca">on?</td><td class="pron">/ˈon/</td><td class="en">where?</td></tr>
+    <tr><td class="ca">quan?</td><td class="pron">/ˈkwan/</td><td class="en">when?</td></tr>
+    <tr><td class="ca">com?</td><td class="pron">/ˈkom/</td><td class="en">how?</td></tr>
+    <tr><td class="ca">quant?</td><td class="pron">/ˈkwan(t)/</td><td class="en">how much?</td></tr>
+    <tr><td class="ca">per què?</td><td class="pron">/pəɾ ˈkɛ/</td><td class="en">why?</td></tr>
+    <tr><td class="ca">perquè</td><td class="pron">/pəɾˈkɛ/</td><td class="en">because</td></tr>
+    <tr><td class="ca">aquí / allà</td><td class="pron">/əˈki/ /əˈʎa/</td><td class="en">here / there</td></tr>
+    <tr><td class="ca">això / allò</td><td class="pron">/əˈʃɔ/ /əˈʎɔ/</td><td class="en">this / that (thing)</td></tr>
+    <tr><td class="ca">molt / poc</td><td class="pron">/ˈmol/ /ˈpɔk/</td><td class="en">a lot / little</td></tr>
+    <tr><td class="ca">bé / malament</td><td class="pron">/ˈbe/ /mələˈmen/</td><td class="en">well / badly</td></tr>
+    <tr><td class="ca">la paraula</td><td class="pron">/pəˈɾawlə/</td><td class="en">word</td></tr>
+    <tr><td class="ca">la frase</td><td class="pron">/ˈfɾazə/</td><td class="en">sentence, phrase</td></tr>
+    <tr><td class="ca">la pregunta</td><td class="pron">/pɾəˈɣuntə/</td><td class="en">question</td></tr>
+    <tr><td class="ca">la resposta</td><td class="pron">/rəsˈpɔstə/</td><td class="en">answer</td></tr>
+    <tr><td class="ca">l'exemple</td><td class="pron">/əɡˈzemplə/</td><td class="en">example</td></tr>
+    <tr><td class="ca">el so</td><td class="pron">/ˈsɔ/</td><td class="en">sound</td></tr>
+  </table>
+  <h4>New phrases</h4>
+  <table>
+    <tr><td class="ca">Com es diu… en català?</td><td class="pron">/ˌkom əz ˈðiw ən kətəˈla/</td><td class="en">How do you say… in Catalan?</td></tr>
+    <tr><td class="ca">Què vol dir…?</td><td class="pron">/ˌkɛ βɔl ˈdi/</td><td class="en">What does… mean?</td></tr>
+    <tr><td class="ca">Pots repetir, si us plau?</td><td class="pron">/ˌpɔdz rəpəˈti si us ˈplaw/</td><td class="en">Can you repeat, please?</td></tr>
+    <tr><td class="ca">Més a poc a poc, si us plau.</td><td class="pron">/ˌmez ə ˌpɔk ə ˈpɔk/</td><td class="en">More slowly, please.</td></tr>
+    <tr><td class="ca">No ho entenc.</td><td class="pron">/ˌno w ənˈteŋ/</td><td class="en">I don't understand.</td></tr>
+    <tr><td class="ca">Ho sento.</td><td class="pron">/u ˈsentu/</td><td class="en">I'm sorry.</td></tr>
+  </table>
+  <p class="note">These classroom-survival phrases are exam gold: examiners expect A1 candidates to ask for repetition in Catalan rather than switching to English.</p>
+
+  <div class="res">
+    <span class="rh">Resources for Unit 1</span>
+    <b>Listen:</b> interactive IPA charts — click any symbol from this unit's tables to hear it → <a href="https://jbdowse.com/ipa/">jbdowse.com/ipa</a> · Loecsen first-contact phrases with audio → <a href="https://www.loecsen.com/en/learn-catalan">loecsen.com/en/learn-catalan</a><br>
+    <b>Practise online:</b> look up each new word on Forvo and shadow the native speaker → <a href="https://forvo.com/languages/ca/">forvo.com/languages/ca</a>
+  </div>
+
+  <div class="ex"><span class="label">EX 1.1</span><h4>Transcribe into IPA (use the tables above).</h4>
+  <ol class="q"><li>plaça</li><li>any</li><li>jo</li><li>cotxe</li><li>color</li></ol></div>
+
+  <div class="ex"><span class="label">EX 1.2</span><h4>Read the IPA — which Catalan word is it?</h4>
+  <ol class="q"><li><span class="pron">/ˈʎiβɾə/</span></li><li><span class="pron">/ˈɔlə/</span></li><li><span class="pron">/kəˈfɛ/</span></li><li><span class="pron">/ˈmatʃ/</span></li></ol></div>
+
+  <div class="ex"><span class="label">EX 1.3</span><h4>Mark the stressed syllable (write the word with CAPITALS).</h4>
+  <ol class="q"><li>hospital</li><li>taula</li><li>català</li><li>setembre</li></ol></div>
+
+  <div class="ex"><span class="label">EX 1.4</span><h4>True or false?</h4>
+  <ol class="q"><li>The symbol /ə/ is the most common vowel in Central Catalan.</li><li>Written v is pronounced /v/ as in English.</li><li>Final -r of infinitives is silent.</li><li>/ʃ/ is the sound of Catalan x.</li></ol></div>
+
+  <div class="ex"><span class="label">EX 1.5</span><h4>Match the question word to its meaning.</h4>
+  <ol class="q"><li>on &nbsp;(a) when</li><li>quan &nbsp;(b) who</li><li>qui &nbsp;(c) where</li><li>quant &nbsp;(d) how much</li></ol></div>
+
+  <div class="ex"><span class="label">EX 1.6</span><h4>What do you say when… (use a new phrase)</h4>
+  <ol class="q"><li>…you didn't understand?</li><li>…you want something repeated?</li><li>…you want to know what a word means?</li></ol></div>
+</div>
+
+<!-- ===== UNIT 2 ===== -->
+<div class="unit">
+  <div class="unit-head"><div class="unit-num">Unit 2</div><h2>Greetings &amp; Introductions</h2></div>
+  <div class="can-do"><b>By the end you can:</b> greet, introduce yourself, say where you're from, and be polite — the exact script of the oral exam's first minute.</div>
+
+  <h3>The verb <i>ser</i> (to be)</h3>
+  <table>
+    <thead><tr><th>Person</th><th>Form</th><th>IPA</th><th>Example</th></tr></thead>
+    <tr><td>jo</td><td class="ca">soc</td><td class="pron">/ˈsɔk/</td><td class="ca">Soc anglès. <span class="pron">/ˌsɔk əŋˈɡlɛs/</span> <span class="en">I'm English.</span></td></tr>
+    <tr><td>tu</td><td class="ca">ets</td><td class="pron">/ˈets/</td><td class="ca">Ets de Londres? <span class="pron">/ˌedz ðə ˈlondɾəs/</span> <span class="en">Are you from London?</span></td></tr>
+    <tr><td>ell/ella/vostè</td><td class="ca">és</td><td class="pron">/ˈes/</td><td class="ca">És catalana. <span class="pron">/ˌes kətəˈlanə/</span> <span class="en">She's Catalan.</span></td></tr>
+    <tr><td>nosaltres</td><td class="ca">som</td><td class="pron">/ˈsom/</td><td class="ca">Som amics. <span class="pron">/ˌsom əˈmiks/</span> <span class="en">We're friends.</span></td></tr>
+    <tr><td>vosaltres</td><td class="ca">sou</td><td class="pron">/ˈsɔw/</td><td class="ca">Sou estudiants? <span class="pron">/ˌsɔw əstuðiˈans/</span> <span class="en">Are you students?</span></td></tr>
+    <tr><td>ells/elles</td><td class="ca">són</td><td class="pron">/ˈson/</td><td class="ca">Són de Girona. <span class="pron">/ˌson də ʒiˈɾonə/</span> <span class="en">They're from Girona.</span></td></tr>
+  </table>
+
+  <h3>Your name: <i>dir-se</i></h3>
+  <p><span class="ca">Em dic Anna.</span> <span class="pron">/əm ˈdik ˈannə/</span> <span class="en">My name is Anna.</span> · <span class="ca">Com et dius?</span> <span class="pron">/ˌkom əd ˈdiws/</span> <span class="en">What's your name? (informal)</span> · <span class="ca">Com es diu (vostè)?</span> <span class="pron">/ˌkom əz ˈðiw/</span> <span class="en">(formal)</span> · <span class="ca">Es diu Marc.</span> <span class="pron">/əz ˈðiw ˈmaɾk/</span> <span class="en">His name is Marc.</span></p>
+
+  <div class="tip"><b>Formal vs informal.</b> Use <i>tu</i> with peers; use <i>vostè</i> + the ell/ella verb form for respect. In the oral exam, address the examiner with <i>vostè</i> unless invited otherwise — it shows register awareness.</div>
+
+  <h3>New vocabulary</h3>
+  <table>
+    <thead><tr><th>Catalan</th><th>IPA</th><th>English</th></tr></thead>
+    <tr><td class="ca">hola</td><td class="pron">/ˈɔlə/</td><td class="en">hello</td></tr>
+    <tr><td class="ca">bon dia</td><td class="pron">/ˌbɔn ˈdiə/</td><td class="en">good morning</td></tr>
+    <tr><td class="ca">bona tarda</td><td class="pron">/ˌbɔnə ˈtaɾðə/</td><td class="en">good afternoon</td></tr>
+    <tr><td class="ca">bona nit</td><td class="pron">/ˌbɔnə ˈnit/</td><td class="en">good evening/night</td></tr>
+    <tr><td class="ca">adeu</td><td class="pron">/əˈðew/</td><td class="en">goodbye</td></tr>
+    <tr><td class="ca">fins aviat</td><td class="pron">/ˌfinz əβiˈat/</td><td class="en">see you soon</td></tr>
+    <tr><td class="ca">fins demà</td><td class="pron">/ˌfinz dəˈma/</td><td class="en">see you tomorrow</td></tr>
+    <tr><td class="ca">gràcies</td><td class="pron">/ˈɡɾasiəs/</td><td class="en">thank you</td></tr>
+    <tr><td class="ca">moltes gràcies</td><td class="pron">/ˌmoltəz ˈɡɾasiəs/</td><td class="en">thank you very much</td></tr>
+    <tr><td class="ca">de res</td><td class="pron">/də ˈrɛs/</td><td class="en">you're welcome</td></tr>
+    <tr><td class="ca">si us plau</td><td class="pron">/si us ˈplaw/</td><td class="en">please</td></tr>
+    <tr><td class="ca">perdó</td><td class="pron">/pəɾˈðo/</td><td class="en">sorry / excuse me</td></tr>
+    <tr><td class="ca">el senyor / la senyora</td><td class="pron">/səˈɲo/ /səˈɲoɾə/</td><td class="en">Mr, sir / Mrs, madam</td></tr>
+    <tr><td class="ca">el nom</td><td class="pron">/ˈnom/</td><td class="en">name</td></tr>
+    <tr><td class="ca">el cognom</td><td class="pron">/kuŋˈnom/</td><td class="en">surname</td></tr>
+    <tr><td class="ca">el país</td><td class="pron">/pəˈis/</td><td class="en">country</td></tr>
+    <tr><td class="ca">la ciutat</td><td class="pron">/siwˈtat/</td><td class="en">city</td></tr>
+    <tr><td class="ca">anglès / anglesa</td><td class="pron">/əŋˈɡlɛs/ /əŋˈɡlɛzə/</td><td class="en">English (m./f.)</td></tr>
+    <tr><td class="ca">català / catalana</td><td class="pron">/kətəˈla/ /kətəˈlanə/</td><td class="en">Catalan (m./f.)</td></tr>
+    <tr><td class="ca">irlandès / escocès</td><td class="pron">/iɾlənˈdɛs/ /əskuˈsɛs/</td><td class="en">Irish / Scottish</td></tr>
+    <tr><td class="ca">l'idioma, la llengua</td><td class="pron">/iðiˈomə/ /ˈʎeŋɡwə/</td><td class="en">language</td></tr>
+  </table>
+  <h4>New phrases</h4>
+  <table>
+    <tr><td class="ca">Com estàs? — Molt bé, i tu?</td><td class="pron">/kom əsˈtas — ˌmol ˈbe i ˈtu/</td><td class="en">How are you? — Very well, and you?</td></tr>
+    <tr><td class="ca">Molt de gust.</td><td class="pron">/ˌmol də ˈɣust/</td><td class="en">Nice to meet you.</td></tr>
+    <tr><td class="ca">D'on ets?</td><td class="pron">/ˈdon ˈets/</td><td class="en">Where are you from?</td></tr>
+    <tr><td class="ca">Soc de Manchester.</td><td class="pron">/ˌsɔɡ də ˈmantʃestəɾ/</td><td class="en">I'm from Manchester.</td></tr>
+    <tr><td class="ca">Parlo una mica de català.</td><td class="pron">/ˌpaɾlu unə ˌmikə ðə kətəˈla/</td><td class="en">I speak a little Catalan.</td></tr>
+    <tr><td class="ca">Encara aprenc.</td><td class="pron">/əŋˌkaɾə əˈpɾɛŋ/</td><td class="en">I'm still learning.</td></tr>
+  </table>
+
+  <div class="dialogue">
+    <p><span class="spk">Anna:</span> Hola! Bon dia. Com et dius?</p>
+    <p class="gloss"><span class="pron">/ˈɔlə | ˌbɔn ˈdiə | ˌkom əd ˈdiws/</span> — Hi! Good morning. What's your name?</p>
+    <p><span class="spk">Tom:</span> Em dic Tom. I tu?</p>
+    <p class="gloss"><span class="pron">/əm ˈdik ˈtɔm | i ˈtu/</span> — My name's Tom. And you?</p>
+    <p><span class="spk">Anna:</span> Jo soc l'Anna. D'on ets?</p>
+    <p class="gloss"><span class="pron">/ˌʒɔ ˈsɔɡ ˈlannə | ˈdon ˈets/</span> — I'm Anna. Where are you from?</p>
+    <p><span class="spk">Tom:</span> Soc de Manchester, soc anglès. I tu, ets catalana?</p>
+    <p class="gloss"><span class="pron">/ˌsɔɡ də ˈmantʃestəɾ | ˌsɔk əŋˈɡlɛs | i ˈtu | ˌedz kətəˈlanə/</span> — I'm from Manchester, I'm English. Are you Catalan?</p>
+    <p><span class="spk">Anna:</span> Sí, soc de Girona. Molt de gust!</p>
+    <p class="gloss"><span class="pron">/ˈsi | ˌsɔɡ də ʒiˈɾonə | ˌmol də ˈɣust/</span> — Yes, I'm from Girona. Nice to meet you!</p>
+  </div>
+
+  <div class="res">
+    <span class="rh">Resources for Unit 2</span>
+    <b>Listen:</b> LingoHut Lesson 1 "Meeting someone" (18 phrases, audio) → <a href="https://www.lingohut.com/en/v771988/catalan-lessons-meeting-someone">lingohut.com/en/v771988/…meeting-someone</a> · "Super Easy Catalan" — beginner video series, every line subtitled in Catalan + English, free on YouTube → <a href="https://www.youtube.com/playlist?list=PLA5UIoabheFNUWOhjopLfYRI0_LhY2Lrg">youtube.com/playlist?list=PLA5UIoabheFNUWOhjopLfYRI0_LhY2Lrg</a><br>
+    <b>Practise online:</b> the listening game on that lesson → <a href="https://www.lingohut.com/en/v771988L/catalan-lessons-meeting-someone/listening-game">lingohut.com/en/v771988L/…/listening-game</a>
+  </div>
+
+  <div class="ex"><span class="label">EX 2.1</span><h4>Complete with <i>ser</i>.</h4>
+  <ol class="q"><li>Jo <span class="fill">___</span> de Londres.</li><li>Tu <span class="fill">___</span> estudiant?</li><li>L'Anna <span class="fill">___</span> catalana.</li><li>Nosaltres <span class="fill">___</span> amics.</li><li>Ells <span class="fill">___</span> de Barcelona.</li><li>Vosaltres <span class="fill">___</span> anglesos?</li></ol></div>
+
+  <div class="ex"><span class="label">EX 2.2</span><h4>Match question → answer.</h4>
+  <ol class="q"><li>Com et dius? &nbsp;(a) De res.</li><li>D'on ets? &nbsp;(b) Em dic Laura.</li><li>Gràcies! &nbsp;(c) Molt bé, i tu?</li><li>Com estàs? &nbsp;(d) Soc d'Escòcia.</li></ol></div>
+
+  <div class="ex"><span class="label">EX 2.3</span><h4>Translate into Catalan.</h4>
+  <ol class="q"><li>Good morning! How are you?</li><li>My name is John and I'm from Ireland.</li><li>Thank you very much. — You're welcome.</li><li>I speak a little Catalan.</li></ol></div>
+
+  <div class="ex"><span class="label">EX 2.4</span><h4>Reorder into a correct sentence.</h4>
+  <ol class="q"><li>dic / Em / Marc / .</li><li>de / soc / Girona / Jo / .</li><li>ets / D'on / ? / tu</li></ol></div>
+
+  <div class="ex"><span class="label">EX 2.5</span><h4>Find and fix the mistake.</h4>
+  <ol class="q"><li>Jo ets de Tarragona.</li><li>Com te dius?</li><li>Nosaltres soc estudiants.</li></ol></div>
+
+  <div class="ex"><span class="label">EX 2.6</span><h4>Rewrite in the formal (vostè) register — oral-exam style.</h4>
+  <ol class="q"><li>Com et dius?</li><li>D'on ets?</li><li>Com estàs?</li></ol></div>
+
+  <div class="ex"><span class="label">EX 2.7</span><h4>Read the IPA aloud, then write the Catalan.</h4>
+  <ol class="q"><li><span class="pron">/ˌmol də ˈɣust/</span></li><li><span class="pron">/ˌfinz əβiˈat/</span></li><li><span class="pron">/kuŋˈnom/</span></li></ol></div>
+
+  <div class="ex"><span class="label">EX 2.8</span><h4>Write your 3-sentence self-introduction (name, origin, nationality) — memorise it for the oral exam.</h4></div>
+</div>
+
+<!-- ===== UNIT 3 ===== -->
+<div class="unit">
+  <div class="unit-head"><div class="unit-num">Unit 3</div><h2>Pronouns, <i>tenir</i> &amp; <i>hi ha</i>, Numbers</h2></div>
+  <div class="can-do"><b>By the end you can:</b> say what you have, give your age, count to 100 and read prices — all tested in the A1 listening paper.</div>
+
+  <h3>Subject pronouns</h3>
+  <table>
+    <tr><td class="ca">jo <span class="pron">/ˈʒɔ/</span></td><td class="en">I</td><td class="ca">nosaltres <span class="pron">/nuˈzaltɾəs/</span></td><td class="en">we</td></tr>
+    <tr><td class="ca">tu <span class="pron">/ˈtu/</span></td><td class="en">you (inf.)</td><td class="ca">vosaltres <span class="pron">/buˈzaltɾəs/</span></td><td class="en">you (pl.)</td></tr>
+    <tr><td class="ca">ell / ella <span class="pron">/ˈeʎ/ /ˈeʎə/</span></td><td class="en">he / she</td><td class="ca">ells / elles <span class="pron">/ˈeʎs/ /ˈeʎəs/</span></td><td class="en">they</td></tr>
+    <tr><td class="ca">vostè <span class="pron">/busˈtɛ/</span></td><td class="en">you (formal)</td><td class="ca">vostès <span class="pron">/busˈtɛs/</span></td><td class="en">you (formal pl.)</td></tr>
+  </table>
+  <p class="note">Catalan drops the pronoun unless emphasising: <span class="ca">Soc anglès</span>, not <span class="ca">Jo soc anglès</span>.</p>
+
+  <h3><i>Tenir</i> (to have) — and age</h3>
+  <table>
+    <tr><td>jo</td><td class="ca">tinc <span class="pron">/ˈtiŋk/</span></td><td>nosaltres</td><td class="ca">tenim <span class="pron">/təˈnim/</span></td></tr>
+    <tr><td>tu</td><td class="ca">tens <span class="pron">/ˈtens/</span></td><td>vosaltres</td><td class="ca">teniu <span class="pron">/təˈniw/</span></td></tr>
+    <tr><td>ell/ella</td><td class="ca">té <span class="pron">/ˈte/</span></td><td>ells/elles</td><td class="ca">tenen <span class="pron">/ˈtenən/</span></td></tr>
+  </table>
+  <p><span class="ca">Quants anys tens? — Tinc trenta anys.</span> <span class="pron">/ˌkwanz ˈaɲs ˈtens — ˌtiŋk ˈtɾɛntə ˈaɲs/</span> <span class="en">How old are you? — I'm thirty.</span> Also needs: <span class="ca">Tinc gana / set / son.</span> <span class="pron">/ˌtiŋɡ ˈɡanə | ˈsɛt | ˈsɔn/</span> <span class="en">I'm hungry / thirsty / sleepy.</span></p>
+
+  <h3><i>Hi ha</i> — there is / there are</h3>
+  <p>One form for both numbers: <span class="ca">Hi ha un gat.</span> <span class="pron">/i ˈa uŋ ˈɡat/</span> <span class="en">There's a cat.</span> · <span class="ca">Hi ha tres gats.</span> <span class="pron">/i ˈa ˌtɾez ˈɡats/</span> <span class="en">There are three cats.</span></p>
+
+  <h3>Articles</h3>
+  <table>
+    <thead><tr><th></th><th>the</th><th>a / some</th></tr></thead>
+    <tr><td>m. sing./pl.</td><td class="ca">el (l') / els <span class="pron">/əl/ /əls/</span></td><td class="ca">un / uns <span class="pron">/un/ /uns/</span></td></tr>
+    <tr><td>f. sing./pl.</td><td class="ca">la (l') / les <span class="pron">/lə/ /ləs/</span></td><td class="ca">una / unes <span class="pron">/ˈunə/ /ˈunəs/</span></td></tr>
+  </table>
+  <p class="note">Before a vowel or silent h: <b>l'</b> — l'home <span class="pron">/ˈlɔmə/</span>, l'aigua <span class="pron">/ˈlajɣwə/</span>. Personal names take the article: en Tom, la Maria.</p>
+
+  <h3>New vocabulary — numbers &amp; first nouns</h3>
+  <table>
+    <thead><tr><th>Catalan</th><th>IPA</th><th>English</th></tr></thead>
+    <tr><td class="ca">zero, un/una, dos/dues, tres</td><td class="pron">/ˈzɛɾu/ /ˈun/ /ˈdos/ˈduəs/ /ˈtɾɛs/</td><td class="en">0–3</td></tr>
+    <tr><td class="ca">quatre, cinc, sis, set</td><td class="pron">/ˈkwatɾə/ /ˈsiŋk/ /ˈsis/ /ˈsɛt/</td><td class="en">4–7</td></tr>
+    <tr><td class="ca">vuit, nou, deu</td><td class="pron">/ˈbujt/ /ˈnɔw/ /ˈdɛw/</td><td class="en">8–10</td></tr>
+    <tr><td class="ca">onze, dotze, tretze, catorze, quinze</td><td class="pron">/ˈonzə/ /ˈdodzə/ /ˈtɾɛdzə/ /kəˈtoɾzə/ /ˈkinzə/</td><td class="en">11–15</td></tr>
+    <tr><td class="ca">setze, disset, divuit, dinou, vint</td><td class="pron">/ˈsɛdzə/ /diˈsɛt/ /diˈβujt/ /diˈnɔw/ /ˈbin/</td><td class="en">16–20</td></tr>
+    <tr><td class="ca">trenta, quaranta, cinquanta</td><td class="pron">/ˈtɾɛntə/ /kwəˈɾantə/ /siŋˈkwantə/</td><td class="en">30, 40, 50</td></tr>
+    <tr><td class="ca">seixanta, setanta, vuitanta</td><td class="pron">/səˈʃantə/ /səˈtantə/ /bujˈtantə/</td><td class="en">60, 70, 80</td></tr>
+    <tr><td class="ca">noranta, cent</td><td class="pron">/nuˈɾantə/ /ˈsen/</td><td class="en">90, 100</td></tr>
+    <tr><td class="ca">el gat / el gos</td><td class="pron">/ˈɡat/ /ˈɡos/</td><td class="en">cat / dog</td></tr>
+    <tr><td class="ca">l'home / la dona</td><td class="pron">/ˈɔmə/ /ˈdɔnə/</td><td class="en">man / woman</td></tr>
+    <tr><td class="ca">la taula / la cadira</td><td class="pron">/ˈtawlə/ /kəˈðiɾə/</td><td class="en">table / chair</td></tr>
+    <tr><td class="ca">el llibre / la clau</td><td class="pron">/ˈʎiβɾə/ /ˈklaw/</td><td class="en">book / key</td></tr>
+    <tr><td class="ca">el cotxe / la bici</td><td class="pron">/ˈkɔtʃə/ /ˈbisi/</td><td class="en">car / bike</td></tr>
+    <tr><td class="ca">els diners</td><td class="pron">/diˈnes/</td><td class="en">money</td></tr>
+    <tr><td class="ca">l'any</td><td class="pron">/ˈaɲ/</td><td class="en">year</td></tr>
+  </table>
+  <h4>New phrases</h4>
+  <table>
+    <tr><td class="ca">Quants anys tens?</td><td class="pron">/ˌkwanz ˈaɲs ˈtens/</td><td class="en">How old are you?</td></tr>
+    <tr><td class="ca">Tinc trenta-dos anys.</td><td class="pron">/ˌtiŋk ˌtɾɛntə ˈðoz ˈaɲs/</td><td class="en">I'm thirty-two.</td></tr>
+    <tr><td class="ca">Quin és el teu número de telèfon?</td><td class="pron">/ˌkin ez əl ˌtew ˈnumeɾu ðə təˈlɛfun/</td><td class="en">What's your phone number?</td></tr>
+    <tr><td class="ca">Hi ha un banc a prop?</td><td class="pron">/i ˈa um ˈbaŋ ə ˈpɾɔp/</td><td class="en">Is there a bank nearby?</td></tr>
+    <tr><td class="ca">No tinc temps.</td><td class="pron">/ˌno ˈtiŋ ˈtems/</td><td class="en">I don't have time.</td></tr>
+  </table>
+  <p class="note">Compounds join with hyphens: vint-i-dos <span class="pron">/ˌbintiˈðos/</span>, trenta-tres. Feminine: una, dues — <span class="ca">dues taules</span> <span class="pron">/ˌduəs ˈtawləs/</span> <span class="en">two tables</span>.</p>
+
+  <div class="res">
+    <span class="rh">Resources for Unit 3</span>
+    <b>Listen:</b> LingoHut numbers with audio — 1–10 → <a href="https://www.lingohut.com/en/v771995/catalan-lessons-numbers-1-through-10">lingohut.com/en/v771995/…numbers-1-through-10</a> · 11–20 → <a href="https://www.lingohut.com/en/v771996/catalan-lessons-numbers-11-through-20">v771996</a> · 21–30 → <a href="https://www.lingohut.com/en/v771997/catalan-lessons-numbers-21-through-30">v771997</a><br>
+    <b>Practise online:</b> open the <i>Matching game</i> on the numbers page → <a href="https://www.lingohut.com/en/v771995/catalan-lessons-numbers-1-through-10">lingohut.com/en/v771995/…numbers</a> · el/la/els/les fill-in drills → <a href="https://talkpal.ai/grammar_exercises/definite-articles-exercises-for-catalan-grammar/">talkpal.ai/grammar_exercises/definite-articles-exercises-for-catalan-grammar</a>
+  </div>
+
+  <div class="ex"><span class="label">EX 3.1</span><h4>Conjugate <i>tenir</i>.</h4>
+  <ol class="q"><li>Jo <span class="fill">___</span> un gos.</li><li>La Maria <span class="fill">___</span> dos germans.</li><li>Vosaltres <span class="fill">___</span> gana?</li><li>Nosaltres <span class="fill">___</span> un cotxe.</li><li>Ells <span class="fill">___</span> tres fills.</li></ol></div>
+
+  <div class="ex"><span class="label">EX 3.2</span><h4>Write the numbers in words.</h4>
+  <ol class="q"><li>7</li><li>14</li><li>21</li><li>33</li><li>68</li><li>100</li></ol></div>
+
+  <div class="ex"><span class="label">EX 3.3</span><h4>Add the definite article (el, la, l', els, les).</h4>
+  <ol class="q"><li><span class="fill">___</span> taula</li><li><span class="fill">___</span> home</li><li><span class="fill">___</span> llibres</li><li><span class="fill">___</span> aigua (f.)</li><li><span class="fill">___</span> claus (f.pl.)</li></ol></div>
+
+  <div class="ex"><span class="label">EX 3.4</span><h4>Listening-paper drill: read the IPA of a price or age, write it in digits.</h4>
+  <ol class="q"><li><span class="pron">/ˌtɾɛntə ˈsiŋk/</span></li><li><span class="pron">/ˌkwəɾantə ˈðos/</span></li><li><span class="pron">/səˈʃantə ˈset/</span></li></ol></div>
+
+  <div class="ex"><span class="label">EX 3.5</span><h4>Translate.</h4>
+  <ol class="q"><li>There are five books on the table.</li><li>I'm thirty-two years old.</li><li>She has two sisters.</li><li>Is there a bank near here?</li></ol></div>
+
+  <div class="ex"><span class="label">EX 3.6</span><h4>Definite or indefinite? Add the article that fits.</h4>
+  <ol class="q"><li>Tinc <span class="fill">___</span> gos. (a dog)</li><li><span class="fill">___</span> gos de la Maria és gran. (the dog)</li><li>Hi ha <span class="fill">___</span> taules a la sala. (some tables)</li></ol></div>
+
+  <div class="ex"><span class="label">EX 3.7</span><h4>Maths in words.</h4>
+  <ol class="q"><li>10 + 12 = <span class="fill">___</span></li><li>20 + 5 = <span class="fill">___</span></li><li>40 + 4 = <span class="fill">___</span></li></ol></div>
+</div>
+
+<!-- ===== UNIT 4 ===== -->
+<div class="unit">
+  <div class="unit-head"><div class="unit-num">Unit 4</div><h2>Nouns &amp; Adjectives; Colours and the Home</h2></div>
+  <div class="can-do"><b>By the end you can:</b> form plurals, make adjectives agree, and describe objects and rooms — a classic A1 written task.</div>
+
+  <h3>Gender &amp; plural</h3>
+  <table>
+    <thead><tr><th>Singular ends in…</th><th>Plural</th><th>Example</th></tr></thead>
+    <tr><td>most words</td><td>add <span class="ca">-s</span></td><td class="ca">llibre → llibres <span class="pron">/ˈʎiβɾəs/</span></td></tr>
+    <tr><td>-a</td><td>→ <span class="ca">-es</span></td><td class="ca">casa → cases <span class="pron">/ˈkazəs/</span></td></tr>
+    <tr><td>stressed vowel</td><td>add <span class="ca">-ns</span></td><td class="ca">pa → pans <span class="pron">/ˈpans/</span>; mà → mans <span class="pron">/ˈmans/</span></td></tr>
+    <tr><td>-s, -ç, -x, -ig</td><td>add <span class="ca">-os</span></td><td class="ca">gos → gossos <span class="pron">/ˈɡosus/</span>; peix → peixos <span class="pron">/ˈpeʃus/</span></td></tr>
+    <tr><td>-ca / -ga</td><td>→ <span class="ca">-ques / -gues</span></td><td class="ca">amiga → amigues <span class="pron">/əˈmiɣəs/</span></td></tr>
+  </table>
+
+  <h3>Adjective agreement</h3>
+  <p>Adjectives agree and usually <b>follow</b> the noun: <span class="ca">un cotxe vermell</span> <span class="pron">/uŋ ˌkɔtʃə βərˈmeʎ/</span> <span class="en">a red car</span> · <span class="ca">una casa vermella</span> <span class="pron">/unə ˌkazə βərˈmeʎə/</span> <span class="en">a red house</span>.</p>
+  <table>
+    <thead><tr><th>Type</th><th>m.s.</th><th>f.s.</th><th>m.pl.</th><th>f.pl.</th></tr></thead>
+    <tr><td>four-form</td><td class="ca">bonic <span class="pron">/buˈnik/</span></td><td class="ca">bonica</td><td class="ca">bonics</td><td class="ca">boniques</td></tr>
+    <tr><td>two-form</td><td class="ca">verd <span class="pron">/ˈbɛɾt/</span></td><td class="ca">verda</td><td class="ca">verds</td><td class="ca">verdes</td></tr>
+    <tr><td>invariable (gender)</td><td class="ca">gran <span class="pron">/ˈɡɾan/</span></td><td class="ca">gran</td><td class="ca">grans</td><td class="ca">grans</td></tr>
+  </table>
+
+  <h3>New vocabulary — adjectives, colours, the home</h3>
+  <table>
+    <thead><tr><th>Catalan</th><th>IPA</th><th>English</th></tr></thead>
+    <tr><td class="ca">gran / petit</td><td class="pron">/ˈɡɾan/ /pəˈtit/</td><td class="en">big / small</td></tr>
+    <tr><td class="ca">nou / vell</td><td class="pron">/ˈnɔw/ /ˈbeʎ/</td><td class="en">new / old</td></tr>
+    <tr><td class="ca">bo / dolent</td><td class="pron">/ˈbɔ/ /duˈlen/</td><td class="en">good / bad</td></tr>
+    <tr><td class="ca">car / barat</td><td class="pron">/ˈkaɾ/ /bəˈɾat/</td><td class="en">expensive / cheap</td></tr>
+    <tr><td class="ca">bonic / lleig</td><td class="pron">/buˈnik/ /ˈʎetʃ/</td><td class="en">pretty / ugly</td></tr>
+    <tr><td class="ca">fàcil / difícil</td><td class="pron">/ˈfasil/ /diˈfisil/</td><td class="en">easy / difficult</td></tr>
+    <tr><td class="ca">vermell / blau</td><td class="pron">/bərˈmeʎ/ /ˈblaw/</td><td class="en">red / blue</td></tr>
+    <tr><td class="ca">verd / groc</td><td class="pron">/ˈbɛɾt/ /ˈɡɾɔk/</td><td class="en">green / yellow</td></tr>
+    <tr><td class="ca">blanc / negre</td><td class="pron">/ˈblaŋ/ /ˈneɣɾə/</td><td class="en">white / black</td></tr>
+    <tr><td class="ca">la casa / el pis</td><td class="pron">/ˈkazə/ /ˈpis/</td><td class="en">house / flat</td></tr>
+    <tr><td class="ca">l'habitació</td><td class="pron">/əβitəsiˈo/</td><td class="en">room, bedroom</td></tr>
+    <tr><td class="ca">la cuina / el bany</td><td class="pron">/ˈkujnə/ /ˈbaɲ/</td><td class="en">kitchen / bathroom</td></tr>
+    <tr><td class="ca">la porta / la finestra</td><td class="pron">/ˈpɔɾtə/ /fiˈnɛstɾə/</td><td class="en">door / window</td></tr>
+    <tr><td class="ca">el llit</td><td class="pron">/ˈʎit/</td><td class="en">bed</td></tr>
+    <tr><td class="ca">la mà / el pa</td><td class="pron">/ˈma/ /ˈpa/</td><td class="en">hand / bread</td></tr>
+    <tr><td class="ca">el peix</td><td class="pron">/ˈpeʃ/</td><td class="en">fish</td></tr>
+    <tr><td class="ca">la cosa</td><td class="pron">/ˈkɔzə/</td><td class="en">thing</td></tr>
+  </table>
+  <h4>New phrases</h4>
+  <table>
+    <tr><td class="ca">De quin color és?</td><td class="pron">/də ˌkiŋ kuˈlo ˈes/</td><td class="en">What colour is it?</td></tr>
+    <tr><td class="ca">Com és casa teva?</td><td class="pron">/ˌkom ez ˌkazə ˈteβə/</td><td class="en">What's your house like?</td></tr>
+    <tr><td class="ca">El pis és petit però bonic.</td><td class="pron">/əl ˌpiz es pəˌtit pəˌɾɔ βuˈnik/</td><td class="en">The flat is small but pretty.</td></tr>
+    <tr><td class="ca">Quant costa? És molt car!</td><td class="pron">/ˌkwaŋ ˈkɔstə | ˌez ˌmol ˈkaɾ/</td><td class="en">How much is it? It's very expensive!</td></tr>
+    <tr><td class="ca">La meva habitació és gran.</td><td class="pron">/lə ˌmeβə əβitəsiˌo ez ˈɡɾan/</td><td class="en">My room is big.</td></tr>
+  </table>
+
+  <div class="res">
+    <span class="rh">Resources for Unit 4</span>
+    <b>Listen:</b> LingoHut "Household items" with audio → <a href="https://www.lingohut.com/en/v772035/catalan-lessons-household-items">lingohut.com/en/v772035/…household-items</a><br>
+    <b>Practise online:</b> adjective agreement &amp; placement fill-ins (casa *gran*, samarreta *verda*…) → <a href="https://talkpal.ai/grammar_exercises/adjective-placement-exercises-for-catalan-grammar/">talkpal.ai/grammar_exercises/adjective-placement-exercises-for-catalan-grammar</a> · hear any colour or object → <a href="https://forvo.com/languages/ca/">forvo.com/languages/ca</a>
+  </div>
+
+  <div class="ex"><span class="label">EX 4.1</span><h4>Make plural.</h4>
+  <ol class="q"><li>el llibre</li><li>la casa</li><li>el gos</li><li>el pa</li><li>l'amiga</li><li>el peix</li></ol></div>
+
+  <div class="ex"><span class="label">EX 4.2</span><h4>Make the adjective agree.</h4>
+  <ol class="q"><li>una casa (petit) <span class="fill">___</span></li><li>uns cotxes (vermell) <span class="fill">___</span></li><li>les taules (gran) <span class="fill">___</span></li><li>una amiga (bonic) <span class="fill">___</span></li><li>uns llibres (nou) <span class="fill">___</span></li></ol></div>
+
+  <div class="ex"><span class="label">EX 4.3</span><h4>el or la?</h4>
+  <ol class="q"><li><span class="fill">___</span> taula</li><li><span class="fill">___</span> cotxe</li><li><span class="fill">___</span> finestra</li><li><span class="fill">___</span> llit</li></ol></div>
+
+  <div class="ex"><span class="label">EX 4.4</span><h4>Find and fix the agreement error.</h4>
+  <ol class="q"><li>una casa petit</li><li>uns cotxes vermella</li><li>les taules gran</li></ol></div>
+
+  <div class="ex"><span class="label">EX 4.5</span><h4>Give the opposite.</h4>
+  <ol class="q"><li>gran ≠ <span class="fill">___</span></li><li>car ≠ <span class="fill">___</span></li><li>fàcil ≠ <span class="fill">___</span></li><li>nou ≠ <span class="fill">___</span></li></ol></div>
+
+  <div class="ex"><span class="label">EX 4.6</span><h4>Translate.</h4>
+  <ol class="q"><li>a big house</li><li>two new cars</li><li>The kitchen is white and the door is green.</li><li>My room is small but pretty.</li></ol></div>
+
+  <div class="ex"><span class="label">EX 4.7</span><h4>Exam-style writing: describe your home in 3–4 sentences (rooms, sizes, colours).</h4></div>
+</div>
+<!-- ===== UNIT 5 ===== -->
+<div class="unit">
+  <div class="unit-head"><div class="unit-num">Unit 5</div><h2>The Present Tense; Everyday Verbs</h2></div>
+  <div class="can-do"><b>By the end you can:</b> use regular and key irregular verbs in the present — the engine of every A1 task.</div>
+
+  <h3>Three conjugations</h3>
+  <table>
+    <thead><tr><th>Person</th><th>-ar: parlar /pəɾˈla/ speak</th><th>-re: perdre /ˈpɛɾðɾə/ lose</th><th>-ir: dormir /duɾˈmi/ sleep</th></tr></thead>
+    <tr><td>jo</td><td class="ca">parlo <span class="pron">/ˈpaɾlu/</span></td><td class="ca">perdo <span class="pron">/ˈpɛɾðu/</span></td><td class="ca">dormo <span class="pron">/ˈdɔɾmu/</span></td></tr>
+    <tr><td>tu</td><td class="ca">parles <span class="pron">/ˈpaɾləs/</span></td><td class="ca">perds <span class="pron">/ˈpɛɾts/</span></td><td class="ca">dorms <span class="pron">/ˈdɔɾms/</span></td></tr>
+    <tr><td>ell/ella</td><td class="ca">parla <span class="pron">/ˈpaɾlə/</span></td><td class="ca">perd <span class="pron">/ˈpɛɾt/</span></td><td class="ca">dorm <span class="pron">/ˈdɔɾm/</span></td></tr>
+    <tr><td>nosaltres</td><td class="ca">parlem <span class="pron">/pəɾˈlɛm/</span></td><td class="ca">perdem <span class="pron">/pəɾˈðɛm/</span></td><td class="ca">dormim <span class="pron">/duɾˈmim/</span></td></tr>
+    <tr><td>vosaltres</td><td class="ca">parleu <span class="pron">/pəɾˈlɛw/</span></td><td class="ca">perdeu <span class="pron">/pəɾˈðɛw/</span></td><td class="ca">dormiu <span class="pron">/duɾˈmiw/</span></td></tr>
+    <tr><td>ells/elles</td><td class="ca">parlen <span class="pron">/ˈpaɾlən/</span></td><td class="ca">perden <span class="pron">/ˈpɛɾðən/</span></td><td class="ca">dormen <span class="pron">/ˈdɔɾmən/</span></td></tr>
+  </table>
+  <p class="note">Many -ir verbs add -eix-: servir → serveixo <span class="pron">/səɾˈβeʃu/</span>, serveix <span class="pron">/səɾˈβeʃ/</span> <span class="en">I serve, he/she serves</span>.</p>
+
+  <h3>Key irregular verbs</h3>
+  <table>
+    <thead><tr><th></th><th>anar /əˈna/ go</th><th>fer /ˈfe/ do, make</th><th>voler /buˈle/ want</th><th>poder /puˈðe/ can</th></tr></thead>
+    <tr><td>jo</td><td class="ca">vaig <span class="pron">/ˈbatʃ/</span></td><td class="ca">faig <span class="pron">/ˈfatʃ/</span></td><td class="ca">vull <span class="pron">/ˈbuʎ/</span></td><td class="ca">puc <span class="pron">/ˈpuk/</span></td></tr>
+    <tr><td>tu</td><td class="ca">vas <span class="pron">/ˈbas/</span></td><td class="ca">fas <span class="pron">/ˈfas/</span></td><td class="ca">vols <span class="pron">/ˈbɔls/</span></td><td class="ca">pots <span class="pron">/ˈpɔts/</span></td></tr>
+    <tr><td>ell/ella</td><td class="ca">va <span class="pron">/ˈba/</span></td><td class="ca">fa <span class="pron">/ˈfa/</span></td><td class="ca">vol <span class="pron">/ˈbɔl/</span></td><td class="ca">pot <span class="pron">/ˈpɔt/</span></td></tr>
+    <tr><td>nosaltres</td><td class="ca">anem <span class="pron">/əˈnɛm/</span></td><td class="ca">fem <span class="pron">/ˈfɛm/</span></td><td class="ca">volem <span class="pron">/buˈlɛm/</span></td><td class="ca">podem <span class="pron">/puˈðɛm/</span></td></tr>
+    <tr><td>vosaltres</td><td class="ca">aneu <span class="pron">/əˈnɛw/</span></td><td class="ca">feu <span class="pron">/ˈfɛw/</span></td><td class="ca">voleu <span class="pron">/buˈlɛw/</span></td><td class="ca">podeu <span class="pron">/puˈðɛw/</span></td></tr>
+    <tr><td>ells/elles</td><td class="ca">van <span class="pron">/ˈban/</span></td><td class="ca">fan <span class="pron">/ˈfan/</span></td><td class="ca">volen <span class="pron">/ˈbɔlən/</span></td><td class="ca">poden <span class="pron">/ˈpɔðən/</span></td></tr>
+  </table>
+
+  <h3>Negatives &amp; questions</h3>
+  <p><b>no</b> before the verb: <span class="ca">No parlo gaire.</span> <span class="pron">/ˌno ˈpaɾlu ˈɣajɾə/</span> <span class="en">I don't speak much.</span> Questions keep the word order: <span class="ca">Parles anglès?</span> <span class="pron">/ˌpaɾləz əŋˈɡlɛs/</span> <span class="en">Do you speak English?</span></p>
+
+  <h3>New vocabulary — everyday verbs &amp; time words</h3>
+  <table>
+    <thead><tr><th>Catalan</th><th>IPA</th><th>English</th></tr></thead>
+    <tr><td class="ca">treballar</td><td class="pron">/tɾəβəˈʎa/</td><td class="en">to work</td></tr>
+    <tr><td class="ca">estudiar</td><td class="pron">/əstuðiˈa/</td><td class="en">to study</td></tr>
+    <tr><td class="ca">menjar</td><td class="pron">/mənˈʒa/</td><td class="en">to eat</td></tr>
+    <tr><td class="ca">beure</td><td class="pron">/ˈbɛwɾə/</td><td class="en">to drink</td></tr>
+    <tr><td class="ca">viure</td><td class="pron">/ˈbiwɾə/</td><td class="en">to live</td></tr>
+    <tr><td class="ca">aprendre</td><td class="pron">/əˈpɾɛndɾə/</td><td class="en">to learn</td></tr>
+    <tr><td class="ca">comprar</td><td class="pron">/kumˈpɾa/</td><td class="en">to buy</td></tr>
+    <tr><td class="ca">mirar</td><td class="pron">/miˈɾa/</td><td class="en">to look at, watch</td></tr>
+    <tr><td class="ca">escoltar</td><td class="pron">/əskulˈta/</td><td class="en">to listen</td></tr>
+    <tr><td class="ca">venir</td><td class="pron">/bəˈni/</td><td class="en">to come</td></tr>
+    <tr><td class="ca">obrir / tancar</td><td class="pron">/uˈβɾi/ /təŋˈka/</td><td class="en">to open / close</td></tr>
+    <tr><td class="ca">la feina</td><td class="pron">/ˈfejnə/</td><td class="en">work, job</td></tr>
+    <tr><td class="ca">els deures</td><td class="pron">/ˈdɛwɾəs/</td><td class="en">homework</td></tr>
+    <tr><td class="ca">avui / demà</td><td class="pron">/əˈβuj/ /dəˈma/</td><td class="en">today / tomorrow</td></tr>
+    <tr><td class="ca">ara / després</td><td class="pron">/ˈaɾə/ /dəsˈpɾes/</td><td class="en">now / later</td></tr>
+    <tr><td class="ca">sempre / mai</td><td class="pron">/ˈsempɾə/ /ˈmaj/</td><td class="en">always / never</td></tr>
+    <tr><td class="ca">també / tampoc</td><td class="pron">/təmˈbe/ /təmˈpɔk/</td><td class="en">also / neither</td></tr>
+    <tr><td class="ca">però</td><td class="pron">/pəˈɾɔ/</td><td class="en">but</td></tr>
+  </table>
+  <h4>New phrases</h4>
+  <table>
+    <tr><td class="ca">Què fas avui?</td><td class="pron">/ˌkɛ ˈfaz əˈβuj/</td><td class="en">What are you doing today?</td></tr>
+    <tr><td class="ca">On vius? — Visc a Barcelona.</td><td class="pron">/ˌom ˈbiws — ˌbisk ə βəɾsəˈlonə/</td><td class="en">Where do you live? — I live in Barcelona.</td></tr>
+    <tr><td class="ca">Vull aprendre català.</td><td class="pron">/ˌbuʎ əˌpɾɛndɾə kətəˈla/</td><td class="en">I want to learn Catalan.</td></tr>
+    <tr><td class="ca">Pots ajudar-me?</td><td class="pron">/ˌpɔdz əʒuˈðaɾmə/</td><td class="en">Can you help me?</td></tr>
+    <tr><td class="ca">No puc venir avui.</td><td class="pron">/ˌno ˌpuɡ bəˌni əˈβuj/</td><td class="en">I can't come today.</td></tr>
+  </table>
+
+  <div class="dialogue">
+    <p><span class="spk">Laia:</span> Què fas avui?</p>
+    <p class="gloss"><span class="pron">/ˌkɛ ˈfaz əˈβuj/</span> — What are you doing today?</p>
+    <p><span class="spk">Marc:</span> Vaig a la feina, però a la tarda vull estudiar català.</p>
+    <p class="gloss"><span class="pron">/ˌbatʃ ə lə ˈfejnə | pəˌɾɔ ə lə ˌtaɾðə ˌβuʎ əstuðiˌa kətəˈla/</span> — I'm going to work, but in the afternoon I want to study Catalan.</p>
+    <p><span class="spk">Laia:</span> Pots venir al cafè a les sis?</p>
+    <p class="gloss"><span class="pron">/ˌpɔdz bəˌni əl kəˌfɛ ə ləs ˈsis/</span> — Can you come to the café at six?</p>
+    <p><span class="spk">Marc:</span> Sí, però no parlo gaire. Encara aprenc!</p>
+    <p class="gloss"><span class="pron">/ˈsi | pəˌɾɔ ˌno ˈpaɾlu ˈɣajɾə | əŋˌkaɾə əˈpɾɛŋ/</span> — Yes, but I don't speak much. I'm still learning!</p>
+  </div>
+
+  <div class="res">
+    <span class="rh">Resources for Unit 5</span>
+    <b>Listen:</b> "Super Easy Catalan" — short beginner episodes with everyday present-tense scenes, subtitled CA + EN → <a href="https://www.youtube.com/playlist?list=PLA5UIoabheFNUWOhjopLfYRI0_LhY2Lrg">youtube.com/playlist?list=PLA5UIoabheFNUWOhjopLfYRI0_LhY2Lrg</a><br>
+    <b>Practise online:</b> verbs.cat trainer, pick "present" → <a href="https://www.verbs.cat/en/practise.html">verbs.cat/en/practise.html</a> · Talkpal present-tense drill with answers → <a href="https://talkpal.ai/grammar_exercises/present-exercises-for-catalan-grammar/">talkpal.ai/grammar_exercises/present-exercises-for-catalan-grammar</a>
+  </div>
+
+  <div class="ex"><span class="label">EX 5.1</span><h4>Conjugate the verb in brackets.</h4>
+  <ol class="q"><li>Jo (parlar) <span class="fill">___</span> una mica de català.</li><li>Nosaltres (dormir) <span class="fill">___</span> vuit hores.</li><li>Ells (perdre) <span class="fill">___</span> les claus.</li><li>Tu (treballar) <span class="fill">___</span> a Barcelona?</li><li>Vosaltres (menjar) <span class="fill">___</span> a casa.</li></ol></div>
+
+  <div class="ex"><span class="label">EX 5.2</span><h4>Choose anar / fer / voler / poder.</h4>
+  <ol class="q"><li>Jo <span class="fill">___</span> a casa. (go)</li><li>Què <span class="fill">___</span> tu avui? (do)</li><li>Nosaltres <span class="fill">___</span> un cafè. (want)</li><li>Vostè <span class="fill">___</span> ajudar-me? (can)</li><li>Ells <span class="fill">___</span> els deures. (do)</li></ol></div>
+
+  <div class="ex"><span class="label">EX 5.3</span><h4>Make negative, then make a question.</h4>
+  <ol class="q"><li>Parles francès. → ___ → ___?</li><li>Anem al cinema. → ___ → ___?</li></ol></div>
+
+  <div class="ex"><span class="label">EX 5.4</span><h4>Write all six present forms of <i>comprar</i> (to buy), with IPA for the jo-form.</h4></div>
+
+  <div class="ex"><span class="label">EX 5.5</span><h4>Find and fix the verb error.</h4>
+  <ol class="q"><li>Jo vas a la feina.</li><li>Nosaltres parlo català.</li><li>Ella poden venir.</li></ol></div>
+
+  <div class="ex"><span class="label">EX 5.6</span><h4>Reading: answer in Catalan.</h4>
+  <p class="note">"En Joan treballa a Barcelona. Cada dia va a la feina amb tren. A la tarda fa esport i a la nit dorm vuit hores." <span class="pron">/əɲ ˌʒoan tɾəˌβaʎə ə βəɾsəˈlonə…/</span> — Joan works in Barcelona. Every day he goes to work by train. In the afternoon he does sport and at night he sleeps eight hours.</p>
+  <ol class="q"><li>On treballa en Joan?</li><li>Com va a la feina?</li><li>Què fa a la tarda?</li></ol></div>
+
+  <div class="ex"><span class="label">EX 5.7</span><h4>Translate.</h4>
+  <ol class="q"><li>I want to learn Catalan.</li><li>We can't come today.</li><li>What do they do on Sundays?</li></ol></div>
+</div>
+
+<!-- ===== UNIT 6 ===== -->
+<div class="unit">
+  <div class="unit-head"><div class="unit-num">Unit 6</div><h2>Family, Jobs &amp; Describing People</h2></div>
+  <div class="can-do"><b>By the end you can:</b> present your family and job and describe people — a guaranteed oral-exam topic.</div>
+
+  <h3>Possessives</h3>
+  <table>
+    <thead><tr><th>Owner</th><th>m.s.</th><th>f.s.</th><th>m.pl.</th><th>f.pl.</th></tr></thead>
+    <tr><td>my</td><td class="ca">el meu <span class="pron">/ˈmew/</span></td><td class="ca">la meva <span class="pron">/ˈmeβə/</span></td><td class="ca">els meus</td><td class="ca">les meves</td></tr>
+    <tr><td>your (inf.)</td><td class="ca">el teu <span class="pron">/ˈtew/</span></td><td class="ca">la teva <span class="pron">/ˈteβə/</span></td><td class="ca">els teus</td><td class="ca">les teves</td></tr>
+    <tr><td>his/her/their</td><td class="ca">el seu <span class="pron">/ˈsew/</span></td><td class="ca">la seva <span class="pron">/ˈseβə/</span></td><td class="ca">els seus</td><td class="ca">les seves</td></tr>
+    <tr><td>our</td><td class="ca">el nostre <span class="pron">/ˈnɔstɾə/</span></td><td class="ca">la nostra</td><td class="ca">els nostres</td><td class="ca">les nostres</td></tr>
+    <tr><td>your (pl.)</td><td class="ca">el vostre <span class="pron">/ˈbɔstɾə/</span></td><td class="ca">la vostra</td><td class="ca">els vostres</td><td class="ca">les vostres</td></tr>
+  </table>
+  <p class="note">Agreement is with the <b>thing owned</b>, and the article is kept: <span class="ca">la meva germana</span> <span class="pron">/lə ˌmeβə ʒəɾˈmanə/</span> <span class="en">my sister</span>. Jobs take no article: <span class="ca">Soc enginyera.</span> <span class="pron">/ˌsɔk ənʒiˈɲeɾə/</span> <span class="en">I'm an engineer.</span></p>
+
+  <h3>New vocabulary — family, jobs, description</h3>
+  <table>
+    <thead><tr><th>Catalan</th><th>IPA</th><th>English</th></tr></thead>
+    <tr><td class="ca">la família</td><td class="pron">/fəˈmiliə/</td><td class="en">family</td></tr>
+    <tr><td class="ca">el pare / la mare</td><td class="pron">/ˈpaɾə/ /ˈmaɾə/</td><td class="en">father / mother</td></tr>
+    <tr><td class="ca">els pares</td><td class="pron">/ˈpaɾəs/</td><td class="en">parents</td></tr>
+    <tr><td class="ca">el fill / la filla</td><td class="pron">/ˈfiʎ/ /ˈfiʎə/</td><td class="en">son / daughter</td></tr>
+    <tr><td class="ca">el germà / la germana</td><td class="pron">/ʒəɾˈma/ /ʒəɾˈmanə/</td><td class="en">brother / sister</td></tr>
+    <tr><td class="ca">l'avi / l'àvia</td><td class="pron">/ˈaβi/ /ˈaβiə/</td><td class="en">grandfather / grandmother</td></tr>
+    <tr><td class="ca">l'oncle / la tia</td><td class="pron">/ˈoŋklə/ /ˈtiə/</td><td class="en">uncle / aunt</td></tr>
+    <tr><td class="ca">el cosí / la cosina</td><td class="pron">/kuˈzi/ /kuˈzinə/</td><td class="en">cousin (m./f.)</td></tr>
+    <tr><td class="ca">el marit / la muller</td><td class="pron">/məˈɾit/ /muˈʎe/</td><td class="en">husband / wife</td></tr>
+    <tr><td class="ca">l'amic / l'amiga</td><td class="pron">/əˈmik/ /əˈmiɣə/</td><td class="en">friend (m./f.)</td></tr>
+    <tr><td class="ca">el professor / la professora</td><td class="pron">/pɾufəˈso/ /pɾufəˈsoɾə/</td><td class="en">teacher</td></tr>
+    <tr><td class="ca">el metge / la metgessa</td><td class="pron">/ˈmedʒə/ /məˈdʒɛsə/</td><td class="en">doctor</td></tr>
+    <tr><td class="ca">el cambrer / la cambrera</td><td class="pron">/kəmˈbɾe/ /kəmˈbɾeɾə/</td><td class="en">waiter / waitress</td></tr>
+    <tr><td class="ca">l'enginyer / l'enginyera</td><td class="pron">/ənʒiˈɲe/ /ənʒiˈɲeɾə/</td><td class="en">engineer</td></tr>
+    <tr><td class="ca">l'estudiant</td><td class="pron">/əstuðiˈan/</td><td class="en">student</td></tr>
+    <tr><td class="ca">alt / baix</td><td class="pron">/ˈal/ /ˈbaʃ/</td><td class="en">tall / short</td></tr>
+    <tr><td class="ca">ros / morè</td><td class="pron">/ˈros/ /muˈɾɛ/</td><td class="en">blond / dark-haired</td></tr>
+    <tr><td class="ca">jove / gran</td><td class="pron">/ˈʒoβə/ /ˈɡɾan/</td><td class="en">young / old (person)</td></tr>
+    <tr><td class="ca">simpàtic / simpàtica</td><td class="pron">/simˈpatik/ /simˈpatikə/</td><td class="en">nice, friendly</td></tr>
+    <tr><td class="ca">intel·ligent</td><td class="pron">/intəliˈʒen/</td><td class="en">intelligent</td></tr>
+  </table>
+  <h4>New phrases</h4>
+  <table>
+    <tr><td class="ca">A què et dediques?</td><td class="pron">/ə ˌkɛ əd dəˈðikəs/</td><td class="en">What do you do (for a living)?</td></tr>
+    <tr><td class="ca">Quina feina fas?</td><td class="pron">/ˌkinə ˌfejnə ˈfas/</td><td class="en">What job do you do?</td></tr>
+    <tr><td class="ca">Tens germans?</td><td class="pron">/ˌtenz ʒəɾˈmans/</td><td class="en">Do you have siblings?</td></tr>
+    <tr><td class="ca">Estic casat / casada.</td><td class="pron">/əsˌtik kəˈzat | kəˈzaðə/</td><td class="en">I'm married (m./f.)</td></tr>
+    <tr><td class="ca">Com és el teu germà?</td><td class="pron">/ˌkom ez əl ˌtew ʒəɾˈma/</td><td class="en">What's your brother like?</td></tr>
+    <tr><td class="ca">És alta i molt simpàtica.</td><td class="pron">/ˌez ˌaltə j ˌmol simˈpatikə/</td><td class="en">She's tall and very friendly.</td></tr>
+  </table>
+
+  <div class="dialogue">
+    <p><span class="spk">—</span> Tens germans?</p>
+    <p class="gloss"><span class="pron">/ˌtenz ʒəɾˈmans/</span> — Do you have siblings?</p>
+    <p><span class="spk">—</span> Sí, tinc una germana. Es diu Clara i és metgessa.</p>
+    <p class="gloss"><span class="pron">/ˈsi | ˌtiŋk unə ʒəɾˈmanə | əz ˈðiw ˈklaɾə j ˌez məˈdʒɛsə/</span> — Yes, I have a sister. Her name is Clara and she's a doctor.</p>
+    <p><span class="spk">—</span> Com és?</p>
+    <p class="gloss"><span class="pron">/ˌkom ˈes/</span> — What's she like?</p>
+    <p><span class="spk">—</span> És alta, morena i molt intel·ligent.</p>
+    <p class="gloss"><span class="pron">/ˌez ˈaltə | muˈɾɛnə j ˌmol intəliˈʒen/</span> — She's tall, dark-haired and very intelligent.</p>
+  </div>
+
+  <div class="res">
+    <span class="rh">Resources for Unit 6</span>
+    <b>Listen:</b> LingoHut "Family members" → <a href="https://www.lingohut.com/en/v772021/catalan-lessons-family-members">lingohut.com/en/v772021/…family-members</a> · "Family relations" (married? how old?) → <a href="https://www.lingohut.com/en/v772024/catalan-lessons-family-relations">v772024</a><br>
+    <b>Practise online:</b> open the <i>Listening game</i> on the family page → <a href="https://www.lingohut.com/en/v772021/catalan-lessons-family-members">lingohut.com/en/v772021/…family-members</a> · all the possessive forms (meu/meva/teu/teva…) with examples → <a href="https://talkpal.ai/grammar/possessive-adjectives-in-catalan-grammar/">talkpal.ai/grammar/possessive-adjectives-in-catalan-grammar</a>
+  </div>
+
+  <div class="ex"><span class="label">EX 6.1</span><h4>Complete with a family word.</h4>
+  <ol class="q"><li>El pare de la meva mare és el meu <span class="fill">___</span>.</li><li>La filla dels meus pares (no soc jo) és la meva <span class="fill">___</span>.</li><li>El germà del meu pare és el meu <span class="fill">___</span>.</li><li>La filla de la meva tia és la meva <span class="fill">___</span>.</li></ol></div>
+
+  <div class="ex"><span class="label">EX 6.2</span><h4>Add the possessive "my".</h4>
+  <ol class="q"><li><span class="fill">___</span> germà</li><li><span class="fill">___</span> mare</li><li><span class="fill">___</span> amics</li><li><span class="fill">___</span> filles</li></ol></div>
+
+  <div class="ex"><span class="label">EX 6.3</span><h4>Add the possessive in brackets.</h4>
+  <ol class="q"><li>(your, inf.) <span class="fill">___</span> cotxe</li><li>(our) <span class="fill">___</span> casa</li><li>(his) <span class="fill">___</span> llibres</li><li>(their) <span class="fill">___</span> filles</li></ol></div>
+
+  <div class="ex"><span class="label">EX 6.4</span><h4>Give the feminine.</h4>
+  <ol class="q"><li>professor</li><li>metge</li><li>cambrer</li><li>simpàtic</li></ol></div>
+
+  <div class="ex"><span class="label">EX 6.5</span><h4>Find and fix the mistake.</h4>
+  <ol class="q"><li>La meu germana és metgessa.</li><li>Els teu llibres són nous.</li><li>Soc un professor.</li></ol></div>
+
+  <div class="ex"><span class="label">EX 6.6</span><h4>Translate.</h4>
+  <ol class="q"><li>My sister is a doctor.</li><li>Their parents are from Valencia.</li><li>What do you do? — I'm a teacher.</li><li>My uncle is tall and friendly.</li></ol></div>
+
+  <div class="ex"><span class="label">EX 6.7</span><h4>Oral-exam rehearsal: describe your family aloud in 4 sentences, then write them down.</h4></div>
+</div>
+
+<!-- ===== UNIT 7 ===== -->
+<div class="unit">
+  <div class="unit-head"><div class="unit-num">Unit 7</div><h2>Time, Days, Meals &amp; Daily Routine</h2></div>
+  <div class="can-do"><b>By the end you can:</b> tell the time, name days and months, and narrate your routine with reflexive verbs.</div>
+
+  <h3>Telling the time</h3>
+  <table>
+    <thead><tr><th>Catalan</th><th>IPA</th><th>English</th></tr></thead>
+    <tr><td class="ca">Quina hora és?</td><td class="pron">/ˌkinə ˈɔɾə ˈes/</td><td class="en">What time is it?</td></tr>
+    <tr><td class="ca">És la una.</td><td class="pron">/ˌez lə ˈunə/</td><td class="en">It's one o'clock.</td></tr>
+    <tr><td class="ca">Són les dues.</td><td class="pron">/ˌson ləz ˈðuəs/</td><td class="en">It's two o'clock.</td></tr>
+    <tr><td class="ca">Són les tres i deu.</td><td class="pron">/ˌson ləs ˌtɾɛz i ˈðɛw/</td><td class="en">It's ten past three.</td></tr>
+    <tr><td class="ca">Són les sis i mitja.</td><td class="pron">/ˌson ləs ˌsiz i ˈmidʒə/</td><td class="en">It's half past six.</td></tr>
+    <tr><td class="ca">a les vuit del matí</td><td class="pron">/ə ləz ˌβujd dəl məˈti/</td><td class="en">at 8 in the morning</td></tr>
+  </table>
+
+  <h3>Reflexive verbs</h3>
+  <p>Pronouns <b>em, et, es, ens, us, es</b> before the verb. <span class="ca">llevar-se</span> <span class="pron">/ʎəˈβaɾsə/</span> <span class="en">to get up</span>: <span class="ca">em llevo</span> <span class="pron">/əm ˈʎeβu/</span>, <span class="ca">et lleves, es lleva, ens llevem, us lleveu, es lleven</span>.</p>
+
+  <h3>New vocabulary — days, months, meals, routine</h3>
+  <table>
+    <thead><tr><th>Catalan</th><th>IPA</th><th>English</th></tr></thead>
+    <tr><td class="ca">dilluns, dimarts, dimecres</td><td class="pron">/diˈʎuns/ /diˈmaɾts/ /diˈmɛkɾəs/</td><td class="en">Mon, Tue, Wed</td></tr>
+    <tr><td class="ca">dijous, divendres</td><td class="pron">/diˈʒɔws/ /diˈβɛndɾəs/</td><td class="en">Thu, Fri</td></tr>
+    <tr><td class="ca">dissabte, diumenge</td><td class="pron">/diˈsaptə/ /diwˈmɛnʒə/</td><td class="en">Sat, Sun</td></tr>
+    <tr><td class="ca">gener, febrer, març</td><td class="pron">/ʒəˈne/ /fəˈβɾe/ /ˈmaɾs/</td><td class="en">Jan, Feb, Mar</td></tr>
+    <tr><td class="ca">abril, maig, juny</td><td class="pron">/əˈβɾil/ /ˈmatʃ/ /ˈʒuɲ/</td><td class="en">Apr, May, Jun</td></tr>
+    <tr><td class="ca">juliol, agost, setembre</td><td class="pron">/ʒuliˈɔl/ /əˈɣost/ /səˈtɛmbɾə/</td><td class="en">Jul, Aug, Sep</td></tr>
+    <tr><td class="ca">octubre, novembre, desembre</td><td class="pron">/ukˈtuβɾə/ /nuˈβɛmbɾə/ /dəˈzɛmbɾə/</td><td class="en">Oct, Nov, Dec</td></tr>
+    <tr><td class="ca">l'hora</td><td class="pron">/ˈɔɾə/</td><td class="en">hour, time</td></tr>
+    <tr><td class="ca">el matí / la tarda</td><td class="pron">/məˈti/ /ˈtaɾðə/</td><td class="en">morning / afternoon</td></tr>
+    <tr><td class="ca">el vespre / la nit</td><td class="pron">/ˈbɛspɾə/ /ˈnit/</td><td class="en">evening / night</td></tr>
+    <tr><td class="ca">esmorzar</td><td class="pron">/əzmuɾˈza/</td><td class="en">to have breakfast; breakfast</td></tr>
+    <tr><td class="ca">dinar</td><td class="pron">/diˈna/</td><td class="en">to have lunch; lunch</td></tr>
+    <tr><td class="ca">sopar</td><td class="pron">/suˈpa/</td><td class="en">to have dinner; dinner</td></tr>
+    <tr><td class="ca">despertar-se</td><td class="pron">/dəspəɾˈtaɾsə/</td><td class="en">to wake up</td></tr>
+    <tr><td class="ca">dutxar-se</td><td class="pron">/duˈtʃaɾsə/</td><td class="en">to shower</td></tr>
+    <tr><td class="ca">vestir-se</td><td class="pron">/bəsˈtiɾsə/</td><td class="en">to get dressed</td></tr>
+    <tr><td class="ca">tard / d'hora</td><td class="pron">/ˈtaɾt/ /ˈdɔɾə/</td><td class="en">late / early</td></tr>
+    <tr><td class="ca">el cap de setmana</td><td class="pron">/ˌkab də səmˈmanə/</td><td class="en">weekend</td></tr>
+  </table>
+  <h4>New phrases</h4>
+  <table>
+    <tr><td class="ca">A quina hora et lleves?</td><td class="pron">/ə ˌkinə ˌɔɾə əd ˈʎeβəs/</td><td class="en">What time do you get up?</td></tr>
+    <tr><td class="ca">Em llevo a les set.</td><td class="pron">/əm ˌʎeβu ə ləs ˈsɛt/</td><td class="en">I get up at seven.</td></tr>
+    <tr><td class="ca">Quin dia és avui?</td><td class="pron">/ˌkin ˌdiə ez əˈβuj/</td><td class="en">What day is it today?</td></tr>
+    <tr><td class="ca">Els dissabtes no treballo.</td><td class="pron">/əlz diˌsaptəz ˌno tɾəˈβaʎu/</td><td class="en">On Saturdays I don't work.</td></tr>
+    <tr><td class="ca">De dilluns a divendres</td><td class="pron">/də ðiˌʎunz ə ðiˈβɛndɾəs/</td><td class="en">from Monday to Friday</td></tr>
+  </table>
+
+  <div class="dialogue">
+    <p><span class="spk">—</span> A quina hora et lleves?</p>
+    <p class="gloss"><span class="pron">/ə ˌkinə ˌɔɾə əd ˈʎeβəs/</span> — What time do you get up?</p>
+    <p><span class="spk">—</span> Em llevo a les set i esmorzo a les vuit.</p>
+    <p class="gloss"><span class="pron">/əm ˌʎeβu ə ləs ˈsɛt i əzˌmoɾzu ə ləz ˈβujt/</span> — I get up at seven and have breakfast at eight.</p>
+    <p><span class="spk">—</span> I què fas els dissabtes?</p>
+    <p class="gloss"><span class="pron">/i ˌkɛ ˈfaz əlz diˈsaptəs/</span> — And what do you do on Saturdays?</p>
+    <p><span class="spk">—</span> Els dissabtes no treballo. Em llevo tard!</p>
+    <p class="gloss"><span class="pron">/əlz diˌsaptəz ˌno tɾəˈβaʎu | əm ˌʎeβu ˈtaɾt/</span> — On Saturdays I don't work. I get up late!</p>
+  </div>
+
+  <div class="res">
+    <span class="rh">Resources for Unit 7</span>
+    <b>Listen:</b> LingoHut "Days of the week" → <a href="https://www.lingohut.com/en/v771993/catalan-lessons-days-of-the-week">lingohut.com/en/v771993/…days-of-the-week</a> · "Time and date" → <a href="https://www.lingohut.com/en/v772071/catalan-lessons-time-and-date">v772071</a><br>
+    <b>Practise online:</b> days flashcards → <a href="https://www.lingohut.com/en/v771993F/catalan-lessons-days-of-the-week/flashcards">lingohut.com/en/v771993F/…/flashcards</a> · time matching game → <a href="https://www.lingohut.com/en/v772071S/catalan-lessons-time-and-date/matching-game">v772071S/…/matching-game</a>
+  </div>
+
+  <div class="ex"><span class="label">EX 7.1</span><h4>Write the time in Catalan.</h4>
+  <ol class="q"><li>1:00</li><li>3:30</li><li>5:10</li><li>at 9 in the morning</li><li>2:20</li></ol></div>
+
+  <div class="ex"><span class="label">EX 7.2</span><h4>Conjugate the reflexive verb.</h4>
+  <ol class="q"><li>(llevar-se, jo) <span class="fill">___</span> a les set.</li><li>(dutxar-se, ella) <span class="fill">___</span> al matí.</li><li>(vestir-se, nosaltres) <span class="fill">___</span> de pressa.</li><li>(despertar-se, ells) <span class="fill">___</span> tard.</li></ol></div>
+
+  <div class="ex"><span class="label">EX 7.3</span><h4>Days &amp; months puzzles.</h4>
+  <ol class="q"><li>What day comes after dijous?</li><li>What month comes before maig?</li><li>Put in order: agost, gener, abril.</li></ol></div>
+
+  <div class="ex"><span class="label">EX 7.4</span><h4>Reorder into a correct sentence.</h4>
+  <ol class="q"><li>set / a / Em / les / llevo / .</li><li>dissabtes / no / Els / treballo / .</li></ol></div>
+
+  <div class="ex"><span class="label">EX 7.5</span><h4>Find and fix the mistake.</h4>
+  <ol class="q"><li>Jo llevo a les vuit.</li><li>És les tres.</li><li>Ella es dutxen al matí.</li></ol></div>
+
+  <div class="ex"><span class="label">EX 7.6</span><h4>Translate.</h4>
+  <ol class="q"><li>Today is Wednesday.</li><li>It's half past two.</li><li>I wake up at seven and have breakfast.</li></ol></div>
+
+  <div class="ex"><span class="label">EX 7.7</span><h4>Exam-style writing: your morning routine in 3 sentences, with times.</h4></div>
+</div>
+
+<!-- ===== UNIT 8 ===== -->
+<div class="unit">
+  <div class="unit-head"><div class="unit-num">Unit 8</div><h2>Food, Shopping &amp; the Pronoun <i>en</i></h2></div>
+  <div class="can-do"><b>By the end you can:</b> order in a café, shop, ask prices and use <i>en</i> — the role-play scenario most used in A1 oral exams.</div>
+
+  <h3>The pronoun <i>en</i></h3>
+  <p><b>En</b> <span class="pron">/ən/</span> replaces an indefinite or quantified noun ("some / of it / of them"):</p>
+  <table>
+    <thead><tr><th>Question</th><th>Answer with <i>en</i></th></tr></thead>
+    <tr><td class="ca">Vols pa? <span class="pron">/ˌbɔls ˈpa/</span> <span class="en">Want bread?</span></td><td class="ca">Sí, en vull. <span class="pron">/ˌsi əm ˈbuʎ/</span> <span class="en">Yes, I want some.</span></td></tr>
+    <tr><td class="ca">Quantes pomes vols? <span class="en">How many apples?</span></td><td class="ca">En vull tres. <span class="pron">/əm ˌbuʎ ˈtɾɛs/</span> <span class="en">I want three.</span></td></tr>
+    <tr><td class="ca">Tens cafè? <span class="en">Got coffee?</span></td><td class="ca">No, no en tinc. <span class="pron">/ˌno ˌno ən ˈtiŋk/</span> <span class="en">No, I don't have any.</span></td></tr>
+  </table>
+
+  <h3>Quantities &amp; prices</h3>
+  <p><span class="ca">un quilo de</span> <span class="pron">/uŋ ˌkilu ðə/</span> <span class="en">a kilo of</span> · <span class="ca">mig quilo</span> <span class="pron">/ˌmitʃ ˈkilu/</span> <span class="en">half a kilo</span> · <span class="ca">una mica de</span> <span class="pron">/unə ˌmikə ðə/</span> <span class="en">a bit of</span>. Price: <span class="ca">Quant és? / Quant val?</span> <span class="pron">/ˌkwan ˈes/ /ˌkwam ˈbal/</span> <span class="en">How much is it?</span></p>
+
+  <h3>New vocabulary — food &amp; drink</h3>
+  <table>
+    <thead><tr><th>Catalan</th><th>IPA</th><th>English</th></tr></thead>
+    <tr><td class="ca">l'aigua</td><td class="pron">/ˈajɣwə/</td><td class="en">water</td></tr>
+    <tr><td class="ca">el cafè amb llet</td><td class="pron">/kəˌfɛ əm ˈʎet/</td><td class="en">coffee with milk</td></tr>
+    <tr><td class="ca">el te / la llet</td><td class="pron">/ˈtɛ/ /ˈʎet/</td><td class="en">tea / milk</td></tr>
+    <tr><td class="ca">el vi / la cervesa</td><td class="pron">/ˈbi/ /səɾˈβɛzə/</td><td class="en">wine / beer</td></tr>
+    <tr><td class="ca">la fruita / la verdura</td><td class="pron">/ˈfɾujtə/ /bəɾˈðuɾə/</td><td class="en">fruit / vegetables</td></tr>
+    <tr><td class="ca">la poma / el plàtan</td><td class="pron">/ˈpomə/ /ˈplatən/</td><td class="en">apple / banana</td></tr>
+    <tr><td class="ca">la taronja</td><td class="pron">/təˈɾɔnʒə/</td><td class="en">orange</td></tr>
+    <tr><td class="ca">la carn</td><td class="pron">/ˈkaɾn/</td><td class="en">meat</td></tr>
+    <tr><td class="ca">l'ou / els ous</td><td class="pron">/ˈɔw/ /ˈɔws/</td><td class="en">egg / eggs</td></tr>
+    <tr><td class="ca">l'arròs</td><td class="pron">/əˈrɔs/</td><td class="en">rice</td></tr>
+    <tr><td class="ca">el formatge</td><td class="pron">/fuɾˈmadʒə/</td><td class="en">cheese</td></tr>
+    <tr><td class="ca">l'entrepà</td><td class="pron">/əntɾəˈpa/</td><td class="en">sandwich</td></tr>
+    <tr><td class="ca">el sucre / la sal</td><td class="pron">/ˈsukɾə/ /ˈsal/</td><td class="en">sugar / salt</td></tr>
+    <tr><td class="ca">l'oli</td><td class="pron">/ˈɔli/</td><td class="en">oil</td></tr>
+    <tr><td class="ca">l'ampolla</td><td class="pron">/əmˈpoʎə/</td><td class="en">bottle</td></tr>
+    <tr><td class="ca">l'euro / el cèntim</td><td class="pron">/ˈɛwɾu/ /ˈsɛntim/</td><td class="en">euro / cent</td></tr>
+    <tr><td class="ca">el compte</td><td class="pron">/ˈkomtə/</td><td class="en">the bill</td></tr>
+  </table>
+  <h4>New phrases</h4>
+  <table>
+    <tr><td class="ca">Què voleu (prendre)?</td><td class="pron">/ˌkɛ βuˈlɛw ˈpɾɛndɾə/</td><td class="en">What would you like (to have)?</td></tr>
+    <tr><td class="ca">Per a mi, un cafè amb llet.</td><td class="pron">/pəɾ ə ˈmi | uŋ kəˌfɛ əm ˈʎet/</td><td class="en">For me, a coffee with milk.</td></tr>
+    <tr><td class="ca">Alguna cosa més?</td><td class="pron">/əlˌɣunə ˌkɔzə ˈmes/</td><td class="en">Anything else?</td></tr>
+    <tr><td class="ca">Res més, gràcies.</td><td class="pron">/ˌrɛz ˈmes | ˈɡɾasiəs/</td><td class="en">Nothing else, thanks.</td></tr>
+    <tr><td class="ca">El compte, si us plau.</td><td class="pron">/əl ˈkomtə | si us ˈplaw/</td><td class="en">The bill, please.</td></tr>
+    <tr><td class="ca">Són quatre euros amb cinquanta.</td><td class="pron">/ˌsoŋ ˌkwatɾə ˌɛwɾuz əm siŋˈkwantə/</td><td class="en">That's four euros fifty.</td></tr>
+  </table>
+
+  <div class="dialogue">
+    <p><span class="spk">Cambrer:</span> Bon dia, què voleu?</p>
+    <p class="gloss"><span class="pron">/ˌbɔn ˈdiə | ˌkɛ βuˈlɛw/</span> — Good morning, what would you like?</p>
+    <p><span class="spk">Client:</span> Un cafè amb llet i un entrepà de formatge, si us plau.</p>
+    <p class="gloss"><span class="pron">/uŋ kəˌfɛ əm ˈʎet i un əntɾəˌpa ðə fuɾˈmadʒə | si us ˈplaw/</span> — A coffee with milk and a cheese sandwich, please.</p>
+    <p><span class="spk">Cambrer:</span> Molt bé. Alguna cosa més?</p>
+    <p class="gloss"><span class="pron">/ˌmol ˈbe | əlˌɣunə ˌkɔzə ˈmes/</span> — Very good. Anything else?</p>
+    <p><span class="spk">Client:</span> No, gràcies. Quant és?</p>
+    <p class="gloss"><span class="pron">/ˈno ˈɡɾasiəs | ˌkwan ˈes/</span> — No, thanks. How much is it?</p>
+    <p><span class="spk">Cambrer:</span> Són quatre euros amb cinquanta.</p>
+    <p class="gloss"><span class="pron">/ˌsoŋ ˌkwatɾə ˌɛwɾuz əm siŋˈkwantə/</span> — That's four euros fifty.</p>
+  </div>
+
+  <div class="res">
+    <span class="rh">Resources for Unit 8</span>
+    <b>Listen:</b> LingoHut "Meals" → <a href="https://www.lingohut.com/en/v772039/catalan-lessons-meals">lingohut.com/en/v772039/…meals</a> · "At a restaurant" → <a href="https://www.lingohut.com/en/v772058/catalan-lessons-at-a-restaurant">v772058</a><br>
+    <b>Practise online:</b> restaurant listening game → <a href="https://www.lingohut.com/en/v772058L/catalan-lessons-at-a-restaurant/listening-game">lingohut.com/en/v772058L/…/listening-game</a> · menu vocabulary → <a href="https://www.lingohut.com/en/v296733/catalan-lessons-restaurant-ordering-food">v296733/…restaurant-ordering-food</a>
+  </div>
+
+  <div class="ex"><span class="label">EX 8.1</span><h4>Answer using <i>en</i>.</h4>
+  <ol class="q"><li>Vols aigua? → Sí, <span class="fill">___</span>.</li><li>Quantes pomes compres? → <span class="fill">___</span> dues.</li><li>Tens diners? → No, no <span class="fill">___</span>.</li><li>Vols cafè? → Sí, <span class="fill">___</span>.</li></ol></div>
+
+  <div class="ex"><span class="label">EX 8.2</span><h4>Order politely (full sentences).</h4>
+  <ol class="q"><li>a tea and an apple</li><li>half a kilo of fish</li><li>a coffee with milk and the bill</li></ol></div>
+
+  <div class="ex"><span class="label">EX 8.3</span><h4>Write the prices in words.</h4>
+  <ol class="q"><li>€2.50</li><li>€3.20</li><li>€10</li></ol></div>
+
+  <div class="ex"><span class="label">EX 8.4</span><h4>Categorise: menjar (food) or beguda (drink)?</h4>
+  <ol class="q"><li>aigua</li><li>formatge</li><li>cervesa</li><li>arròs</li><li>te</li></ol></div>
+
+  <div class="ex"><span class="label">EX 8.5</span><h4>Fill the gaps in the café dialogue.</h4>
+  <ol class="q"><li>— Bon dia, què <span class="fill">___</span>?</li><li>— Un <span class="fill">___</span> amb llet, si us <span class="fill">___</span>.</li><li>— Alguna cosa <span class="fill">___</span>? — No, gràcies. Quant <span class="fill">___</span>?</li></ol></div>
+
+  <div class="ex"><span class="label">EX 8.6</span><h4>Translate.</h4>
+  <ol class="q"><li>How much is it? — It's three euros twenty.</li><li>I want a bit of bread, please.</li><li>Do you have oranges? — Yes, I have some.</li></ol></div>
+
+  <div class="ex"><span class="label">EX 8.7</span><h4>Oral-exam role-play: write your half of a café dialogue (greet, order two items, ask the price, thank, say goodbye). Then say it aloud.</h4></div>
+</div>
+
+<!-- ===== UNIT 9 ===== -->
+<div class="unit">
+  <div class="unit-head"><div class="unit-num">Unit 9</div><h2>The City, Directions &amp; Places</h2></div>
+  <div class="can-do"><b>By the end you can:</b> ask for and give directions and locate things — common in both listening and oral papers.</div>
+
+  <h3><i>Hi ha</i> vs <i>ser/estar</i> for location</h3>
+  <p><b>hi ha</b> for existence (indefinite): <span class="ca">A la plaça hi ha un mercat.</span> <span class="pron">/ə lə ˌplasə i ˈa um məɾˈkat/</span> <span class="en">There's a market in the square.</span> <b>ser/estar</b> for locating a known thing: <span class="ca">El mercat és a la plaça.</span> <span class="pron">/əl məɾˌkat ez ə lə ˈplasə/</span> <span class="en">The market is in the square.</span></p>
+
+  <h3>New vocabulary — places &amp; position</h3>
+  <table>
+    <thead><tr><th>Catalan</th><th>IPA</th><th>English</th></tr></thead>
+    <tr><td class="ca">el carrer</td><td class="pron">/kəˈre/</td><td class="en">street</td></tr>
+    <tr><td class="ca">la plaça</td><td class="pron">/ˈplasə/</td><td class="en">square</td></tr>
+    <tr><td class="ca">l'estació</td><td class="pron">/əstəsiˈo/</td><td class="en">station</td></tr>
+    <tr><td class="ca">el mercat</td><td class="pron">/məɾˈkat/</td><td class="en">market</td></tr>
+    <tr><td class="ca">la botiga</td><td class="pron">/buˈtiɣə/</td><td class="en">shop</td></tr>
+    <tr><td class="ca">el banc</td><td class="pron">/ˈbaŋ/</td><td class="en">bank</td></tr>
+    <tr><td class="ca">l'hospital</td><td class="pron">/uspiˈtal/</td><td class="en">hospital</td></tr>
+    <tr><td class="ca">la farmàcia</td><td class="pron">/fəɾˈmasiə/</td><td class="en">pharmacy</td></tr>
+    <tr><td class="ca">l'escola</td><td class="pron">/əsˈkɔlə/</td><td class="en">school</td></tr>
+    <tr><td class="ca">la biblioteca</td><td class="pron">/biβliuˈtɛkə/</td><td class="en">library</td></tr>
+    <tr><td class="ca">el museu</td><td class="pron">/muˈzɛw/</td><td class="en">museum</td></tr>
+    <tr><td class="ca">la platja</td><td class="pron">/ˈpladʒə/</td><td class="en">beach</td></tr>
+    <tr><td class="ca">la parada de metro</td><td class="pron">/pəˌɾaðə ðə ˈmɛtɾu/</td><td class="en">metro stop</td></tr>
+    <tr><td class="ca">la cantonada</td><td class="pron">/kəntuˈnaðə/</td><td class="en">corner</td></tr>
+    <tr><td class="ca">sota / sobre</td><td class="pron">/ˈsotə/ /ˈsoβɾə/</td><td class="en">under / on</td></tr>
+    <tr><td class="ca">davant (de) / darrere (de)</td><td class="pron">/dəˈβan/ /dəˈrɛɾə/</td><td class="en">in front of / behind</td></tr>
+    <tr><td class="ca">al costat de</td><td class="pron">/əl kusˌtad də/</td><td class="en">next to</td></tr>
+    <tr><td class="ca">entre</td><td class="pron">/ˈentɾə/</td><td class="en">between</td></tr>
+    <tr><td class="ca">a prop (de) / lluny (de)</td><td class="pron">/ə ˈpɾɔp/ /ˈʎuɲ/</td><td class="en">near / far (from)</td></tr>
+    <tr><td class="ca">la dreta / l'esquerra</td><td class="pron">/ˈdɾɛtə/ /əsˈkɛrə/</td><td class="en">right / left</td></tr>
+  </table>
+  <h4>New phrases</h4>
+  <table>
+    <tr><td class="ca">Perdoni, on és…?</td><td class="pron">/pəɾˈðoni | ˌon ˈes/</td><td class="en">Excuse me (formal), where is…?</td></tr>
+    <tr><td class="ca">Gira a la dreta / a l'esquerra.</td><td class="pron">/ˌʒiɾə ə lə ˈðɾɛtə | ə ləsˈkɛrə/</td><td class="en">Turn right / left.</td></tr>
+    <tr><td class="ca">Ves tot recte.</td><td class="pron">/ˌbɛs ˌtot ˈrektə/</td><td class="en">Go straight on.</td></tr>
+    <tr><td class="ca">És lluny? — No, és a prop.</td><td class="pron">/ˌez ˈʎuɲ — ˌno | ˌez ə ˈpɾɔp/</td><td class="en">Is it far? — No, it's near.</td></tr>
+    <tr><td class="ca">La primera a la dreta.</td><td class="pron">/lə pɾiˌmeɾə ə lə ˈðɾɛtə/</td><td class="en">The first on the right.</td></tr>
+  </table>
+
+  <div class="dialogue">
+    <p><span class="spk">Turista:</span> Perdoni, on és l'estació?</p>
+    <p class="gloss"><span class="pron">/pəɾˈðoni | ˌon ez ləstəsiˈo/</span> — Excuse me, where is the station?</p>
+    <p><span class="spk">Local:</span> Tot recte i després la primera a la dreta. És al costat del banc.</p>
+    <p class="gloss"><span class="pron">/ˌtot ˈrektə i ðəsˌpɾez lə pɾiˌmeɾə ə lə ˈðɾɛtə | ˌez əl kusˌtad dəl ˈbaŋ/</span> — Straight on, then first right. It's next to the bank.</p>
+    <p><span class="spk">Turista:</span> És lluny?</p>
+    <p class="gloss"><span class="pron">/ˌez ˈʎuɲ/</span> — Is it far?</p>
+    <p><span class="spk">Local:</span> No, és a prop. Cinc minuts.</p>
+    <p class="gloss"><span class="pron">/ˈno | ˌez ə ˈpɾɔp | ˌsiŋ miˈnuts/</span> — No, it's near. Five minutes.</p>
+  </div>
+
+  <div class="res">
+    <span class="rh">Resources for Unit 9</span>
+    <b>Listen:</b> LingoHut "Directions" → <a href="https://www.lingohut.com/en/v772065/catalan-lessons-directions">lingohut.com/en/v772065/…directions</a><br>
+    <b>Practise online:</b> open the <i>Listening game</i> on that page → <a href="https://www.lingohut.com/en/v772065/catalan-lessons-directions">lingohut.com/en/v772065/…directions</a> · preposition fill-in drills (a, de, sobre, amb…) → <a href="https://talkpal.ai/grammar_exercises/prepositions-with-verbs-and-adjectives-exercises-for-catalan-grammar/">talkpal.ai/grammar_exercises/prepositions-with-verbs-and-adjectives-exercises-for-catalan-grammar</a>
+  </div>
+
+  <div class="ex"><span class="label">EX 9.1</span><h4>Choose <i>hi ha</i> or <i>és</i>.</h4>
+  <ol class="q"><li>A prop de casa <span class="fill">___</span> un supermercat.</li><li>El supermercat <span class="fill">___</span> al carrer Major.</li><li>On <span class="fill">___</span> el banc?</li><li>A la plaça <span class="fill">___</span> tres botigues.</li></ol></div>
+
+  <div class="ex"><span class="label">EX 9.2</span><h4>Complete with a preposition of place.</h4>
+  <ol class="q"><li>El gat és <span class="fill">___</span> la taula. (under)</li><li>La botiga és <span class="fill">___</span> del banc. (next to)</li><li>L'hospital és <span class="fill">___</span>. (far)</li><li>El cotxe és <span class="fill">___</span> de la casa. (in front of)</li></ol></div>
+
+  <div class="ex"><span class="label">EX 9.3</span><h4>Opposites.</h4>
+  <ol class="q"><li>a prop de ≠ <span class="fill">___</span></li><li>davant de ≠ <span class="fill">___</span></li><li>sota ≠ <span class="fill">___</span></li><li>a la dreta ≠ <span class="fill">___</span></li></ol></div>
+
+  <div class="ex"><span class="label">EX 9.4</span><h4>Follow the directions and describe where you end up.</h4>
+  <p class="note">"Tot recte, la segona a l'esquerra; és al costat del mercat."</p></div>
+
+  <div class="ex"><span class="label">EX 9.5</span><h4>Find and fix the mistake.</h4>
+  <ol class="q"><li>On hi ha el banc? (a specific bank)</li><li>A la plaça és un mercat.</li></ol></div>
+
+  <div class="ex"><span class="label">EX 9.6</span><h4>Translate.</h4>
+  <ol class="q"><li>Excuse me, where is the market?</li><li>Turn left and go straight on.</li><li>There's a pharmacy next to the station.</li></ol></div>
+
+  <div class="ex"><span class="label">EX 9.7</span><h4>Read the IPA, write the place.</h4>
+  <ol class="q"><li><span class="pron">/biβliuˈtɛkə/</span></li><li><span class="pron">/fəɾˈmasiə/</span></li><li><span class="pron">/əstəsiˈo/</span></li></ol></div>
+</div>
+
+<!-- ===== UNIT 10 ===== -->
+<div class="unit">
+  <div class="unit-head"><div class="unit-num">Unit 10</div><h2>Likes &amp; Free Time</h2></div>
+  <div class="can-do"><b>By the end you can:</b> say what you like and dislike, talk about hobbies, seasons and weather. <b>Exam skill:</b> "M'agrada…" sentences are expected in both the writing and oral papers.</div>
+
+  <h3>The verb <i>agradar</i> <span class="pron">/əɣɾəˈða/</span> (to like)</h3>
+  <p>It works "backwards": the thing liked is the grammatical subject. Use the indirect pronouns <b>em, et, li, ens, us, els</b> before it.</p>
+  <table>
+    <thead><tr><th>Catalan</th><th>IPA</th><th>English</th></tr></thead>
+    <tr><td class="ca">M'agrada el cafè.</td><td class="pron">/məˈɣɾaðə əl kəˈfɛ/</td><td class="en">I like coffee. (singular thing → agrada)</td></tr>
+    <tr><td class="ca">M'agraden els llibres.</td><td class="pron">/məˈɣɾaðən əls ˈʎiβɾəs/</td><td class="en">I like books. (plural thing → agraden)</td></tr>
+    <tr><td class="ca">T'agrada llegir?</td><td class="pron">/təˈɣɾaðə ʎəˈʒi/</td><td class="en">Do you like reading? (verb → agrada)</td></tr>
+    <tr><td class="ca">Li agrada la música.</td><td class="pron">/li əˈɣɾaðə lə ˈmuzikə/</td><td class="en">He/She likes music.</td></tr>
+    <tr><td class="ca">No ens agrada gens.</td><td class="pron">/ˌnɔ ənz əˈɣɾaðə ˈʒens/</td><td class="en">We don't like it at all.</td></tr>
+    <tr><td class="ca">M'encanta!</td><td class="pron">/məŋˈkantə/</td><td class="en">I love it!</td></tr>
+  </table>
+
+  <h3>Weather with <i>fer</i></h3>
+  <p>Catalan "does" the weather: <span class="ca">Quin temps fa?</span> <span class="pron">/ˌkin ˈtems ˈfa/</span> <span class="en">What's the weather like?</span> — <span class="ca">Fa sol / fred / calor / vent.</span> <span class="pron">/fə ˈsɔl ˈfɾɛt kəˈlo ˈben/</span> <span class="en">It's sunny / cold / hot / windy.</span> But: <span class="ca">Plou.</span> <span class="pron">/ˈplɔw/</span> <span class="en">It's raining.</span> · <span class="ca">Neva.</span> <span class="pron">/ˈnɛβə/</span> <span class="en">It's snowing.</span> · <span class="ca">Està ennuvolat.</span> <span class="pron">/əsˈta ənnuβuˈlat/</span> <span class="en">It's cloudy.</span></p>
+
+  <h3>New vocabulary — hobbies, seasons &amp; weather</h3>
+  <table>
+    <thead><tr><th>Catalan</th><th>IPA</th><th>English</th></tr></thead>
+    <tr><td class="ca">llegir / escriure</td><td class="pron">/ʎəˈʒi/ /əsˈkɾiwɾə/</td><td class="en">to read / to write</td></tr>
+    <tr><td class="ca">cuinar</td><td class="pron">/kujˈna/</td><td class="en">to cook</td></tr>
+    <tr><td class="ca">córrer / nedar</td><td class="pron">/ˈkorə/ /nəˈða/</td><td class="en">to run / to swim</td></tr>
+    <tr><td class="ca">ballar / cantar</td><td class="pron">/bəˈʎa/ /kənˈta/</td><td class="en">to dance / to sing</td></tr>
+    <tr><td class="ca">viatjar / passejar</td><td class="pron">/biəˈdʒa/ /pəsəˈʒa/</td><td class="en">to travel / to stroll</td></tr>
+    <tr><td class="ca">jugar (a futbol)</td><td class="pron">/ʒuˈɣa/</td><td class="en">to play (football)</td></tr>
+    <tr><td class="ca">la música</td><td class="pron">/ˈmuzikə/</td><td class="en">music</td></tr>
+    <tr><td class="ca">la pel·lícula</td><td class="pron">/pəˈlikulə/</td><td class="en">film</td></tr>
+    <tr><td class="ca">l'esport</td><td class="pron">/əsˈpɔrt/</td><td class="en">sport</td></tr>
+    <tr><td class="ca">el futbol</td><td class="pron">/fubˈbɔl/</td><td class="en">football</td></tr>
+    <tr><td class="ca">la primavera / l'estiu</td><td class="pron">/pɾiməˈβeɾə/ /əsˈtiw/</td><td class="en">spring / summer</td></tr>
+    <tr><td class="ca">la tardor / l'hivern</td><td class="pron">/tərˈðo/ /iˈβɛrn/</td><td class="en">autumn / winter</td></tr>
+    <tr><td class="ca">el sol / el núvol</td><td class="pron">/ˈsɔl/ /ˈnuβul/</td><td class="en">sun / cloud</td></tr>
+    <tr><td class="ca">la pluja / la neu</td><td class="pron">/ˈpluʒə/ /ˈnɛw/</td><td class="en">rain / snow</td></tr>
+    <tr><td class="ca">el vent / el temps</td><td class="pron">/ˈben/ /ˈtems/</td><td class="en">wind / weather, time</td></tr>
+    <tr><th colspan="3">Phrases</th></tr>
+    <tr><td class="ca">Què t'agrada fer?</td><td class="pron">/ˌkɛ təˈɣɾaðə ˈfe/</td><td class="en">What do you like doing?</td></tr>
+    <tr><td class="ca">M'agrada molt cuinar.</td><td class="pron">/məˈɣɾaðə ˌmol kujˈna/</td><td class="en">I really like cooking.</td></tr>
+    <tr><td class="ca">No m'agrada gens el futbol.</td><td class="pron">/ˌnɔ məˈɣɾaðə ˈʒens əl fubˈbɔl/</td><td class="en">I don't like football at all.</td></tr>
+    <tr><td class="ca">Quin temps fa avui?</td><td class="pron">/ˌkin ˈtems ˈfa əˈβuj/</td><td class="en">What's the weather like today?</td></tr>
+    <tr><td class="ca">A l'estiu fa molta calor.</td><td class="pron">/ə ləsˈtiw fə ˌmoltə kəˈlo/</td><td class="en">In summer it's very hot.</td></tr>
+  </table>
+
+  <div class="dialogue">
+    <p><span class="spk">Laia:</span> Què t'agrada fer el cap de setmana?</p>
+    <p class="gloss"><span class="pron">/ˌkɛ təˈɣɾaðə ˈfe əl ˌkab də səmˈmanə/</span> — What do you like doing at the weekend?</p>
+    <p><span class="spk">Marc:</span> M'agrada llegir i córrer. I a tu?</p>
+    <p class="gloss"><span class="pron">/məˈɣɾaðə ʎəˈʒi i ˈkorə | i ə ˈtu/</span> — I like reading and running. And you?</p>
+    <p><span class="spk">Laia:</span> A mi m'encanta cuinar. Però no m'agraden els esports.</p>
+    <p class="gloss"><span class="pron">/ə ˈmi məŋˈkantə kujˈna | pəˈɾɔ ˌnɔ məˈɣɾaðən əlz əsˈpɔrts/</span> — I love cooking. But I don't like sports.</p>
+    <p><span class="spk">Marc:</span> Quin temps fa? Podem passejar?</p>
+    <p class="gloss"><span class="pron">/ˌkin ˈtems ˈfa | puˈðɛm pəsəˈʒa/</span> — What's the weather like? Can we go for a stroll?</p>
+    <p><span class="spk">Laia:</span> Fa sol, però fa una mica de fred.</p>
+    <p class="gloss"><span class="pron">/fə ˈsɔl | pəˈɾɔ fə ˌunə ˌmikə ðə ˈfɾɛt/</span> — It's sunny, but a bit cold.</p>
+  </div>
+
+  <div class="res">
+    <span class="rh">Resources for Unit 10</span>
+    <b>Listen:</b> LingoHut "Recreation" (hobbies, audio) → <a href="https://www.lingohut.com/en/v772010/catalan-lessons-recreation">lingohut.com/en/v772010/…recreation</a> · "Seasons and weather" → <a href="https://www.lingohut.com/en/v772008/catalan-lessons-seasons-and-weather">lingohut.com/en/v772008/…seasons-and-weather</a> (open the <i>Listening game</i> on each page)<br>
+    <b>Practise online:</b> the pronouns agradar needs (em, et, li, ens…) explained with full tables → <a href="https://talkpal.ai/grammar/personal-pronouns-in-catalan-grammar/">talkpal.ai/grammar/personal-pronouns-in-catalan-grammar</a> · hear any hobby word → <a href="https://forvo.com/languages/ca/">forvo.com/languages/ca</a>
+  </div>
+
+  <div class="ex"><span class="label">EX 10.1</span><h4>agrada or agraden?</h4>
+  <ol class="q"><li>M'<span class="fill">___</span> la música.</li><li>M'<span class="fill">___</span> els gats.</li><li>T'<span class="fill">___</span> cuinar?</li><li>No ens <span class="fill">___</span> les pel·lícules de por.</li><li>Li <span class="fill">___</span> viatjar.</li></ol></div>
+
+  <div class="ex"><span class="label">EX 10.2</span><h4>Add the right pronoun (em/et/li/ens/els).</h4>
+  <ol class="q"><li>A mi <span class="fill">___</span> agrada el te.</li><li>A tu <span class="fill">___</span> agrada córrer?</li><li>A ella <span class="fill">___</span> agraden els llibres.</li><li>A nosaltres <span class="fill">___</span> agrada passejar.</li></ol></div>
+
+  <div class="ex"><span class="label">EX 10.3</span><h4>Translate.</h4>
+  <ol class="q"><li>I like reading.</li><li>She likes apples.</li><li>We love travelling.</li><li>They don't like fish.</li></ol></div>
+
+  <div class="ex"><span class="label">EX 10.4</span><h4>Describe the weather in Catalan.</h4>
+  <ol class="q"><li>It's hot and sunny.</li><li>It's raining and windy.</li><li>It's cold and cloudy.</li><li>In winter it snows.</li></ol></div>
+
+  <div class="ex"><span class="label">EX 10.5</span><h4>Find and fix the mistake.</h4>
+  <ol class="q"><li>M'agraden el cafè.</li><li>M'agrada els gats.</li><li>Fa plou avui.</li></ol></div>
+
+  <div class="ex"><span class="label">EX 10.6</span><h4>Read the IPA, write the word.</h4>
+  <ol class="q"><li><span class="pron">/kujˈna/</span></li><li><span class="pron">/iˈβɛrn/</span></li><li><span class="pron">/ˈpluʒə/</span></li></ol></div>
+
+  <div class="ex"><span class="label">EX 10.7</span><h4>Exam-style writing: three sentences — two things you like (one plural!), one you dislike, and today's weather.</h4></div>
+</div>
+
+<!-- ===== UNIT 11 ===== -->
+<div class="unit">
+  <div class="unit-head"><div class="unit-num">Unit 11</div><h2>The Recent Past</h2></div>
+  <div class="can-do"><b>By the end you can:</b> say what you did, using the easiest past tense in Europe. <b>Exam skill:</b> the writing paper's postcard task almost always needs the past tense.</div>
+
+  <h3>The <i>perfet perifràstic</i></h3>
+  <p>Spoken Catalan's main past tense: special forms of <b>anar</b> + the plain <b>infinitive</b>. It works for <b>every verb</b> — only the auxiliary changes.</p>
+  <table>
+    <thead><tr><th>Person</th><th>Auxiliary</th><th>IPA</th><th>Example</th></tr></thead>
+    <tr><td>jo</td><td class="ca">vaig</td><td class="pron">/ˈbatʃ/</td><td>vaig parlar <span class="pron">/ˌbatʃ pərˈla/</span> <span class="en">I spoke</span></td></tr>
+    <tr><td>tu</td><td class="ca">vas</td><td class="pron">/ˈbas/</td><td>vas menjar <span class="pron">/ˌbaz mənˈʒa/</span> <span class="en">you ate</span></td></tr>
+    <tr><td>ell/ella</td><td class="ca">va</td><td class="pron">/ˈba/</td><td>va anar <span class="pron">/ˌba əˈna/</span> <span class="en">he/she went</span></td></tr>
+    <tr><td>nosaltres</td><td class="ca">vam</td><td class="pron">/ˈbam/</td><td>vam fer <span class="pron">/ˌbam ˈfe/</span> <span class="en">we did/made</span></td></tr>
+    <tr><td>vosaltres</td><td class="ca">vau</td><td class="pron">/ˈbaw/</td><td>vau veure <span class="pron">/ˌbaw ˈβɛwɾə/</span> <span class="en">you (pl.) saw</span></td></tr>
+    <tr><td>ells/elles</td><td class="ca">van</td><td class="pron">/ˈban/</td><td>van comprar <span class="pron">/ˌbaŋ kumˈpɾa/</span> <span class="en">they bought</span></td></tr>
+  </table>
+  <p class="note">Yes — "go" makes the <i>past</i> here, the mirror image of English "going to". <span class="ca">Vaig anar</span> <span class="pron">/ˌbadʒ əˈna/</span> literally "I go to go" = <span class="en">I went</span>.</p>
+
+  <h3>New vocabulary — past time &amp; going out</h3>
+  <table>
+    <thead><tr><th>Catalan</th><th>IPA</th><th>English</th></tr></thead>
+    <tr><td class="ca">ahir / abans-d'ahir</td><td class="pron">/əˈi/ /əˌβanz ðəˈi/</td><td class="en">yesterday / the day before yesterday</td></tr>
+    <tr><td class="ca">anit</td><td class="pron">/əˈnit/</td><td class="en">last night</td></tr>
+    <tr><td class="ca">la setmana passada</td><td class="pron">/səmˌmanə pəˈsaðə/</td><td class="en">last week</td></tr>
+    <tr><td class="ca">el mes passat / l'any passat</td><td class="pron">/ˌmɛs pəˈsat/ /ˌaɲ pəˈsat/</td><td class="en">last month / last year</td></tr>
+    <tr><td class="ca">aquest matí</td><td class="pron">/əˌkɛt məˈti/</td><td class="en">this morning</td></tr>
+    <tr><td class="ca">arribar / sortir</td><td class="pron">/əriˈβa/ /surˈti/</td><td class="en">to arrive / to go out, leave</td></tr>
+    <tr><td class="ca">tornar</td><td class="pron">/turˈna/</td><td class="en">to return, go back</td></tr>
+    <tr><td class="ca">visitar / trobar</td><td class="pron">/biziˈta/ /tɾuˈβa/</td><td class="en">to visit / to find, meet</td></tr>
+    <tr><td class="ca">esperar / ajudar</td><td class="pron">/əspəˈɾa/ /əʒuˈða/</td><td class="en">to wait (for) / to help</td></tr>
+    <tr><td class="ca">descansar</td><td class="pron">/dəskənˈsa/</td><td class="en">to rest</td></tr>
+    <tr><td class="ca">el restaurant / el cinema</td><td class="pron">/rəstəwˈɾan/ /siˈnɛmə/</td><td class="en">restaurant / cinema</td></tr>
+    <tr><td class="ca">el concert / la festa</td><td class="pron">/kunˈsɛrt/ /ˈfɛstə/</td><td class="en">concert / party</td></tr>
+    <tr><td class="ca">el viatge / les vacances</td><td class="pron">/biˈadʒə/ /bəˈkansəs/</td><td class="en">trip / holidays</td></tr>
+    <tr><th colspan="3">Phrases</th></tr>
+    <tr><td class="ca">Què vas fer ahir?</td><td class="pron">/ˌkɛ βas ˈfeɾ əˈi/</td><td class="en">What did you do yesterday?</td></tr>
+    <tr><td class="ca">Vaig anar a la platja.</td><td class="pron">/ˌbadʒ əˈnaɾ ə lə ˈpladʒə/</td><td class="en">I went to the beach.</td></tr>
+    <tr><td class="ca">On vas anar de vacances?</td><td class="pron">/ˌon bəz əˈna ðə βəˈkansəs/</td><td class="en">Where did you go on holiday?</td></tr>
+    <tr><td class="ca">Va ser fantàstic!</td><td class="pron">/ˌba ˈse fənˈtastik/</td><td class="en">It was fantastic!</td></tr>
+    <tr><td class="ca">M'ho vaig passar molt bé.</td><td class="pron">/ˌmu βatʃ pəˈsa ˌmol ˈbe/</td><td class="en">I had a great time.</td></tr>
+    <tr><td class="ca">Vam sopar fora.</td><td class="pron">/ˌbam suˈpa ˈfɔɾə/</td><td class="en">We ate out (dinner).</td></tr>
+  </table>
+
+  <div class="dialogue">
+    <p><span class="spk">Nil:</span> Què vas fer ahir?</p>
+    <p class="gloss"><span class="pron">/ˌkɛ βas ˈfeɾ əˈi/</span> — What did you do yesterday?</p>
+    <p><span class="spk">Júlia:</span> Vaig anar al mercat i vaig comprar fruita. I tu?</p>
+    <p class="gloss"><span class="pron">/ˌbadʒ əˈnaɾ əl mərˈkat i ˌbatʃ kumˈpɾa ˈfɾujtə | i ˈtu/</span> — I went to the market and bought fruit. And you?</p>
+    <p><span class="spk">Nil:</span> Vaig treballar tot el dia, però al vespre vam sopar fora.</p>
+    <p class="gloss"><span class="pron">/ˌbatʃ tɾəβəˈʎa ˌtot əl ˈdiə | pəˈɾɔ əl ˈβɛspɾə ˌbam suˈpa ˈfɔɾə/</span> — I worked all day, but in the evening we ate out.</p>
+    <p><span class="spk">Júlia:</span> On vau anar?</p>
+    <p class="gloss"><span class="pron">/ˌom baw əˈna/</span> — Where did you go?</p>
+    <p><span class="spk">Nil:</span> A un restaurant del barri. Va ser fantàstic!</p>
+    <p class="gloss"><span class="pron">/ə un rəstəwˈɾan dəl ˈβari | ˌba ˈse fənˈtastik/</span> — To a neighbourhood restaurant. It was fantastic!</p>
+  </div>
+
+  <div class="res">
+    <span class="rh">Resources for Unit 11</span>
+    <b>Listen:</b> Easy Catalan — street interviews where people naturally narrate things they did (vaig…, vam…), subtitled CA + EN → <a href="https://www.youtube.com/c/EasyCatalan">youtube.com/c/EasyCatalan</a><br>
+    <b>Practise online:</b> verbs.cat trainer — choose the <i>perifràstic</i> past → <a href="https://www.verbs.cat/en/practise.html">verbs.cat/en/practise.html</a> · vaig/va/van fill-in exercises → <a href="https://talkpal.ai/grammar_exercises/preterite-exercises-for-catalan-grammar/">talkpal.ai/grammar_exercises/preterite-exercises-for-catalan-grammar</a>
+  </div>
+
+  <div class="ex"><span class="label">EX 11.1</span><h4>Put into the perfet perifràstic.</h4>
+  <ol class="q"><li>(jo, menjar) <span class="fill">___</span> una poma.</li><li>(ella, anar) <span class="fill">___</span> a Barcelona.</li><li>(nosaltres, fer) <span class="fill">___</span> els deures.</li><li>(ells, comprar) <span class="fill">___</span> un cotxe.</li><li>(tu, veure) <span class="fill">___</span> la pel·lícula?</li></ol></div>
+
+  <div class="ex"><span class="label">EX 11.2</span><h4>Change present → past.</h4>
+  <ol class="q"><li>Parlo amb la Maria. → <span class="fill">___</span></li><li>Anem al cinema. → <span class="fill">___</span></li><li>Compren pa. → <span class="fill">___</span></li></ol></div>
+
+  <div class="ex"><span class="label">EX 11.3</span><h4>Add a logical past time marker.</h4>
+  <ol class="q"><li><span class="fill">___</span> vaig anar al mercat. (yesterday)</li><li><span class="fill">___</span> vam viatjar a Roma. (last year)</li><li><span class="fill">___</span> va arribar tard. (this morning)</li></ol></div>
+
+  <div class="ex"><span class="label">EX 11.4</span><h4>Find and fix the mistake.</h4>
+  <ol class="q"><li>Jo va parlar amb ell.</li><li>Nosaltres van fer els deures.</li><li>Ella vaig anar a casa.</li></ol></div>
+
+  <div class="ex"><span class="label">EX 11.5</span><h4>Translate.</h4>
+  <ol class="q"><li>Yesterday I studied Catalan.</li><li>Last week we travelled to Girona.</li><li>What did she do this morning?</li><li>They returned home late.</li></ol></div>
+
+  <div class="ex"><span class="label">EX 11.6</span><h4>Read the IPA, write the phrase.</h4>
+  <ol class="q"><li><span class="pron">/ˌbadʒ əˈnaɾ ə lə ˈpladʒə/</span></li><li><span class="pron">/ˌba ˈse fənˈtastik/</span></li></ol></div>
+
+  <div class="ex"><span class="label">EX 11.7</span><h4>Exam-style writing: three sentences about what you did yesterday (use three different verbs).</h4></div>
+</div>
+
+<!-- ===== UNIT 12 ===== -->
+<div class="unit">
+  <div class="unit-head"><div class="unit-num">Unit 12</div><h2>Consolidation &amp; Exam Language</h2></div>
+  <div class="can-do"><b>By the end you can:</b> combine Units 1–11 in connected Catalan, fill in forms, and use the language of the exam room itself.</div>
+
+  <h3>Reading (exam-style: no IPA, just like the real paper)</h3>
+  <div class="dialogue">
+    <p>Em dic Sara i soc de Tarragona, però ara visc a Barcelona. Tinc vint-i-vuit anys i soc professora d'anglès. De dilluns a divendres em llevo a les set, esmorzo un cafè amb llet i vaig a la feina amb metro. M'agrada molt la meva feina. Els caps de setmana no treballo: m'agrada cuinar, llegir i passejar per la ciutat. Ahir vaig anar al mercat i vaig comprar fruita i peix. A la tarda va fer molt sol i vam passejar per la platja. M'encanta Barcelona!</p>
+    <p class="gloss">My name is Sara and I'm from Tarragona, but now I live in Barcelona. I'm twenty-eight and I'm an English teacher. From Monday to Friday I get up at seven, have a white coffee for breakfast and go to work by metro. I really like my job. At weekends I don't work: I like cooking, reading and strolling around the city. Yesterday I went to the market and bought fruit and fish. In the afternoon it was very sunny and we walked along the beach. I love Barcelona!</p>
+  </div>
+
+  <h3>New vocabulary — forms &amp; the exam room</h3>
+  <table>
+    <thead><tr><th>Catalan</th><th>IPA</th><th>English</th></tr></thead>
+    <tr><td class="ca">l'examen / la prova</td><td class="pron">/əɡˈzamən/ /ˈpɾɔβə/</td><td class="en">exam / test</td></tr>
+    <tr><td class="ca">el formulari</td><td class="pron">/furmuˈlaɾi/</td><td class="en">form</td></tr>
+    <tr><td class="ca">l'adreça</td><td class="pron">/əˈðɾɛsə/</td><td class="en">address</td></tr>
+    <tr><td class="ca">el correu electrònic</td><td class="pron">/kuˌrew ələkˈtɾɔnik/</td><td class="en">e-mail</td></tr>
+    <tr><td class="ca">el telèfon</td><td class="pron">/təˈlɛfun/</td><td class="en">telephone</td></tr>
+    <tr><td class="ca">la data (de naixement)</td><td class="pron">/ˈdatə ðə nəʃəˈmen/</td><td class="en">date (of birth)</td></tr>
+    <tr><td class="ca">la nacionalitat</td><td class="pron">/nəsiunəliˈtat/</td><td class="en">nationality</td></tr>
+    <tr><td class="ca">l'edat</td><td class="pron">/əˈðat/</td><td class="en">age</td></tr>
+    <tr><td class="ca">la professió</td><td class="pron">/pɾufəsiˈo/</td><td class="en">profession</td></tr>
+    <tr><td class="ca">el codi postal</td><td class="pron">/ˌkɔði pusˈtal/</td><td class="en">postcode</td></tr>
+    <tr><td class="ca">la signatura</td><td class="pron">/siŋnəˈtuɾə/</td><td class="en">signature</td></tr>
+    <tr><td class="ca">el document d'identitat</td><td class="pron">/dukuˌmen didəntiˈtat/</td><td class="en">ID document</td></tr>
+    <tr><td class="ca">la postal / la carta</td><td class="pron">/pusˈtal/ /ˈkartə/</td><td class="en">postcard / letter</td></tr>
+    <tr><td class="ca">omplir / signar</td><td class="pron">/umˈpli/ /siŋˈna/</td><td class="en">to fill in / to sign</td></tr>
+    <tr><td class="ca">marcar / escollir</td><td class="pron">/mərˈka/ /əskuˈʎi/</td><td class="en">to tick, mark / to choose</td></tr>
+    <tr><th colspan="3">Phrases</th></tr>
+    <tr><td class="ca">Com s'escriu?</td><td class="pron">/ˌkɔm səsˈkɾiw/</td><td class="en">How is it spelled?</td></tr>
+    <tr><td class="ca">Puc fer una pregunta?</td><td class="pron">/ˌpuk ˈfeɾ unə pɾəˈɣuntə/</td><td class="en">May I ask a question?</td></tr>
+    <tr><td class="ca">He acabat.</td><td class="pron">/e əkəˈβat/</td><td class="en">I've finished.</td></tr>
+    <tr><td class="ca">Quant de temps tenim?</td><td class="pron">/ˌkwan də ˈtems təˈnim/</td><td class="en">How much time do we have?</td></tr>
+    <tr><td class="ca">Benvolgut / Benvolguda…</td><td class="pron">/bəmbulˈɣut/ /bəmbulˈɣuðə/</td><td class="en">Dear… (m./f., letters)</td></tr>
+    <tr><td class="ca">Salutacions / Una abraçada</td><td class="pron">/səlutəsiˈons/ /ˌunə əβɾəˈsaðə/</td><td class="en">Regards / A hug (sign-offs)</td></tr>
+  </table>
+
+  <div class="res">
+    <span class="rh">Resources for Unit 12 &amp; beyond</span>
+    <b>Take a free certified course:</b> UPF's MOOC "Catalan for Beginners (A1.1): Un dia amb Ella" — 15 h over 3 weeks, free, UPF certificate if you complete 70%; enrolment opens periodically, check this page for the next edition → <a href="https://www.upf.edu/web/idiomesupf/catalanmooc">upf.edu/web/idiomesupf/catalanmooc</a><br>
+    <b>After A1:</b> the Generalitat's portal routes to Parla.cat (free self-study from A2; registration) and free CPNL courses → <a href="https://llengua.gencat.cat/en/serveis/aprendre_catala/a-catalunya/">llengua.gencat.cat/en/…/aprendre_catala</a><br>
+    <b>Keep training verbs:</b> → <a href="https://www.verbs.cat/en/practise.html">verbs.cat/en/practise.html</a>
+  </div>
+
+  <div class="ex"><span class="label">EX 12.1</span><h4>Answer in Catalan (full sentences) about Sara's text.</h4>
+  <ol class="q"><li>D'on és la Sara?</li><li>Quants anys té?</li><li>A què es dedica?</li><li>Què va comprar ahir?</li><li>Què li agrada fer els caps de setmana?</li></ol></div>
+
+  <div class="ex"><span class="label">EX 12.2</span><h4>Fill the gaps (mixed grammar).</h4>
+  <ol class="q"><li>Hola! Em <span class="fill">___</span> Pere i <span class="fill">___</span> de Lleida.</li><li>Quina hora <span class="fill">___</span>? — <span class="fill">___</span> les tres i mitja.</li><li>Ahir <span class="fill">___</span> (jo, anar) al cinema amb la <span class="fill">___</span> germana. (my)</li><li>M'<span class="fill">___</span> els gats però no m'<span class="fill">___</span> el futbol.</li></ol></div>
+
+  <div class="ex"><span class="label">EX 12.3</span><h4>Translate the paragraph into Catalan.</h4>
+  <p class="note">"Hi, my name is Alex. I'm from London and I'm a student. I get up at eight. I like coffee. Yesterday I went to the market."</p></div>
+
+  <div class="ex"><span class="label">EX 12.4</span><h4>Correct the five mistakes.</h4>
+  <p class="note">"Jo ets de Manchester. Tinc trenta any. M'agraden el cafè. Ahir jo va anar al mercat. La meu germana és metgessa."</p></div>
+
+  <div class="ex"><span class="label">EX 12.5</span><h4>Fill in this form about yourself (exam Task A practice).</h4>
+  <ol class="q"><li>Nom: ___ &nbsp; Cognom: ___</li><li>Nacionalitat: ___ &nbsp; Edat: ___</li><li>Adreça: ___ &nbsp; Codi postal: ___</li><li>Telèfon: ___ &nbsp; Correu electrònic: ___</li><li>Professió: ___ &nbsp; Signatura: ___</li></ol></div>
+
+  <div class="ex"><span class="label">EX 12.6</span><h4>Write your half of this oral role-play, then perform it aloud.</h4>
+  <p class="note">At a café: greet → order two things → ask the price → pay → say goodbye. Then: stop a stranger → ask where the station is → thank them.</p></div>
+</div>
+
+<!-- ===== EXAM PREPARATION ===== -->
+<div class="unit">
+  <div class="unit-head"><div class="unit-num">Exam preparation</div><h2>The Official A1 Exam</h2></div>
+
+  <h3>What the certificate is and who runs it</h3>
+  <p>The qualification this course targets is the <b>Certificat de nivell inicial de català (A1)</b>, aligned with the CEFR. Where you sit it depends on where you live:</p>
+  <div class="exam">
+    <h4>In Catalonia</h4>
+    <p>• The <b>CPNL</b> (Consorci per a la Normalització Lingüística) runs free Inicial (A1) courses for adults that lead to the certificate, all over Catalonia.<br>
+    • University language services certify A1 through common interuniversity exams coordinated by <b>CIFALC</b> — open to the public, not only students.<br>
+    → Course &amp; certificate routes, official portal: <a href="https://llengua.gencat.cat/en/serveis/aprendre_catala/a-catalunya/">llengua.gencat.cat/en/serveis/aprendre_catala/a-catalunya</a><br>
+    → How the certificate levels work (A1 → C2): <a href="https://www.intercat.cat/en/certificates">intercat.cat/en/certificates</a></p>
+  </div>
+  <div class="exam">
+    <h4>Outside the Catalan-speaking area</h4>
+    <p>The <b>Institut Ramon Llull (IRL)</b> runs the official exams abroad (150+ host sites, typically each May; registration opens in late winter). Be aware: the IRL ladder starts at <b>Bàsic (A2)</b> — there is no separate IRL A1 paper. So if you live abroad, this course is either (a) your preparation for an A1 sitting at a university CIFALC centre, or (b) the first, solid half of the road to the IRL <b>A2 Bàsic</b>, whose format the mock exam below mirrors at A1 difficulty.<br>
+    → What the IRL exams are: <a href="https://www.llull.cat/english/aprendre_catala/certificats_intro.cfm">llull.cat/english/aprendre_catala/certificats_intro.cfm</a><br>
+    → How registration works: <a href="https://www.llull.cat/english/aprendre_catala/certificats_inscripcio.cfm">llull.cat/english/aprendre_catala/certificats_inscripcio.cfm</a></p>
+  </div>
+
+  <h3>The four papers</h3>
+  <p>A1/A2-level Catalan certificates test four skills. Weighting varies slightly by convener, but the shape is stable:</p>
+  <table>
+    <thead><tr><th>Paper</th><th>What happens</th><th>Typical length</th></tr></thead>
+    <tr><td><b>1. Comprensió oral</b> (listening)</td><td>Short dialogues/announcements, played twice; tick true/false or multiple choice</td><td>~15–20 min</td></tr>
+    <tr><td><b>2. Comprensió lectora</b> (reading)</td><td>Notices, short e-mails, simple texts; matching and multiple choice</td><td>~30 min</td></tr>
+    <tr><td><b>3. Expressió escrita</b> (writing)</td><td>Fill in a form with personal data + write a short text (note/postcard, ±40 words)</td><td>~30 min</td></tr>
+    <tr><td><b>4. Expressió oral</b> (speaking)</td><td>Personal questions (name, origin, family, routine, likes) + a simple role-play</td><td>~10 min</td></tr>
+  </table>
+
+  <h3>What examiners reward at A1 — and the classic English-speaker traps</h3>
+  <div class="exam">
+    <p><b>Reward:</b> communication over perfection. Full short sentences (<i>Em dic… / Soc de… / M'agrada…</i>); correct <i>ser/tenir</i>; numbers and times said confidently; the <i>vaig + infinitive</i> past; asking for repetition in Catalan rather than freezing (<i>Pots repetir, si us plau?</i> earns goodwill — silence doesn't).</p>
+    <p><b>Traps:</b> ① <i>*Tinc trenta</i> — age needs <b>anys</b>: <i>Tinc trenta anys</i>. ② <i>*Soc un professor</i> — no article with jobs: <i>Soc professor</i>. ③ agreement — <i>*M'agraden el cafè</i> (singular → <i>agrada</i>). ④ pronouncing every letter — final infinitive -r and final -t after n/l are silent. ⑤ answering <i>Com estàs?</i> with <i>*Soc bé</i> — it's <i>Estic bé / Molt bé</i>. ⑥ forgetting possessive articles — <i>la meva germana</i>, never <i>*meva germana</i>.</p>
+  </div>
+</div>
+
+<!-- ===== MOCK EXAM ===== -->
+<div class="unit">
+  <div class="unit-head"><div class="unit-num">Mock exam · A1</div><h2>Full Practice Exam</h2></div>
+  <p class="note">Sit this in one session of about 90 minutes, after Unit 12. Exam texts carry no IPA — just like the real papers. Answers and model texts are in the answer key.</p>
+
+  <div class="exam">
+    <h4>Paper 1 · Comprensió oral (listening) — 15 min</h4>
+    <p><b>Setup (choose one):</b> ① ask a Catalan-speaking friend (or a language-exchange partner) to read the script aloud twice; ② paste the script into any text-to-speech tool that offers Catalan; ③ self-test honestly: read the script aloud yourself at natural speed, wait an hour, then answer from memory of meaning.</p>
+    <p><b>Script (do not look while answering):</b></p>
+    <p class="note">«Bon dia! Em dic Marta i soc de Girona, però visc a Barcelona amb el meu marit i els nostres dos fills. Treballo a l'hospital: soc metgessa. De dilluns a divendres em llevo a les sis del matí. M'agrada molt el meu barri perquè hi ha un mercat, dues farmàcies i una biblioteca. Els diumenges no treballo: esmorzo tard, llegeixo i a la tarda passegem per la platja. Ahir va ser dissabte i vam anar al cinema amb els nens.»</p>
+    <p><b>Task: true (V = vertader) or false (F = fals)?</b></p>
+    <ol class="q">
+      <li>La Marta és de Barcelona.</li>
+      <li>Té dos fills.</li>
+      <li>És professora.</li>
+      <li>Es lleva a les sis del matí.</li>
+      <li>Al seu barri no hi ha mercat.</li>
+      <li>Ahir van anar al teatre.</li>
+    </ol>
+  </div>
+
+  <div class="exam">
+    <h4>Paper 2 · Comprensió lectora (reading) — 30 min</h4>
+    <p><b>Task A — Read this notice and answer.</b></p>
+    <p class="note">«BIBLIOTECA MUNICIPAL — Horari: de dilluns a divendres, de 9 h a 20 h. Dissabtes, de 10 h a 14 h. Diumenges: tancat. Per fer-se el carnet, cal un document d'identitat i una fotografia. El carnet és gratuït.»</p>
+    <ol class="q">
+      <li>Quin dia està tancada la biblioteca?</li>
+      <li>A quina hora obre els dissabtes?</li>
+      <li>Què cal per fer-se el carnet? (two things)</li>
+      <li>Quant costa el carnet?</li>
+    </ol>
+    <p><b>Task B — Match each sign (1–5) to its meaning (a–e).</b></p>
+    <ol class="q">
+      <li>OBERT &nbsp;&nbsp; (a) entrance</li>
+      <li>TANCAT &nbsp;&nbsp; (b) open</li>
+      <li>ENTRADA &nbsp;&nbsp; (c) push</li>
+      <li>SORTIDA &nbsp;&nbsp; (d) closed</li>
+      <li>EMPENYEU &nbsp;&nbsp; (e) exit</li>
+    </ol>
+  </div>
+
+  <div class="exam">
+    <h4>Paper 3 · Expressió escrita (writing) — 30 min</h4>
+    <p><b>Task A — Fill in this library-card application about yourself.</b></p>
+    <ol class="q"><li>Nom: ___ · Cognoms: ___</li><li>Data de naixement: ___ · Nacionalitat: ___</li><li>Adreça: ___ · Codi postal: ___ · Ciutat: ___</li><li>Telèfon: ___ · Correu electrònic: ___</li><li>Data: ___ · Signatura: ___</li></ol>
+    <p><b>Task B — Write a postcard (35–45 words) to a Catalan friend from your holidays.</b> Say: where you are, what the weather is like, two things you did yesterday (past tense!), and one thing you like about the place. Open with <i>Hola, [name]!</i> and close with <i>Una abraçada,</i> + your name.</p>
+  </div>
+
+  <div class="exam">
+    <h4>Paper 4 · Expressió oral (speaking) — 10 min</h4>
+    <p><b>Part 1 — Answer these aloud in full sentences (the examiner's classic set):</b></p>
+    <ol class="q">
+      <li>Com et dius? Com s'escriu el teu cognom?</li>
+      <li>D'on ets? On vius?</li>
+      <li>Quants anys tens?</li>
+      <li>A què et dediques?</li>
+      <li>Tens germans? Com és la teva família?</li>
+      <li>Què t'agrada fer el cap de setmana?</li>
+      <li>A quina hora et lleves normalment?</li>
+      <li>Què vas fer ahir?</li>
+    </ol>
+    <p><b>Part 2 — Role-play (the examiner plays the other part):</b> You are at a café. Greet the waiter, order a drink and something to eat, ask how much it is, pay, thank them and say goodbye. Then, on the street, ask a stranger the way to the station and react to the answer.</p>
+    <p><b>Self-marking guide:</b> give yourself one point per question for (a) a full sentence, (b) correct verb form, (c) clear pronunciation of /ə/, /ʎ/, /ʃ/. 18+ / 24 in Part 1 plus a complete role-play = comfortably at A1 standard.</p>
+  </div>
+</div>
+
+<!-- ===== GLOSSARY ===== -->
+<div class="unit">
+  <div class="unit-head"><div class="unit-num">Appendix</div><h2>Glossary — every word in this course</h2></div>
+  <p class="note">Alphabetical (articles ignored). U = the unit where the word is first taught. Pronunciations are Central Catalan, IPA.</p>
+  <table class="glos">
+<thead><tr><th>Catalan</th><th>IPA</th><th>English</th><th>U.</th></tr></thead>
+<tr><td class="ca">A l&#x27;estiu fa molta calor.</td><td class="pron">/ə ləsˈtiw fə ˌmoltə kəˈlo/</td><td class="en">In summer it&#x27;s very hot.</td><td>10</td></tr>
+<tr><td class="ca">a prop (de) / lluny (de)</td><td class="pron">/ə ˈpɾɔp/ /ˈʎuɲ/</td><td class="en">near / far (from)</td><td>9</td></tr>
+<tr><td class="ca">A què et dediques?</td><td class="pron">/ə ˌkɛ əd dəˈðikəs/</td><td class="en">What do you do (for a living)?</td><td>6</td></tr>
+<tr><td class="ca">A quina hora et lleves?</td><td class="pron">/ə ˌkinə ˌɔɾə əd ˈʎeβəs/</td><td class="en">What time do you get up?</td><td>7</td></tr>
+<tr><td class="ca">abril, maig, juny</td><td class="pron">/əˈβɾil/ /ˈmatʃ/ /ˈʒuɲ/</td><td class="en">Apr, May, Jun</td><td>7</td></tr>
+<tr><td class="ca">adeu</td><td class="pron">/əˈðew/</td><td class="en">goodbye</td><td>2</td></tr>
+<tr><td class="ca">l&#x27;adreça</td><td class="pron">/əˈðɾɛsə/</td><td class="en">address</td><td>12</td></tr>
+<tr><td class="ca">ahir / abans-d&#x27;ahir</td><td class="pron">/əˈi/ /əˌβanz ðəˈi/</td><td class="en">yesterday / the day before yesterday</td><td>11</td></tr>
+<tr><td class="ca">l&#x27;aigua</td><td class="pron">/ˈajɣwə/</td><td class="en">water</td><td>8</td></tr>
+<tr><td class="ca">això / allò</td><td class="pron">/əˈʃɔ/ /əˈʎɔ/</td><td class="en">this / that (thing)</td><td>1</td></tr>
+<tr><td class="ca">al costat de</td><td class="pron">/əl kusˌtad də/</td><td class="en">next to</td><td>9</td></tr>
+<tr><td class="ca">Alguna cosa més?</td><td class="pron">/əlˌɣunə ˌkɔzə ˈmes/</td><td class="en">Anything else?</td><td>8</td></tr>
+<tr><td class="ca">alt / baix</td><td class="pron">/ˈal/ /ˈbaʃ/</td><td class="en">tall / short</td><td>6</td></tr>
+<tr><td class="ca">l&#x27;amic / l&#x27;amiga</td><td class="pron">/əˈmik/ /əˈmiɣə/</td><td class="en">friend (m./f.)</td><td>6</td></tr>
+<tr><td class="ca">l&#x27;ampolla</td><td class="pron">/əmˈpoʎə/</td><td class="en">bottle</td><td>8</td></tr>
+<tr><td class="ca">anglès / anglesa</td><td class="pron">/əŋˈɡlɛs/ /əŋˈɡlɛzə/</td><td class="en">English (m./f.)</td><td>2</td></tr>
+<tr><td class="ca">anit</td><td class="pron">/əˈnit/</td><td class="en">last night</td><td>11</td></tr>
+<tr><td class="ca">l&#x27;any</td><td class="pron">/ˈaɲ/</td><td class="en">year</td><td>3</td></tr>
+<tr><td class="ca">aprendre</td><td class="pron">/əˈpɾɛndɾə/</td><td class="en">to learn</td><td>5</td></tr>
+<tr><td class="ca">aquest matí</td><td class="pron">/əˌkɛt məˈti/</td><td class="en">this morning</td><td>11</td></tr>
+<tr><td class="ca">aquí / allà</td><td class="pron">/əˈki/ /əˈʎa/</td><td class="en">here / there</td><td>1</td></tr>
+<tr><td class="ca">ara / després</td><td class="pron">/ˈaɾə/ /dəsˈpɾes/</td><td class="en">now / later</td><td>5</td></tr>
+<tr><td class="ca">arribar / sortir</td><td class="pron">/əriˈβa/ /surˈti/</td><td class="en">to arrive / to go out, leave</td><td>11</td></tr>
+<tr><td class="ca">l&#x27;arròs</td><td class="pron">/əˈrɔs/</td><td class="en">rice</td><td>8</td></tr>
+<tr><td class="ca">l&#x27;avi / l&#x27;àvia</td><td class="pron">/ˈaβi/ /ˈaβiə/</td><td class="en">grandfather / grandmother</td><td>6</td></tr>
+<tr><td class="ca">avui / demà</td><td class="pron">/əˈβuj/ /dəˈma/</td><td class="en">today / tomorrow</td><td>5</td></tr>
+<tr><td class="ca">ballar / cantar</td><td class="pron">/bəˈʎa/ /kənˈta/</td><td class="en">to dance / to sing</td><td>10</td></tr>
+<tr><td class="ca">el banc</td><td class="pron">/ˈbaŋ/</td><td class="en">bank</td><td>9</td></tr>
+<tr><td class="ca">bé / malament</td><td class="pron">/ˈbe/ /mələˈmen/</td><td class="en">well / badly</td><td>1</td></tr>
+<tr><td class="ca">Benvolgut / Benvolguda…</td><td class="pron">/bəmbulˈɣut/ /bəmbulˈɣuðə/</td><td class="en">Dear… (m./f., letters)</td><td>12</td></tr>
+<tr><td class="ca">beure</td><td class="pron">/ˈbɛwɾə/</td><td class="en">to drink</td><td>5</td></tr>
+<tr><td class="ca">la biblioteca</td><td class="pron">/biβliuˈtɛkə/</td><td class="en">library</td><td>9</td></tr>
+<tr><td class="ca">blanc / negre</td><td class="pron">/ˈblaŋ/ /ˈneɣɾə/</td><td class="en">white / black</td><td>4</td></tr>
+<tr><td class="ca">bo / dolent</td><td class="pron">/ˈbɔ/ /duˈlen/</td><td class="en">good / bad</td><td>4</td></tr>
+<tr><td class="ca">bon dia</td><td class="pron">/ˌbɔn ˈdiə/</td><td class="en">good morning</td><td>2</td></tr>
+<tr><td class="ca">bona nit</td><td class="pron">/ˌbɔnə ˈnit/</td><td class="en">good evening/night</td><td>2</td></tr>
+<tr><td class="ca">bona tarda</td><td class="pron">/ˌbɔnə ˈtaɾðə/</td><td class="en">good afternoon</td><td>2</td></tr>
+<tr><td class="ca">bonic / lleig</td><td class="pron">/buˈnik/ /ˈʎetʃ/</td><td class="en">pretty / ugly</td><td>4</td></tr>
+<tr><td class="ca">la botiga</td><td class="pron">/buˈtiɣə/</td><td class="en">shop</td><td>9</td></tr>
+<tr><td class="ca">el cafè amb llet</td><td class="pron">/kəˌfɛ əm ˈʎet/</td><td class="en">coffee with milk</td><td>8</td></tr>
+<tr><td class="ca">el cambrer / la cambrera</td><td class="pron">/kəmˈbɾe/ /kəmˈbɾeɾə/</td><td class="en">waiter / waitress</td><td>6</td></tr>
+<tr><td class="ca">la cantonada</td><td class="pron">/kəntuˈnaðə/</td><td class="en">corner</td><td>9</td></tr>
+<tr><td class="ca">el cap de setmana</td><td class="pron">/ˌkab də səmˈmanə/</td><td class="en">weekend</td><td>7</td></tr>
+<tr><td class="ca">car / barat</td><td class="pron">/ˈkaɾ/ /bəˈɾat/</td><td class="en">expensive / cheap</td><td>4</td></tr>
+<tr><td class="ca">la carn</td><td class="pron">/ˈkaɾn/</td><td class="en">meat</td><td>8</td></tr>
+<tr><td class="ca">el carrer</td><td class="pron">/kəˈre/</td><td class="en">street</td><td>9</td></tr>
+<tr><td class="ca">la casa / el pis</td><td class="pron">/ˈkazə/ /ˈpis/</td><td class="en">house / flat</td><td>4</td></tr>
+<tr><td class="ca">català / catalana</td><td class="pron">/kətəˈla/ /kətəˈlanə/</td><td class="en">Catalan (m./f.)</td><td>2</td></tr>
+<tr><td class="ca">la ciutat</td><td class="pron">/siwˈtat/</td><td class="en">city</td><td>2</td></tr>
+<tr><td class="ca">el codi postal</td><td class="pron">/ˌkɔði pusˈtal/</td><td class="en">postcode</td><td>12</td></tr>
+<tr><td class="ca">el cognom</td><td class="pron">/kuŋˈnom/</td><td class="en">surname</td><td>2</td></tr>
+<tr><td class="ca">Com és casa teva?</td><td class="pron">/ˌkom ez ˌkazə ˈteβə/</td><td class="en">What&#x27;s your house like?</td><td>4</td></tr>
+<tr><td class="ca">Com es diu… en català?</td><td class="pron">/ˌkom əz ˈðiw ən kətəˈla/</td><td class="en">How do you say… in Catalan?</td><td>1</td></tr>
+<tr><td class="ca">Com és el teu germà?</td><td class="pron">/ˌkom ez əl ˌtew ʒəɾˈma/</td><td class="en">What&#x27;s your brother like?</td><td>6</td></tr>
+<tr><td class="ca">Com estàs? — Molt bé, i tu?</td><td class="pron">/kom əsˈtas — ˌmol ˈbe i ˈtu/</td><td class="en">How are you? — Very well, and you?</td><td>2</td></tr>
+<tr><td class="ca">Com s&#x27;escriu?</td><td class="pron">/ˌkɔm səsˈkɾiw/</td><td class="en">How is it spelled?</td><td>12</td></tr>
+<tr><td class="ca">com?</td><td class="pron">/ˈkom/</td><td class="en">how?</td><td>1</td></tr>
+<tr><td class="ca">comprar</td><td class="pron">/kumˈpɾa/</td><td class="en">to buy</td><td>5</td></tr>
+<tr><td class="ca">el compte</td><td class="pron">/ˈkomtə/</td><td class="en">the bill</td><td>8</td></tr>
+<tr><td class="ca">El compte, si us plau.</td><td class="pron">/əl ˈkomtə | si us ˈplaw/</td><td class="en">The bill, please.</td><td>8</td></tr>
+<tr><td class="ca">el concert / la festa</td><td class="pron">/kunˈsɛrt/ /ˈfɛstə/</td><td class="en">concert / party</td><td>11</td></tr>
+<tr><td class="ca">córrer / nedar</td><td class="pron">/ˈkorə/ /nəˈða/</td><td class="en">to run / to swim</td><td>10</td></tr>
+<tr><td class="ca">el correu electrònic</td><td class="pron">/kuˌrew ələkˈtɾɔnik/</td><td class="en">e-mail</td><td>12</td></tr>
+<tr><td class="ca">la cosa</td><td class="pron">/ˈkɔzə/</td><td class="en">thing</td><td>4</td></tr>
+<tr><td class="ca">el cosí / la cosina</td><td class="pron">/kuˈzi/ /kuˈzinə/</td><td class="en">cousin (m./f.)</td><td>6</td></tr>
+<tr><td class="ca">el cotxe / la bici</td><td class="pron">/ˈkɔtʃə/ /ˈbisi/</td><td class="en">car / bike</td><td>3</td></tr>
+<tr><td class="ca">la cuina / el bany</td><td class="pron">/ˈkujnə/ /ˈbaɲ/</td><td class="en">kitchen / bathroom</td><td>4</td></tr>
+<tr><td class="ca">cuinar</td><td class="pron">/kujˈna/</td><td class="en">to cook</td><td>10</td></tr>
+<tr><td class="ca">D&#x27;on ets?</td><td class="pron">/ˈdon ˈets/</td><td class="en">Where are you from?</td><td>2</td></tr>
+<tr><td class="ca">la data (de naixement)</td><td class="pron">/ˈdatə ðə nəʃəˈmen/</td><td class="en">date (of birth)</td><td>12</td></tr>
+<tr><td class="ca">davant (de) / darrere (de)</td><td class="pron">/dəˈβan/ /dəˈrɛɾə/</td><td class="en">in front of / behind</td><td>9</td></tr>
+<tr><td class="ca">De dilluns a divendres</td><td class="pron">/də ðiˌʎunz ə ðiˈβɛndɾəs/</td><td class="en">from Monday to Friday</td><td>7</td></tr>
+<tr><td class="ca">De quin color és?</td><td class="pron">/də ˌkiŋ kuˈlo ˈes/</td><td class="en">What colour is it?</td><td>4</td></tr>
+<tr><td class="ca">de res</td><td class="pron">/də ˈrɛs/</td><td class="en">you&#x27;re welcome</td><td>2</td></tr>
+<tr><td class="ca">descansar</td><td class="pron">/dəskənˈsa/</td><td class="en">to rest</td><td>11</td></tr>
+<tr><td class="ca">despertar-se</td><td class="pron">/dəspəɾˈtaɾsə/</td><td class="en">to wake up</td><td>7</td></tr>
+<tr><td class="ca">els deures</td><td class="pron">/ˈdɛwɾəs/</td><td class="en">homework</td><td>5</td></tr>
+<tr><td class="ca">dijous, divendres</td><td class="pron">/diˈʒɔws/ /diˈβɛndɾəs/</td><td class="en">Thu, Fri</td><td>7</td></tr>
+<tr><td class="ca">dilluns, dimarts, dimecres</td><td class="pron">/diˈʎuns/ /diˈmaɾts/ /diˈmɛkɾəs/</td><td class="en">Mon, Tue, Wed</td><td>7</td></tr>
+<tr><td class="ca">dinar</td><td class="pron">/diˈna/</td><td class="en">to have lunch; lunch</td><td>7</td></tr>
+<tr><td class="ca">els diners</td><td class="pron">/diˈnes/</td><td class="en">money</td><td>3</td></tr>
+<tr><td class="ca">dissabte, diumenge</td><td class="pron">/diˈsaptə/ /diwˈmɛnʒə/</td><td class="en">Sat, Sun</td><td>7</td></tr>
+<tr><td class="ca">Els dissabtes no treballo.</td><td class="pron">/əlz diˌsaptəz ˌno tɾəˈβaʎu/</td><td class="en">On Saturdays I don&#x27;t work.</td><td>7</td></tr>
+<tr><td class="ca">el document d&#x27;identitat</td><td class="pron">/dukuˌmen didəntiˈtat/</td><td class="en">ID document</td><td>12</td></tr>
+<tr><td class="ca">la dreta / l&#x27;esquerra</td><td class="pron">/ˈdɾɛtə/ /əsˈkɛrə/</td><td class="en">right / left</td><td>9</td></tr>
+<tr><td class="ca">dutxar-se</td><td class="pron">/duˈtʃaɾsə/</td><td class="en">to shower</td><td>7</td></tr>
+<tr><td class="ca">l&#x27;edat</td><td class="pron">/əˈðat/</td><td class="en">age</td><td>12</td></tr>
+<tr><td class="ca">Em llevo a les set.</td><td class="pron">/əm ˌʎeβu ə ləs ˈsɛt/</td><td class="en">I get up at seven.</td><td>7</td></tr>
+<tr><td class="ca">Encara aprenc.</td><td class="pron">/əŋˌkaɾə əˈpɾɛŋ/</td><td class="en">I&#x27;m still learning.</td><td>2</td></tr>
+<tr><td class="ca">l&#x27;enginyer / l&#x27;enginyera</td><td class="pron">/ənʒiˈɲe/ /ənʒiˈɲeɾə/</td><td class="en">engineer</td><td>6</td></tr>
+<tr><td class="ca">entre</td><td class="pron">/ˈentɾə/</td><td class="en">between</td><td>9</td></tr>
+<tr><td class="ca">l&#x27;entrepà</td><td class="pron">/əntɾəˈpa/</td><td class="en">sandwich</td><td>8</td></tr>
+<tr><td class="ca">És alta i molt simpàtica.</td><td class="pron">/ˌez ˌaltə j ˌmol simˈpatikə/</td><td class="en">She&#x27;s tall and very friendly.</td><td>6</td></tr>
+<tr><td class="ca">És lluny? — No, és a prop.</td><td class="pron">/ˌez ˈʎuɲ — ˌno | ˌez ə ˈpɾɔp/</td><td class="en">Is it far? — No, it&#x27;s near.</td><td>9</td></tr>
+<tr><td class="ca">l&#x27;escola</td><td class="pron">/əsˈkɔlə/</td><td class="en">school</td><td>9</td></tr>
+<tr><td class="ca">escoltar</td><td class="pron">/əskulˈta/</td><td class="en">to listen</td><td>5</td></tr>
+<tr><td class="ca">esmorzar</td><td class="pron">/əzmuɾˈza/</td><td class="en">to have breakfast; breakfast</td><td>7</td></tr>
+<tr><td class="ca">esperar / ajudar</td><td class="pron">/əspəˈɾa/ /əʒuˈða/</td><td class="en">to wait (for) / to help</td><td>11</td></tr>
+<tr><td class="ca">l&#x27;esport</td><td class="pron">/əsˈpɔrt/</td><td class="en">sport</td><td>10</td></tr>
+<tr><td class="ca">l&#x27;estació</td><td class="pron">/əstəsiˈo/</td><td class="en">station</td><td>9</td></tr>
+<tr><td class="ca">Estic casat / casada.</td><td class="pron">/əsˌtik kəˈzat | kəˈzaðə/</td><td class="en">I&#x27;m married (m./f.)</td><td>6</td></tr>
+<tr><td class="ca">l&#x27;estudiant</td><td class="pron">/əstuðiˈan/</td><td class="en">student</td><td>6</td></tr>
+<tr><td class="ca">estudiar</td><td class="pron">/əstuðiˈa/</td><td class="en">to study</td><td>5</td></tr>
+<tr><td class="ca">l&#x27;euro / el cèntim</td><td class="pron">/ˈɛwɾu/ /ˈsɛntim/</td><td class="en">euro / cent</td><td>8</td></tr>
+<tr><td class="ca">l&#x27;examen / la prova</td><td class="pron">/əɡˈzamən/ /ˈpɾɔβə/</td><td class="en">exam / test</td><td>12</td></tr>
+<tr><td class="ca">l&#x27;exemple</td><td class="pron">/əɡˈzemplə/</td><td class="en">example</td><td>1</td></tr>
+<tr><td class="ca">fàcil / difícil</td><td class="pron">/ˈfasil/ /diˈfisil/</td><td class="en">easy / difficult</td><td>4</td></tr>
+<tr><td class="ca">la família</td><td class="pron">/fəˈmiliə/</td><td class="en">family</td><td>6</td></tr>
+<tr><td class="ca">la farmàcia</td><td class="pron">/fəɾˈmasiə/</td><td class="en">pharmacy</td><td>9</td></tr>
+<tr><td class="ca">la feina</td><td class="pron">/ˈfejnə/</td><td class="en">work, job</td><td>5</td></tr>
+<tr><td class="ca">el fill / la filla</td><td class="pron">/ˈfiʎ/ /ˈfiʎə/</td><td class="en">son / daughter</td><td>6</td></tr>
+<tr><td class="ca">fins aviat</td><td class="pron">/ˌfinz əβiˈat/</td><td class="en">see you soon</td><td>2</td></tr>
+<tr><td class="ca">fins demà</td><td class="pron">/ˌfinz dəˈma/</td><td class="en">see you tomorrow</td><td>2</td></tr>
+<tr><td class="ca">el formatge</td><td class="pron">/fuɾˈmadʒə/</td><td class="en">cheese</td><td>8</td></tr>
+<tr><td class="ca">el formulari</td><td class="pron">/furmuˈlaɾi/</td><td class="en">form</td><td>12</td></tr>
+<tr><td class="ca">la frase</td><td class="pron">/ˈfɾazə/</td><td class="en">sentence, phrase</td><td>1</td></tr>
+<tr><td class="ca">la fruita / la verdura</td><td class="pron">/ˈfɾujtə/ /bəɾˈðuɾə/</td><td class="en">fruit / vegetables</td><td>8</td></tr>
+<tr><td class="ca">el futbol</td><td class="pron">/fubˈbɔl/</td><td class="en">football</td><td>10</td></tr>
+<tr><td class="ca">el gat / el gos</td><td class="pron">/ˈɡat/ /ˈɡos/</td><td class="en">cat / dog</td><td>3</td></tr>
+<tr><td class="ca">gener, febrer, març</td><td class="pron">/ʒəˈne/ /fəˈβɾe/ /ˈmaɾs/</td><td class="en">Jan, Feb, Mar</td><td>7</td></tr>
+<tr><td class="ca">el germà / la germana</td><td class="pron">/ʒəɾˈma/ /ʒəɾˈmanə/</td><td class="en">brother / sister</td><td>6</td></tr>
+<tr><td class="ca">Gira a la dreta / a l&#x27;esquerra.</td><td class="pron">/ˌʒiɾə ə lə ˈðɾɛtə | ə ləsˈkɛrə/</td><td class="en">Turn right / left.</td><td>9</td></tr>
+<tr><td class="ca">gràcies</td><td class="pron">/ˈɡɾasiəs/</td><td class="en">thank you</td><td>2</td></tr>
+<tr><td class="ca">gran / petit</td><td class="pron">/ˈɡɾan/ /pəˈtit/</td><td class="en">big / small</td><td>4</td></tr>
+<tr><td class="ca">l&#x27;habitació</td><td class="pron">/əβitəsiˈo/</td><td class="en">room, bedroom</td><td>4</td></tr>
+<tr><td class="ca">He acabat.</td><td class="pron">/e əkəˈβat/</td><td class="en">I&#x27;ve finished.</td><td>12</td></tr>
+<tr><td class="ca">Hi ha un banc a prop?</td><td class="pron">/i ˈa um ˈbaŋ ə ˈpɾɔp/</td><td class="en">Is there a bank nearby?</td><td>3</td></tr>
+<tr><td class="ca">Ho sento.</td><td class="pron">/u ˈsentu/</td><td class="en">I&#x27;m sorry.</td><td>1</td></tr>
+<tr><td class="ca">hola</td><td class="pron">/ˈɔlə/</td><td class="en">hello</td><td>2</td></tr>
+<tr><td class="ca">l&#x27;home / la dona</td><td class="pron">/ˈɔmə/ /ˈdɔnə/</td><td class="en">man / woman</td><td>3</td></tr>
+<tr><td class="ca">l&#x27;hora</td><td class="pron">/ˈɔɾə/</td><td class="en">hour, time</td><td>7</td></tr>
+<tr><td class="ca">l&#x27;hospital</td><td class="pron">/uspiˈtal/</td><td class="en">hospital</td><td>9</td></tr>
+<tr><td class="ca">i / o</td><td class="pron">/i/ /o/</td><td class="en">and / or</td><td>1</td></tr>
+<tr><td class="ca">l&#x27;idioma, la llengua</td><td class="pron">/iðiˈomə/ /ˈʎeŋɡwə/</td><td class="en">language</td><td>2</td></tr>
+<tr><td class="ca">intel·ligent</td><td class="pron">/intəliˈʒen/</td><td class="en">intelligent</td><td>6</td></tr>
+<tr><td class="ca">irlandès / escocès</td><td class="pron">/iɾlənˈdɛs/ /əskuˈsɛs/</td><td class="en">Irish / Scottish</td><td>2</td></tr>
+<tr><td class="ca">jove / gran</td><td class="pron">/ˈʒoβə/ /ˈɡɾan/</td><td class="en">young / old (person)</td><td>6</td></tr>
+<tr><td class="ca">jugar (a futbol)</td><td class="pron">/ʒuˈɣa/</td><td class="en">to play (football)</td><td>10</td></tr>
+<tr><td class="ca">juliol, agost, setembre</td><td class="pron">/ʒuliˈɔl/ /əˈɣost/ /səˈtɛmbɾə/</td><td class="en">Jul, Aug, Sep</td><td>7</td></tr>
+<tr><td class="ca">llegir / escriure</td><td class="pron">/ʎəˈʒi/ /əsˈkɾiwɾə/</td><td class="en">to read / to write</td><td>10</td></tr>
+<tr><td class="ca">el llibre / la clau</td><td class="pron">/ˈʎiβɾə/ /ˈklaw/</td><td class="en">book / key</td><td>3</td></tr>
+<tr><td class="ca">el llit</td><td class="pron">/ˈʎit/</td><td class="en">bed</td><td>4</td></tr>
+<tr><td class="ca">M&#x27;agrada molt cuinar.</td><td class="pron">/məˈɣɾaðə ˌmol kujˈna/</td><td class="en">I really like cooking.</td><td>10</td></tr>
+<tr><td class="ca">M&#x27;ho vaig passar molt bé.</td><td class="pron">/ˌmu βatʃ pəˈsa ˌmol ˈbe/</td><td class="en">I had a great time.</td><td>11</td></tr>
+<tr><td class="ca">la mà / el pa</td><td class="pron">/ˈma/ /ˈpa/</td><td class="en">hand / bread</td><td>4</td></tr>
+<tr><td class="ca">marcar / escollir</td><td class="pron">/mərˈka/ /əskuˈʎi/</td><td class="en">to tick, mark / to choose</td><td>12</td></tr>
+<tr><td class="ca">el marit / la muller</td><td class="pron">/məˈɾit/ /muˈʎe/</td><td class="en">husband / wife</td><td>6</td></tr>
+<tr><td class="ca">el matí / la tarda</td><td class="pron">/məˈti/ /ˈtaɾðə/</td><td class="en">morning / afternoon</td><td>7</td></tr>
+<tr><td class="ca">menjar</td><td class="pron">/mənˈʒa/</td><td class="en">to eat</td><td>5</td></tr>
+<tr><td class="ca">el mercat</td><td class="pron">/məɾˈkat/</td><td class="en">market</td><td>9</td></tr>
+<tr><td class="ca">Més a poc a poc, si us plau.</td><td class="pron">/ˌmez ə ˌpɔk ə ˈpɔk/</td><td class="en">More slowly, please.</td><td>1</td></tr>
+<tr><td class="ca">el mes passat / l&#x27;any passat</td><td class="pron">/ˌmɛs pəˈsat/ /ˌaɲ pəˈsat/</td><td class="en">last month / last year</td><td>11</td></tr>
+<tr><td class="ca">el metge / la metgessa</td><td class="pron">/ˈmedʒə/ /məˈdʒɛsə/</td><td class="en">doctor</td><td>6</td></tr>
+<tr><td class="ca">La meva habitació és gran.</td><td class="pron">/lə ˌmeβə əβitəsiˌo ez ˈɡɾan/</td><td class="en">My room is big.</td><td>4</td></tr>
+<tr><td class="ca">mirar</td><td class="pron">/miˈɾa/</td><td class="en">to look at, watch</td><td>5</td></tr>
+<tr><td class="ca">molt / poc</td><td class="pron">/ˈmol/ /ˈpɔk/</td><td class="en">a lot / little</td><td>1</td></tr>
+<tr><td class="ca">Molt de gust.</td><td class="pron">/ˌmol də ˈɣust/</td><td class="en">Nice to meet you.</td><td>2</td></tr>
+<tr><td class="ca">moltes gràcies</td><td class="pron">/ˌmoltəz ˈɡɾasiəs/</td><td class="en">thank you very much</td><td>2</td></tr>
+<tr><td class="ca">el museu</td><td class="pron">/muˈzɛw/</td><td class="en">museum</td><td>9</td></tr>
+<tr><td class="ca">la música</td><td class="pron">/ˈmuzikə/</td><td class="en">music</td><td>10</td></tr>
+<tr><td class="ca">la nacionalitat</td><td class="pron">/nəsiunəliˈtat/</td><td class="en">nationality</td><td>12</td></tr>
+<tr><td class="ca">No ho entenc.</td><td class="pron">/ˌno w ənˈteŋ/</td><td class="en">I don&#x27;t understand.</td><td>1</td></tr>
+<tr><td class="ca">No m&#x27;agrada gens el futbol.</td><td class="pron">/ˌnɔ məˈɣɾaðə ˈʒens əl fubˈbɔl/</td><td class="en">I don&#x27;t like football at all.</td><td>10</td></tr>
+<tr><td class="ca">No puc venir avui.</td><td class="pron">/ˌno ˌpuɡ bəˌni əˈβuj/</td><td class="en">I can&#x27;t come today.</td><td>5</td></tr>
+<tr><td class="ca">No tinc temps.</td><td class="pron">/ˌno ˈtiŋ ˈtems/</td><td class="en">I don&#x27;t have time.</td><td>3</td></tr>
+<tr><td class="ca">el nom</td><td class="pron">/ˈnom/</td><td class="en">name</td><td>2</td></tr>
+<tr><td class="ca">noranta, cent</td><td class="pron">/nuˈɾantə/ /ˈsen/</td><td class="en">90, 100</td><td>3</td></tr>
+<tr><td class="ca">nou / vell</td><td class="pron">/ˈnɔw/ /ˈbeʎ/</td><td class="en">new / old</td><td>4</td></tr>
+<tr><td class="ca">obrir / tancar</td><td class="pron">/uˈβɾi/ /təŋˈka/</td><td class="en">to open / close</td><td>5</td></tr>
+<tr><td class="ca">octubre, novembre, desembre</td><td class="pron">/ukˈtuβɾə/ /nuˈβɛmbɾə/ /dəˈzɛmbɾə/</td><td class="en">Oct, Nov, Dec</td><td>7</td></tr>
+<tr><td class="ca">l&#x27;oli</td><td class="pron">/ˈɔli/</td><td class="en">oil</td><td>8</td></tr>
+<tr><td class="ca">omplir / signar</td><td class="pron">/umˈpli/ /siŋˈna/</td><td class="en">to fill in / to sign</td><td>12</td></tr>
+<tr><td class="ca">On vas anar de vacances?</td><td class="pron">/ˌon bəz əˈna ðə βəˈkansəs/</td><td class="en">Where did you go on holiday?</td><td>11</td></tr>
+<tr><td class="ca">On vius? — Visc a Barcelona.</td><td class="pron">/ˌom ˈbiws — ˌbisk ə βəɾsəˈlonə/</td><td class="en">Where do you live? — I live in Barcelona.</td><td>5</td></tr>
+<tr><td class="ca">on?</td><td class="pron">/ˈon/</td><td class="en">where?</td><td>1</td></tr>
+<tr><td class="ca">l&#x27;oncle / la tia</td><td class="pron">/ˈoŋklə/ /ˈtiə/</td><td class="en">uncle / aunt</td><td>6</td></tr>
+<tr><td class="ca">onze, dotze, tretze, catorze, quinze</td><td class="pron">/ˈonzə/ /ˈdodzə/ /ˈtɾɛdzə/ /kəˈtoɾzə/ /ˈkinzə/</td><td class="en">11–15</td><td>3</td></tr>
+<tr><td class="ca">l&#x27;ou / els ous</td><td class="pron">/ˈɔw/ /ˈɔws/</td><td class="en">egg / eggs</td><td>8</td></tr>
+<tr><td class="ca">el país</td><td class="pron">/pəˈis/</td><td class="en">country</td><td>2</td></tr>
+<tr><td class="ca">la parada de metro</td><td class="pron">/pəˌɾaðə ðə ˈmɛtɾu/</td><td class="en">metro stop</td><td>9</td></tr>
+<tr><td class="ca">la paraula</td><td class="pron">/pəˈɾawlə/</td><td class="en">word</td><td>1</td></tr>
+<tr><td class="ca">el pare / la mare</td><td class="pron">/ˈpaɾə/ /ˈmaɾə/</td><td class="en">father / mother</td><td>6</td></tr>
+<tr><td class="ca">els pares</td><td class="pron">/ˈpaɾəs/</td><td class="en">parents</td><td>6</td></tr>
+<tr><td class="ca">Parlo una mica de català.</td><td class="pron">/ˌpaɾlu unə ˌmikə ðə kətəˈla/</td><td class="en">I speak a little Catalan.</td><td>2</td></tr>
+<tr><td class="ca">el peix</td><td class="pron">/ˈpeʃ/</td><td class="en">fish</td><td>4</td></tr>
+<tr><td class="ca">la pel·lícula</td><td class="pron">/pəˈlikulə/</td><td class="en">film</td><td>10</td></tr>
+<tr><td class="ca">Per a mi, un cafè amb llet.</td><td class="pron">/pəɾ ə ˈmi | uŋ kəˌfɛ əm ˈʎet/</td><td class="en">For me, a coffee with milk.</td><td>8</td></tr>
+<tr><td class="ca">per què?</td><td class="pron">/pəɾ ˈkɛ/</td><td class="en">why?</td><td>1</td></tr>
+<tr><td class="ca">perdó</td><td class="pron">/pəɾˈðo/</td><td class="en">sorry / excuse me</td><td>2</td></tr>
+<tr><td class="ca">Perdoni, on és…?</td><td class="pron">/pəɾˈðoni | ˌon ˈes/</td><td class="en">Excuse me (formal), where is…?</td><td>9</td></tr>
+<tr><td class="ca">però</td><td class="pron">/pəˈɾɔ/</td><td class="en">but</td><td>5</td></tr>
+<tr><td class="ca">perquè</td><td class="pron">/pəɾˈkɛ/</td><td class="en">because</td><td>1</td></tr>
+<tr><td class="ca">El pis és petit però bonic.</td><td class="pron">/əl ˌpiz es pəˌtit pəˌɾɔ βuˈnik/</td><td class="en">The flat is small but pretty.</td><td>4</td></tr>
+<tr><td class="ca">la plaça</td><td class="pron">/ˈplasə/</td><td class="en">square</td><td>9</td></tr>
+<tr><td class="ca">la platja</td><td class="pron">/ˈpladʒə/</td><td class="en">beach</td><td>9</td></tr>
+<tr><td class="ca">la pluja / la neu</td><td class="pron">/ˈpluʒə/ /ˈnɛw/</td><td class="en">rain / snow</td><td>10</td></tr>
+<tr><td class="ca">la poma / el plàtan</td><td class="pron">/ˈpomə/ /ˈplatən/</td><td class="en">apple / banana</td><td>8</td></tr>
+<tr><td class="ca">la porta / la finestra</td><td class="pron">/ˈpɔɾtə/ /fiˈnɛstɾə/</td><td class="en">door / window</td><td>4</td></tr>
+<tr><td class="ca">la postal / la carta</td><td class="pron">/pusˈtal/ /ˈkartə/</td><td class="en">postcard / letter</td><td>12</td></tr>
+<tr><td class="ca">Pots ajudar-me?</td><td class="pron">/ˌpɔdz əʒuˈðaɾmə/</td><td class="en">Can you help me?</td><td>5</td></tr>
+<tr><td class="ca">Pots repetir, si us plau?</td><td class="pron">/ˌpɔdz rəpəˈti si us ˈplaw/</td><td class="en">Can you repeat, please?</td><td>1</td></tr>
+<tr><td class="ca">la pregunta</td><td class="pron">/pɾəˈɣuntə/</td><td class="en">question</td><td>1</td></tr>
+<tr><td class="ca">la primavera / l&#x27;estiu</td><td class="pron">/pɾiməˈβeɾə/ /əsˈtiw/</td><td class="en">spring / summer</td><td>10</td></tr>
+<tr><td class="ca">La primera a la dreta.</td><td class="pron">/lə pɾiˌmeɾə ə lə ˈðɾɛtə/</td><td class="en">The first on the right.</td><td>9</td></tr>
+<tr><td class="ca">la professió</td><td class="pron">/pɾufəsiˈo/</td><td class="en">profession</td><td>12</td></tr>
+<tr><td class="ca">el professor / la professora</td><td class="pron">/pɾufəˈso/ /pɾufəˈsoɾə/</td><td class="en">teacher</td><td>6</td></tr>
+<tr><td class="ca">Puc fer una pregunta?</td><td class="pron">/ˌpuk ˈfeɾ unə pɾəˈɣuntə/</td><td class="en">May I ask a question?</td><td>12</td></tr>
+<tr><td class="ca">quan?</td><td class="pron">/ˈkwan/</td><td class="en">when?</td><td>1</td></tr>
+<tr><td class="ca">Quant costa? És molt car!</td><td class="pron">/ˌkwaŋ ˈkɔstə | ˌez ˌmol ˈkaɾ/</td><td class="en">How much is it? It&#x27;s very expensive!</td><td>4</td></tr>
+<tr><td class="ca">Quant de temps tenim?</td><td class="pron">/ˌkwan də ˈtems təˈnim/</td><td class="en">How much time do we have?</td><td>12</td></tr>
+<tr><td class="ca">quant?</td><td class="pron">/ˈkwan(t)/</td><td class="en">how much?</td><td>1</td></tr>
+<tr><td class="ca">Quants anys tens?</td><td class="pron">/ˌkwanz ˈaɲs ˈtens/</td><td class="en">How old are you?</td><td>3</td></tr>
+<tr><td class="ca">quatre, cinc, sis, set</td><td class="pron">/ˈkwatɾə/ /ˈsiŋk/ /ˈsis/ /ˈsɛt/</td><td class="en">4–7</td><td>3</td></tr>
+<tr><td class="ca">Què fas avui?</td><td class="pron">/ˌkɛ ˈfaz əˈβuj/</td><td class="en">What are you doing today?</td><td>5</td></tr>
+<tr><td class="ca">Què t&#x27;agrada fer?</td><td class="pron">/ˌkɛ təˈɣɾaðə ˈfe/</td><td class="en">What do you like doing?</td><td>10</td></tr>
+<tr><td class="ca">Què vas fer ahir?</td><td class="pron">/ˌkɛ βas ˈfeɾ əˈi/</td><td class="en">What did you do yesterday?</td><td>11</td></tr>
+<tr><td class="ca">Què vol dir…?</td><td class="pron">/ˌkɛ βɔl ˈdi/</td><td class="en">What does… mean?</td><td>1</td></tr>
+<tr><td class="ca">Què voleu (prendre)?</td><td class="pron">/ˌkɛ βuˈlɛw ˈpɾɛndɾə/</td><td class="en">What would you like (to have)?</td><td>8</td></tr>
+<tr><td class="ca">què?</td><td class="pron">/ˈkɛ/</td><td class="en">what?</td><td>1</td></tr>
+<tr><td class="ca">qui?</td><td class="pron">/ˈki/</td><td class="en">who?</td><td>1</td></tr>
+<tr><td class="ca">Quin dia és avui?</td><td class="pron">/ˌkin ˌdiə ez əˈβuj/</td><td class="en">What day is it today?</td><td>7</td></tr>
+<tr><td class="ca">Quin és el teu número de telèfon?</td><td class="pron">/ˌkin ez əl ˌtew ˈnumeɾu ðə təˈlɛfun/</td><td class="en">What&#x27;s your phone number?</td><td>3</td></tr>
+<tr><td class="ca">Quin temps fa avui?</td><td class="pron">/ˌkin ˈtems ˈfa əˈβuj/</td><td class="en">What&#x27;s the weather like today?</td><td>10</td></tr>
+<tr><td class="ca">Quina feina fas?</td><td class="pron">/ˌkinə ˌfejnə ˈfas/</td><td class="en">What job do you do?</td><td>6</td></tr>
+<tr><td class="ca">Res més, gràcies.</td><td class="pron">/ˌrɛz ˈmes | ˈɡɾasiəs/</td><td class="en">Nothing else, thanks.</td><td>8</td></tr>
+<tr><td class="ca">la resposta</td><td class="pron">/rəsˈpɔstə/</td><td class="en">answer</td><td>1</td></tr>
+<tr><td class="ca">el restaurant / el cinema</td><td class="pron">/rəstəwˈɾan/ /siˈnɛmə/</td><td class="en">restaurant / cinema</td><td>11</td></tr>
+<tr><td class="ca">ros / morè</td><td class="pron">/ˈros/ /muˈɾɛ/</td><td class="en">blond / dark-haired</td><td>6</td></tr>
+<tr><td class="ca">Salutacions / Una abraçada</td><td class="pron">/səlutəsiˈons/ /ˌunə əβɾəˈsaðə/</td><td class="en">Regards / A hug (sign-offs)</td><td>12</td></tr>
+<tr><td class="ca">seixanta, setanta, vuitanta</td><td class="pron">/səˈʃantə/ /səˈtantə/ /bujˈtantə/</td><td class="en">60, 70, 80</td><td>3</td></tr>
+<tr><td class="ca">sempre / mai</td><td class="pron">/ˈsempɾə/ /ˈmaj/</td><td class="en">always / never</td><td>5</td></tr>
+<tr><td class="ca">el senyor / la senyora</td><td class="pron">/səˈɲo/ /səˈɲoɾə/</td><td class="en">Mr, sir / Mrs, madam</td><td>2</td></tr>
+<tr><td class="ca">la setmana passada</td><td class="pron">/səmˌmanə pəˈsaðə/</td><td class="en">last week</td><td>11</td></tr>
+<tr><td class="ca">setze, disset, divuit, dinou, vint</td><td class="pron">/ˈsɛdzə/ /diˈsɛt/ /diˈβujt/ /diˈnɔw/ /ˈbin/</td><td class="en">16–20</td><td>3</td></tr>
+<tr><td class="ca">sí / no</td><td class="pron">/ˈsi/ /ˈno/</td><td class="en">yes / no</td><td>1</td></tr>
+<tr><td class="ca">si us plau</td><td class="pron">/si us ˈplaw/</td><td class="en">please</td><td>2</td></tr>
+<tr><td class="ca">la signatura</td><td class="pron">/siŋnəˈtuɾə/</td><td class="en">signature</td><td>12</td></tr>
+<tr><td class="ca">simpàtic / simpàtica</td><td class="pron">/simˈpatik/ /simˈpatikə/</td><td class="en">nice, friendly</td><td>6</td></tr>
+<tr><td class="ca">el so</td><td class="pron">/ˈsɔ/</td><td class="en">sound</td><td>1</td></tr>
+<tr><td class="ca">Soc de Manchester.</td><td class="pron">/ˌsɔɡ də ˈmantʃestəɾ/</td><td class="en">I&#x27;m from Manchester.</td><td>2</td></tr>
+<tr><td class="ca">el sol / el núvol</td><td class="pron">/ˈsɔl/ /ˈnuβul/</td><td class="en">sun / cloud</td><td>10</td></tr>
+<tr><td class="ca">Són quatre euros amb cinquanta.</td><td class="pron">/ˌsoŋ ˌkwatɾə ˌɛwɾuz əm siŋˈkwantə/</td><td class="en">That&#x27;s four euros fifty.</td><td>8</td></tr>
+<tr><td class="ca">sopar</td><td class="pron">/suˈpa/</td><td class="en">to have dinner; dinner</td><td>7</td></tr>
+<tr><td class="ca">sota / sobre</td><td class="pron">/ˈsotə/ /ˈsoβɾə/</td><td class="en">under / on</td><td>9</td></tr>
+<tr><td class="ca">el sucre / la sal</td><td class="pron">/ˈsukɾə/ /ˈsal/</td><td class="en">sugar / salt</td><td>8</td></tr>
+<tr><td class="ca">també / tampoc</td><td class="pron">/təmˈbe/ /təmˈpɔk/</td><td class="en">also / neither</td><td>5</td></tr>
+<tr><td class="ca">tard / d&#x27;hora</td><td class="pron">/ˈtaɾt/ /ˈdɔɾə/</td><td class="en">late / early</td><td>7</td></tr>
+<tr><td class="ca">la tardor / l&#x27;hivern</td><td class="pron">/tərˈðo/ /iˈβɛrn/</td><td class="en">autumn / winter</td><td>10</td></tr>
+<tr><td class="ca">la taronja</td><td class="pron">/təˈɾɔnʒə/</td><td class="en">orange</td><td>8</td></tr>
+<tr><td class="ca">la taula / la cadira</td><td class="pron">/ˈtawlə/ /kəˈðiɾə/</td><td class="en">table / chair</td><td>3</td></tr>
+<tr><td class="ca">el te / la llet</td><td class="pron">/ˈtɛ/ /ˈʎet/</td><td class="en">tea / milk</td><td>8</td></tr>
+<tr><td class="ca">el telèfon</td><td class="pron">/təˈlɛfun/</td><td class="en">telephone</td><td>12</td></tr>
+<tr><td class="ca">Tens germans?</td><td class="pron">/ˌtenz ʒəɾˈmans/</td><td class="en">Do you have siblings?</td><td>6</td></tr>
+<tr><td class="ca">Tinc trenta-dos anys.</td><td class="pron">/ˌtiŋk ˌtɾɛntə ˈðoz ˈaɲs/</td><td class="en">I&#x27;m thirty-two.</td><td>3</td></tr>
+<tr><td class="ca">tornar</td><td class="pron">/turˈna/</td><td class="en">to return, go back</td><td>11</td></tr>
+<tr><td class="ca">treballar</td><td class="pron">/tɾəβəˈʎa/</td><td class="en">to work</td><td>5</td></tr>
+<tr><td class="ca">trenta, quaranta, cinquanta</td><td class="pron">/ˈtɾɛntə/ /kwəˈɾantə/ /siŋˈkwantə/</td><td class="en">30, 40, 50</td><td>3</td></tr>
+<tr><td class="ca">Va ser fantàstic!</td><td class="pron">/ˌba ˈse fənˈtastik/</td><td class="en">It was fantastic!</td><td>11</td></tr>
+<tr><td class="ca">Vaig anar a la platja.</td><td class="pron">/ˌbadʒ əˈnaɾ ə lə ˈpladʒə/</td><td class="en">I went to the beach.</td><td>11</td></tr>
+<tr><td class="ca">Vam sopar fora.</td><td class="pron">/ˌbam suˈpa ˈfɔɾə/</td><td class="en">We ate out (dinner).</td><td>11</td></tr>
+<tr><td class="ca">venir</td><td class="pron">/bəˈni/</td><td class="en">to come</td><td>5</td></tr>
+<tr><td class="ca">el vent / el temps</td><td class="pron">/ˈben/ /ˈtems/</td><td class="en">wind / weather, time</td><td>10</td></tr>
+<tr><td class="ca">verd / groc</td><td class="pron">/ˈbɛɾt/ /ˈɡɾɔk/</td><td class="en">green / yellow</td><td>4</td></tr>
+<tr><td class="ca">vermell / blau</td><td class="pron">/bərˈmeʎ/ /ˈblaw/</td><td class="en">red / blue</td><td>4</td></tr>
+<tr><td class="ca">Ves tot recte.</td><td class="pron">/ˌbɛs ˌtot ˈrektə/</td><td class="en">Go straight on.</td><td>9</td></tr>
+<tr><td class="ca">el vespre / la nit</td><td class="pron">/ˈbɛspɾə/ /ˈnit/</td><td class="en">evening / night</td><td>7</td></tr>
+<tr><td class="ca">vestir-se</td><td class="pron">/bəsˈtiɾsə/</td><td class="en">to get dressed</td><td>7</td></tr>
+<tr><td class="ca">el vi / la cervesa</td><td class="pron">/ˈbi/ /səɾˈβɛzə/</td><td class="en">wine / beer</td><td>8</td></tr>
+<tr><td class="ca">el viatge / les vacances</td><td class="pron">/biˈadʒə/ /bəˈkansəs/</td><td class="en">trip / holidays</td><td>11</td></tr>
+<tr><td class="ca">viatjar / passejar</td><td class="pron">/biəˈdʒa/ /pəsəˈʒa/</td><td class="en">to travel / to stroll</td><td>10</td></tr>
+<tr><td class="ca">visitar / trobar</td><td class="pron">/biziˈta/ /tɾuˈβa/</td><td class="en">to visit / to find, meet</td><td>11</td></tr>
+<tr><td class="ca">viure</td><td class="pron">/ˈbiwɾə/</td><td class="en">to live</td><td>5</td></tr>
+<tr><td class="ca">vuit, nou, deu</td><td class="pron">/ˈbujt/ /ˈnɔw/ /ˈdɛw/</td><td class="en">8–10</td><td>3</td></tr>
+<tr><td class="ca">Vull aprendre català.</td><td class="pron">/ˌbuʎ əˌpɾɛndɾə kətəˈla/</td><td class="en">I want to learn Catalan.</td><td>5</td></tr>
+<tr><td class="ca">zero, un/una, dos/dues, tres</td><td class="pron">/ˈzɛɾu/ /ˈun/ /ˈdos/ˈduəs/ /ˈtɾɛs/</td><td class="en">0–3</td><td>3</td></tr>
+</table>
+</div>
+
+<!-- ===== ANSWER KEY ===== -->
+<div class="answers">
+  <h1 class="page-title">Answer Key</h1>
+  <p class="note">For translation, writing and speaking tasks, sample answers are shown; reasonable variations are equally correct.</p>
+
+  <h3>Unit 1</h3>
+  <div class="ans-block"><span class="ak">1.1</span> 1) /ˈplasə/ 2) /ˈaɲ/ 3) /ˈʒɔ/ 4) /ˈkɔtʃə/ 5) /kuˈlo/. <span class="ak">1.2</span> 1) llibre 2) hola 3) cafè 4) maig. <span class="ak">1.3</span> 1) hospi<b>TAL</b> 2) <b>TAU</b>la 3) cata<b>LÀ</b> 4) se<b>TEM</b>bre. <span class="ak">1.4</span> 1) True 2) False — it's /b/ (or /β/) 3) True 4) True. <span class="ak">1.5</span> 1-c, 2-a, 3-b, 4-d. <span class="ak">1.6</span> 1) No ho entenc. 2) Pots repetir, si us plau? 3) Què vol dir…?</div>
+
+  <h3>Unit 2</h3>
+  <div class="ans-block"><span class="ak">2.1</span> 1) soc 2) ets 3) és 4) som 5) són 6) sou. <span class="ak">2.2</span> 1-b, 2-d, 3-a, 4-c. <span class="ak">2.3</span> 1) Bon dia! Com estàs? 2) Em dic John i soc d'Irlanda. 3) Moltes gràcies. — De res. 4) Parlo una mica de català. <span class="ak">2.4</span> 1) Em dic Marc. 2) Jo soc de Girona. 3) D'on ets (tu)? <span class="ak">2.5</span> 1) Jo <b>soc</b> de Tarragona. 2) Com <b>et</b> dius? 3) Nosaltres <b>som</b> estudiants. <span class="ak">2.6</span> 1) Com es diu? 2) D'on és? 3) Com està? <span class="ak">2.7</span> 1) Molt de gust 2) Fins aviat 3) cognom. <span class="ak">2.8</span> Sample: Hola! Em dic Sam. Soc de Bristol. Soc anglès.</div>
+
+  <h3>Unit 3</h3>
+  <div class="ans-block"><span class="ak">3.1</span> 1) tinc 2) té 3) teniu 4) tenim 5) tenen. <span class="ak">3.2</span> set · catorze · vint-i-un · trenta-tres · seixanta-vuit · cent. <span class="ak">3.3</span> 1) la 2) l' 3) els 4) l' 5) les. <span class="ak">3.4</span> 1) 35 2) 42 3) 67. <span class="ak">3.5</span> 1) Hi ha cinc llibres a la taula. 2) Tinc trenta-dos anys. 3) (Ella) té dues germanes. 4) Hi ha un banc a prop (d'aquí)? <span class="ak">3.6</span> 1) un 2) El 3) unes. <span class="ak">3.7</span> 1) vint-i-dos 2) vint-i-cinc 3) quaranta-quatre.</div>
+
+  <h3>Unit 4</h3>
+  <div class="ans-block"><span class="ak">4.1</span> els llibres · les cases · els gossos · els pans · les amigues · els peixos. <span class="ak">4.2</span> 1) petita 2) vermells 3) grans 4) bonica 5) nous. <span class="ak">4.3</span> 1) la 2) el 3) la 4) el. <span class="ak">4.4</span> 1) petita 2) vermells 3) grans. <span class="ak">4.5</span> 1) petit 2) barat 3) difícil 4) vell. <span class="ak">4.6</span> 1) una casa gran 2) dos cotxes nous 3) La cuina és blanca i la porta és verda. 4) La meva habitació és petita però bonica. <span class="ak">4.7</span> Sample: Casa meva és un pis petit. Hi ha dues habitacions, una cuina i un bany. La cuina és blanca i gran. La meva habitació és petita però molt bonica.</div>
+
+  <h3>Unit 5</h3>
+  <div class="ans-block"><span class="ak">5.1</span> 1) parlo 2) dormim 3) perden 4) treballes 5) mengeu. <span class="ak">5.2</span> 1) vaig 2) fas 3) volem 4) pot 5) fan. <span class="ak">5.3</span> 1) No parles francès. / Parles francès? 2) No anem al cinema. / Anem al cinema? <span class="ak">5.4</span> compro /ˈkompɾu/, compres, compra, comprem, compreu, compren. <span class="ak">5.5</span> 1) Jo <b>vaig</b> 2) Nosaltres <b>parlem</b> 3) Ella <b>pot</b>. <span class="ak">5.6</span> 1) Treballa a Barcelona. 2) Hi va amb tren. 3) Fa esport. <span class="ak">5.7</span> 1) Vull aprendre català. 2) No podem venir avui. 3) Què fan els diumenges?</div>
+
+  <h3>Unit 6</h3>
+  <div class="ans-block"><span class="ak">6.1</span> 1) avi 2) germana 3) oncle 4) cosina. <span class="ak">6.2</span> 1) el meu germà 2) la meva mare 3) els meus amics 4) les meves filles. <span class="ak">6.3</span> 1) el teu cotxe 2) la nostra casa 3) els seus llibres 4) les seves filles. <span class="ak">6.4</span> 1) professora 2) metgessa 3) cambrera 4) simpàtica. <span class="ak">6.5</span> 1) La <b>meva</b> germana 2) Els <b>teus</b> llibres 3) Soc professor (no article with jobs). <span class="ak">6.6</span> 1) La meva germana és metgessa. 2) Els seus pares són de València. 3) A què et dediques? — Soc professor/a. 4) El meu oncle és alt i simpàtic. <span class="ak">6.7</span> Sample: La meva família és petita. Tinc un germà i una germana. El meu germà es diu Tom i és alt. La meva germana és metgessa i molt simpàtica.</div>
+
+  <h3>Unit 7</h3>
+  <div class="ans-block"><span class="ak">7.1</span> 1) És la una. 2) Són les tres i mitja. 3) Són les cinc i deu. 4) a les nou del matí 5) Són les dues i vint. <span class="ak">7.2</span> 1) em llevo 2) es dutxa 3) ens vestim 4) es desperten. <span class="ak">7.3</span> 1) divendres 2) abril 3) gener, abril, agost. <span class="ak">7.4</span> 1) Em llevo a les set. 2) Els dissabtes no treballo. <span class="ak">7.5</span> 1) Jo <b>em</b> llevo 2) <b>Són</b> les tres 3) Ella es <b>dutxa</b>. <span class="ak">7.6</span> 1) Avui és dimecres. 2) Són les dues i mitja. 3) Em desperto a les set i esmorzo. <span class="ak">7.7</span> Sample: Em llevo a les set. Em dutxo i esmorzo a dos quarts de vuit (a les set i mitja). Vaig a la feina a les vuit.</div>
+
+  <h3>Unit 8</h3>
+  <div class="ans-block"><span class="ak">8.1</span> 1) en vull 2) En compro 3) en tinc 4) en vull. <span class="ak">8.2</span> 1) Un te i una poma, si us plau. 2) Mig quilo de peix, si us plau. 3) Un cafè amb llet i el compte, si us plau. <span class="ak">8.3</span> 1) dos euros amb cinquanta 2) tres euros amb vint 3) deu euros. <span class="ak">8.4</span> beguda: aigua, cervesa, te · menjar: formatge, arròs. <span class="ak">8.5</span> 1) voleu 2) cafè / plau 3) més / és. <span class="ak">8.6</span> 1) Quant és? — Són tres euros amb vint. 2) Vull una mica de pa, si us plau. 3) Tens taronges? — Sí, en tinc. <span class="ak">8.7</span> Model: Bon dia! — Un cafè amb llet i un entrepà de formatge, si us plau. — Quant és? — Gràcies. Adeu!</div>
+
+  <h3>Unit 9</h3>
+  <div class="ans-block"><span class="ak">9.1</span> 1) hi ha 2) és 3) és 4) hi ha. <span class="ak">9.2</span> 1) sota 2) al costat 3) lluny 4) davant. <span class="ak">9.3</span> 1) lluny de 2) darrere de 3) sobre 4) a l'esquerra. <span class="ak">9.4</span> Sample: Vas tot recte, agafes el segon carrer a l'esquerra, i el lloc és al costat del mercat. <span class="ak">9.5</span> 1) On <b>és</b> el banc? 2) A la plaça <b>hi ha</b> un mercat. <span class="ak">9.6</span> 1) Perdoni, on és el mercat? 2) Gira a l'esquerra i ves tot recte. 3) Hi ha una farmàcia al costat de l'estació. <span class="ak">9.7</span> 1) biblioteca 2) farmàcia 3) estació.</div>
+
+  <h3>Unit 10</h3>
+  <div class="ans-block"><span class="ak">10.1</span> 1) agrada 2) agraden 3) agrada 4) agraden 5) agrada. <span class="ak">10.2</span> 1) m' 2) t' 3) li 4) ens. <span class="ak">10.3</span> 1) M'agrada llegir. 2) Li agraden les pomes. 3) Ens encanta viatjar. 4) No els agrada el peix. <span class="ak">10.4</span> 1) Fa calor i fa sol. 2) Plou i fa vent. 3) Fa fred i està ennuvolat. 4) A l'hivern neva. <span class="ak">10.5</span> 1) M'<b>agrada</b> el cafè. 2) M'<b>agraden</b> els gats. 3) <b>Plou</b> avui. <span class="ak">10.6</span> 1) cuinar 2) hivern 3) pluja. <span class="ak">10.7</span> Sample: M'agrada molt llegir. M'agraden els gats. No m'agrada gens el futbol. Avui fa sol però fa fred.</div>
+
+  <h3>Unit 11</h3>
+  <div class="ans-block"><span class="ak">11.1</span> 1) vaig menjar 2) va anar 3) vam fer 4) van comprar 5) vas veure. <span class="ak">11.2</span> 1) Vaig parlar amb la Maria. 2) Vam anar al cinema. 3) Van comprar pa. <span class="ak">11.3</span> 1) Ahir 2) L'any passat 3) Aquest matí. <span class="ak">11.4</span> 1) Jo <b>vaig</b> parlar 2) Nosaltres <b>vam</b> fer 3) Ella <b>va</b> anar. <span class="ak">11.5</span> 1) Ahir vaig estudiar català. 2) La setmana passada vam viatjar a Girona. 3) Què va fer (ella) aquest matí? 4) Van tornar a casa tard. <span class="ak">11.6</span> 1) Vaig anar a la platja. 2) Va ser fantàstic. <span class="ak">11.7</span> Sample: Ahir vaig treballar tot el matí. A la tarda vaig comprar fruita al mercat. Al vespre vaig veure una pel·lícula.</div>
+
+  <h3>Unit 12</h3>
+  <div class="ans-block"><span class="ak">12.1</span> 1) És de Tarragona. 2) Té vint-i-vuit anys. 3) És professora d'anglès. 4) Va comprar fruita i peix. 5) Li agrada cuinar, llegir i passejar. <span class="ak">12.2</span> 1) dic / soc 2) és / Són 3) vaig anar / meva 4) agraden / agrada. <span class="ak">12.3</span> Model: Hola, em dic Alex. Soc de Londres i soc estudiant. Em llevo a les vuit. M'agrada el cafè. Ahir vaig anar al mercat. <span class="ak">12.4</span> Jo <b>soc</b> de Manchester. Tinc trenta <b>anys</b>. M'<b>agrada</b> el cafè. Ahir jo <b>vaig</b> anar al mercat. La <b>meva</b> germana és metgessa. <span class="ak">12.5–12.6</span> Personal / model in Mock Paper 4 below.</div>
+
+  <h3>Mock exam</h3>
+  <div class="ans-block"><span class="ak">Paper 1</span> 1) F — és de Girona 2) V 3) F — és metgessa 4) V 5) F — sí que hi ha mercat 6) F — van anar al cinema.<br>
+  <span class="ak">Paper 2A</span> 1) El diumenge. 2) A les deu (del matí). 3) Un document d'identitat i una fotografia. 4) Res — és gratuït.<br>
+  <span class="ak">Paper 2B</span> 1-b, 2-d, 3-a, 4-e, 5-c.<br>
+  <span class="ak">Paper 3B model (38 words)</span> «Hola, Marta! Soc a Mallorca, de vacances. Fa molt sol i molta calor. Ahir vaig nedar al mar i vam sopar en un restaurant petit. M'agrada molt la platja d'aquí. Fins aviat! Una abraçada, Sam.»<br>
+  <span class="ak">Paper 4 model answers (Part 1)</span> Em dic… / S'escriu… (spell it with the letter names from Unit 1) · Soc de… i visc a… · Tinc … anys · Soc … (no article!) · Sí, tinc un germà; és alt i simpàtic · M'agrada llegir i passejar · Em llevo a les set · Ahir vaig treballar i al vespre vaig sopar amb amics.<br>
+  <span class="ak">Paper 4 role-play skeleton</span> Bon dia! — Un cafè amb llet i un entrepà, si us plau. — Quant és? — Gràcies, adeu! · Perdoni, on és l'estació? — És lluny? — Moltes gràcies!</div>
+</div>
+
+<!-- ===== CHECKLIST ===== -->
+<div class="answers">
+  <h1 class="page-title">A1 Self-Assessment Checklist</h1>
+  <p>Tick what you can do confidently. All boxes ticked = you are ready to register for the exam.</p>
+  <ul class="checklist">
+    <li>I can <b>read Catalan aloud</b> from spelling, and read <b>IPA transcriptions</b>.</li>
+    <li>I can <b>greet, thank, apologise</b> and ask someone to repeat or slow down.</li>
+    <li>I can <b>introduce myself</b> (name, spelling it aloud, origin, nationality, job, age).</li>
+    <li>I can use <b>ser, estar, tenir</b> and <b>hi ha</b> correctly.</li>
+    <li>I can <b>count to 100</b>, say prices, ages and phone numbers.</li>
+    <li>I can make <b>articles, nouns and adjectives agree</b>.</li>
+    <li>I can use the <b>present tense</b> of regular verbs and anar/fer/voler/poder.</li>
+    <li>I can <b>describe my family and home</b> with possessives and colours.</li>
+    <li>I can <b>tell the time</b> and talk about my <b>daily routine</b> with reflexive verbs.</li>
+    <li>I can <b>order food, ask prices</b> and answer with the pronoun <b>en</b>.</li>
+    <li>I can <b>ask for and give directions</b>.</li>
+    <li>I can express <b>likes and dislikes</b> with <b>agradar</b> and describe weather and seasons.</li>
+    <li>I can narrate the <b>recent past</b> with <b>vaig + infinitive</b>.</li>
+    <li>I can <b>fill in a personal-data form</b> and write a <b>40-word postcard</b>.</li>
+    <li>I have <b>sat the mock exam</b> and reached the marking-guide threshold.</li>
+  </ul>
+  <p class="note" style="margin-top:6mm;">Molta sort a l'examen! — Good luck in the exam! Next step: A2 on parla.cat or a CPNL "Bàsic" course.</p>
+  <p><small class="cite">External sites (LingoHut, Loecsen, UPF, Easy Catalan, verbs.cat, Talkpal, Forvo, jbdowse.com, Wikipedia, internationalphoneticalphabet.org, llull.cat, llengua.gencat.cat, CPNL) belong to their respective owners; all links were live in June 2026. Exam formats and dates are set by each convener — always confirm details on the official pages before registering. IPA transcriptions are standard Central Catalan citation forms; natural connected speech assimilates further.</small></p>
+</div>
+
+</body>
+</html>
