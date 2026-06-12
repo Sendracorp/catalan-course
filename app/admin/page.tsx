@@ -57,9 +57,9 @@ export default async function AdminPage() {
           <div className="admin-stats">
             <div><b>{userCount ?? 0}</b><span>registered students</span></div>
             <div><b>{paid.length}</b><span>active purchases</span></div>
-            <div><b>{revenue}</b><span>gross revenue (before Lemon Squeezy fees)</span></div>
+            <div><b>{revenue}</b><span>gross revenue (before Paddle fees)</span></div>
           </div>
-          <p className="note">Finance detail (fees, payouts, taxes) lives in the Lemon Squeezy dashboard.</p>
+          <p className="note">Finance detail (fees, payouts, taxes) lives in the Paddle dashboard.</p>
         </div>
         <div className="card">
           <h2>Purchases</h2>

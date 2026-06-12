@@ -28,14 +28,14 @@ create trigger on_auth_user_created
   for each row execute function public.handle_new_user();
 
 -- ───────────────────────────── purchases ────────────────────────────
--- Written exclusively by the Lemon Squeezy webhook (service role).
+-- Written exclusively by the payment webhook (service role).
 -- user_id references profiles (not auth.users) so PostgREST can embed the
 -- buyer's email on the admin page; the signup trigger guarantees the row.
 create table public.purchases (
   id            uuid primary key default gen_random_uuid(),
   user_id       uuid not null references public.profiles (id) on delete cascade,
   course_slug   text not null,
-  ls_order_id   text not null unique,
+  provider_order_id text not null unique,   -- Paddle transaction id
   status        text not null default 'paid' check (status in ('paid', 'refunded')),
   amount_cents  integer,
   currency      text,

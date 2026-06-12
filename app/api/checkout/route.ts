@@ -2,8 +2,11 @@ import { NextResponse } from 'next/server';
 import { getSessionUser } from '@/lib/supabase/server';
 import { getCourseMeta } from '@/lib/courses';
 import { userOwnsCourse } from '@/lib/access';
-import { createCheckout } from '@/lib/lemonsqueezy';
+import { isPaddleConfigured, paddleClientToken, paddleEnvironment, priceIdFor } from '@/lib/paddle';
 
+/* Auth gate for the Paddle overlay: confirms login + non-ownership, then
+   hands the client everything it needs to open the checkout. user_id and
+   course_slug travel as customData and come back on the webhook. */
 export async function POST(request: Request) {
   const user = await getSessionUser();
   if (!user || !user.email) {
@@ -18,9 +21,19 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'You already own this course.' }, { status: 409 });
   }
 
-  const result = await createCheckout({ courseSlug, userId: user.id, email: user.email });
-  if ('error' in result) {
-    return NextResponse.json({ error: result.error }, { status: 503 });
+  if (!isPaddleConfigured()) {
+    return NextResponse.json({ error: 'Payments are not configured yet on this deployment.' }, { status: 503 });
   }
-  return NextResponse.json({ url: result.url });
+  const priceId = priceIdFor(courseSlug);
+  if (!priceId) {
+    return NextResponse.json({ error: 'This course has no price configured yet.' }, { status: 503 });
+  }
+
+  return NextResponse.json({
+    environment: paddleEnvironment(),
+    clientToken: paddleClientToken(),
+    priceId,
+    email: user.email,
+    userId: user.id,
+  });
 }

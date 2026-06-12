@@ -3,14 +3,15 @@
 An interactive course platform for learning Catalan, currently offering a
 complete beginner's course in Central Catalan (CEFR A1) built to prepare for
 the official A1 exam (*Certificat de nivell inicial de català*).
-**Next.js + TypeScript + React + Supabase + Lemon Squeezy**, deployable on Vercel.
+**Next.js + TypeScript + React + Supabase + Paddle**, deployable on Vercel.
 
 * a **course catalog** with per-course purchase (one-time, ~$5) — unit 1 of
   each course is a **free preview**, no account needed
 * **accounts**: email/password (with verification + password reset) and
   Google login via Supabase Auth
-* **payments** through Lemon Squeezy as merchant of record (they handle EU
-  VAT / global sales tax); access granted by signed webhook
+* **payments** through Paddle as merchant of record (they handle EU VAT /
+  global sales tax, and support Andorra-based sellers); access granted by
+  signed webhook
 * **progress tracking in your account**: per-exercise states, per-unit bars,
   mock-exam attempt history, "continue where you left off" — synced across
   devices (logged-out preview progress stays in localStorage)
@@ -45,10 +46,10 @@ returns a friendly error.
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL (Project Settings → API) |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon/public key |
 | `SUPABASE_SERVICE_ROLE_KEY` | Service role key — **server only**; used by the webhook and /admin |
-| `LEMONSQUEEZY_API_KEY` | Lemon Squeezy API key (Settings → API) |
-| `LEMONSQUEEZY_STORE_ID` | Numeric store ID |
-| `LEMONSQUEEZY_WEBHOOK_SECRET` | Signing secret of the webhook below |
-| `LEMONSQUEEZY_VARIANT_CATALAN_A1` | Variant ID of the $5 course product (one var per course slug) |
+| `NEXT_PUBLIC_PADDLE_ENV` | `sandbox` while testing, `production` to go live |
+| `NEXT_PUBLIC_PADDLE_CLIENT_TOKEN` | Paddle client-side token (Developer Tools → Authentication; safe to expose) |
+| `PADDLE_WEBHOOK_SECRET` | Secret key of the notification destination below |
+| `PADDLE_PRICE_CATALAN_A1` | Price ID (`pri_…`) of the $5 course product (one var per course slug) |
 | `NEXT_PUBLIC_SITE_URL` | Canonical site URL for auth + checkout redirects |
 | `COURSE_BYPASS_PAYWALL` | `true` unlocks everything — **local QA only, never in production** |
 
@@ -73,19 +74,26 @@ Row-level security: students can only read/write their own progress and read
 their own purchases; the `purchases` table is written exclusively by the
 webhook through the service-role key.
 
-## Lemon Squeezy setup (one-time)
+## Paddle setup (one-time)
 
-1. Create a store (test mode works immediately; going live requires their
-   store review since they are the merchant of record).
-2. Create a product "Catalan A1" at $5 → copy the **variant ID** into
-   `LEMONSQUEEZY_VARIANT_CATALAN_A1`.
-3. Settings → API → create an API key.
-4. Settings → Webhooks → add
-   `https://<your-domain>/api/webhooks/lemonsqueezy`, subscribe to
-   `order_created` and `order_refunded`, set a signing secret and copy it
-   into `LEMONSQUEEZY_WEBHOOK_SECRET`.
-5. Test-mode checkout uses card `4242 4242 4242 4242`. Refunding an order in
-   the LS dashboard revokes course access via the webhook.
+Paddle is the merchant of record (handles EU VAT / global sales tax) and —
+unlike Stripe or Lemon Squeezy — supports sellers based in Andorra. Start in
+the **sandbox** (<https://sandbox-vendors.paddle.com>, instant signup); going
+live requires Paddle's seller verification of your real account + website.
+
+1. Create a product "Catalan A1" with a one-time $5 price → copy the
+   **price ID** (`pri_…`) into `PADDLE_PRICE_CATALAN_A1`.
+2. Developer Tools → Authentication → create a **client-side token** →
+   `NEXT_PUBLIC_PADDLE_CLIENT_TOKEN` (and set `NEXT_PUBLIC_PADDLE_ENV`).
+3. Developer Tools → Notifications → add a destination
+   `https://<your-domain>/api/webhooks/paddle`, subscribe to
+   `transaction.completed`, `adjustment.created` and `adjustment.updated`,
+   and copy its **secret key** into `PADDLE_WEBHOOK_SECRET`.
+4. Checkout settings → add your domain(s) to the approved domains so the
+   overlay checkout and `successUrl` work.
+5. Sandbox checkout uses card `4242 4242 4242 4242` (any future expiry/CVC).
+   Approving a refund in the Paddle dashboard revokes course access via the
+   webhook. Payouts: SEPA/SWIFT bank transfer or Payoneer.
 
 ## Source of truth
 
@@ -94,7 +102,7 @@ build time by `lib/course.ts`, which **asserts content fidelity** — exactly
 12 units, 83 exercises and 275 glossary rows — and fails the build if the
 source drifts. The catalog itself is `lib/courses.ts`; adding a course means
 adding an entry there, a content source wired in `lib/content.ts`, and a
-`LEMONSQUEEZY_VARIANT_<SLUG>` env var. See `DESIGN.md` for architecture and
+`PADDLE_PRICE_<SLUG>` env var. See `DESIGN.md` for architecture and
 `DECISIONS.md` for the choices made.
 
 ## Deploy on Vercel

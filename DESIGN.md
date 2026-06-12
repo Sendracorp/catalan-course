@@ -138,8 +138,8 @@ browser ── proxy.ts ┤
                        lib/access.ts; Paywall rendered instead of content
 /login /signup /…      Supabase auth flows, /auth/callback exchanges codes
 /account /admin        purchases view · service-role admin overview
-/api/checkout          creates a Lemon Squeezy hosted checkout (logged in)
-/api/webhooks/…        HMAC-verified LS webhook — sole writer of purchases
+/api/checkout          auth gate returning Paddle overlay params (logged in)
+/api/webhooks/paddle   HMAC-verified Paddle webhook — sole writer of purchases
 ```
 
 * **Access control** is evaluated per request in server components

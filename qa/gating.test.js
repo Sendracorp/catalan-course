@@ -95,9 +95,9 @@ function ok(cond, label) {
 
   // webhook rejects unsigned payloads
   const whStatus = await page.evaluate(async () => {
-    const r = await fetch('/api/webhooks/lemonsqueezy', {
+    const r = await fetch('/api/webhooks/paddle', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ meta: { event_name: 'order_created' } }),
+      body: JSON.stringify({ event_type: 'transaction.completed' }),
     });
     return r.status;
   });

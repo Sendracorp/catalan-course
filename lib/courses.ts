@@ -1,6 +1,6 @@
 /* The course catalog. Client-safe: metadata only, no content or secrets.
    Adding a course = adding an entry here (+ content source + a
-   LEMONSQUEEZY_VARIANT_<SLUG> env var for its price variant). */
+   PADDLE_PRICE_<SLUG> env var for its Paddle price). */
 
 export interface CourseMeta {
   slug: string;
@@ -9,7 +9,7 @@ export interface CourseMeta {
   title: string;
   tagline: string;
   description: string;
-  priceLabel: string;          // display only — the real price lives on the Lemon Squeezy variant
+  priceLabel: string;          // display only — the real price lives on the Paddle price object
   freeUnits: number[];         // unit numbers available without purchase
   stats: { units: number; exercises: number; glossary: number };
   available: boolean;          // false = "coming soon" card

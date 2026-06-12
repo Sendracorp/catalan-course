@@ -83,11 +83,16 @@ Decisions made while building the site, and why.
     (extra vendor for a feature Supabase bundles). All tables carry
     row-level security; users only ever see their own rows.
 
-16. **Lemon Squeezy as merchant of record.** They handle EU VAT and global
-    sales tax — worth the higher fee (~5% + 50¢) at a $5 price point versus
-    running tax compliance on Stripe. The webhook
-    (`/api/webhooks/lemonsqueezy`, HMAC-verified, idempotent on order ID) is
-    the **only** writer of `purchases`; refunds revoke access.
+16. **Paddle as merchant of record** (originally Lemon Squeezy, swapped the
+    same week). A MoR handles EU VAT and global sales tax — worth the higher
+    fee at a $5 price point versus running tax compliance yourself. Lemon
+    Squeezy turned out not to support Andorra-based sellers (it's Stripe-owned
+    and Stripe doesn't operate in Andorra; Polar fails the same way via
+    Stripe Connect). Paddle supports Andorran sellers, allows self-authored
+    online courses, and pays out via SEPA/SWIFT or Payoneer. The webhook
+    (`/api/webhooks/paddle`, HMAC-verified, idempotent on the transaction ID)
+    is the **only** writer of `purchases`; approved refunds revoke access.
+    Checkout is Paddle.js overlay (client-side) gated by `/api/checkout`.
 
 17. **One-time purchase per course, no subscriptions in v1.** The
     `purchases` table is per-course rows, so an all-access subscription can

@@ -1,9 +1,11 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { initializePaddle } from '@paddle/paddle-js';
 
-/* Starts a Lemon Squeezy checkout via /api/checkout. Requires login —
-   401 sends the user to /login and back here afterwards. */
+/* Opens the Paddle overlay checkout. /api/checkout is the auth gate —
+   401 sends the user to /login and back here afterwards. Access itself is
+   granted by the transaction.completed webhook, not the success redirect. */
 export default function BuyButton({ courseSlug, priceLabel, returnTo }: {
   courseSlug: string;
   priceLabel: string;
@@ -27,11 +29,24 @@ export default function BuyButton({ courseSlug, priceLabel, returnTo }: {
         return;
       }
       const body = await res.json().catch(() => ({}));
-      if (!res.ok || !body.url) {
+      if (!res.ok) {
         setError(body.error ?? 'Could not start checkout. Please try again.');
         return;
       }
-      window.location.href = body.url;
+      const paddle = await initializePaddle({ environment: body.environment, token: body.clientToken });
+      if (!paddle) {
+        setError('Could not load the checkout. Please try again.');
+        return;
+      }
+      paddle.Checkout.open({
+        items: [{ priceId: body.priceId, quantity: 1 }],
+        customer: { email: body.email },
+        customData: { user_id: body.userId, course_slug: courseSlug },
+        settings: {
+          displayMode: 'overlay',
+          successUrl: `${window.location.origin}${returnTo}?purchased=1`,
+        },
+      });
     } catch {
       setError('Could not start checkout. Please check your connection and try again.');
     } finally {
