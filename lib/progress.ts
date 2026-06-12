@@ -24,7 +24,7 @@ export interface MockAttempt {
 }
 
 /* Keys that are device preferences, not learning progress — always local. */
-const DEVICE_KEYS = new Set(['mock.conditions']);
+const DEVICE_KEYS = new Set(['mock.conditions', 'ttsNoticeDismissed']);
 
 interface Backend { userId: string; courseSlug: string }
 

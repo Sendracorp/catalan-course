@@ -72,18 +72,30 @@ Decisions made while building the site, and why.
     root” serves it with zero configuration and all-relative paths keep
     `file://` working from a clone.
 
+15. **Native-speaker audio over TTS, sourced from Lingua Libre.** Browser TTS
+    pronounces Catalan badly on most devices — unacceptable for a
+    pronunciation-focused course. Forvo (real speakers) forbids caching and
+    requires a commercial API agreement; Lingua Libre's ~23k Catalan
+    recordings on Wikimedia Commons are CC BY-SA 4.0, so they are fetched
+    once (`scripts/fetch-native-audio.mjs`), committed as static MP3s and
+    attributed on the glossary page. Coverage: every whole-entry match plus
+    multi-word entries whose every part is recorded (played in sequence) —
+    roughly half of all speakable strings, including most single-word
+    vocabulary. Sentences/dialogues keep the Web Speech fallback; recordists
+    are ranked by recording count so one voice dominates for consistency.
+
 ---
 
 ## Platform decisions (login, payments, multi-course — June 2026)
 
-15. **Supabase for auth + database.** Email/password (verification +
+16. **Supabase for auth + database.** Email/password (verification +
     password reset included) plus Google OAuth are dashboard toggles, and
     the same project hosts Postgres for purchases/progress. Chosen over
     Auth.js (credentials auth is deliberately bare-bones there) and Clerk
     (extra vendor for a feature Supabase bundles). All tables carry
     row-level security; users only ever see their own rows.
 
-16. **Paddle as merchant of record** (originally Lemon Squeezy, swapped the
+17. **Paddle as merchant of record** (originally Lemon Squeezy, swapped the
     same week). A MoR handles EU VAT and global sales tax — worth the higher
     fee at a $5 price point versus running tax compliance yourself. Lemon
     Squeezy turned out not to support Andorra-based sellers (it's Stripe-owned
@@ -94,21 +106,21 @@ Decisions made while building the site, and why.
     is the **only** writer of `purchases`; approved refunds revoke access.
     Checkout is Paddle.js overlay (client-side) gated by `/api/checkout`.
 
-17. **One-time purchase per course, no subscriptions in v1.** The
+18. **One-time purchase per course, no subscriptions in v1.** The
     `purchases` table is per-course rows, so an all-access subscription can
     later be modelled as additional grant rows without schema rework.
 
-18. **Free preview = unit 1 + IPA guide + exam info; everything else gated.**
+19. **Free preview = unit 1 + IPA guide + exam info; everything else gated.**
     Gating happens server-side in the page components (the paywall is
     rendered instead of content — nothing gated reaches the client).
     `COURSE_BYPASS_PAYWALL=true` exists for the content QA suite only.
 
-19. **Course-scoped URLs.** `/courses/[slug]/…` with permanent redirects
+20. **Course-scoped URLs.** `/courses/[slug]/…` with permanent redirects
     from the old root paths. The catalog (`lib/courses.ts`) is metadata
     only; `lib/content.ts` maps slug → parsed content, so course pages stay
     generic.
 
-20. **Progress keeps its localStorage API, swaps the backend.** The exercise
+21. **Progress keeps its localStorage API, swaps the backend.** The exercise
     engine still calls `sget/sset/exState`; when logged in the store is an
     in-memory cache seeded server-side and pushed to Supabase through a
     retrying, latest-write-wins queue (optimistic UI on the exercise hot
@@ -116,7 +128,7 @@ Decisions made while building the site, and why.
     existing users, so no migration. `mock.conditions` remains a device
     preference.
 
-21. **The app must run with placeholder credentials.** Unconfigured Supabase
+22. **The app must run with placeholder credentials.** Unconfigured Supabase
     short-circuits to "logged out" (paywall active, auth pages explain
     themselves) instead of crashing — so the repo builds, deploys and QA-runs
     before any account is created. Auth-dependent routes are

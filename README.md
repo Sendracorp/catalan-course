@@ -18,8 +18,10 @@ the official A1 exam (*Certificat de nivell inicial de català*).
 * **12 units** of theory, vocabulary (300+ words, every one with IPA),
   dialogues and verified external resources
 * **83 interactive exercises** auto-marked from the course answer key
-* 🔊 **audio on every Catalan word, phrase and dialogue line** via the Web
-  Speech API (prefers a `ca-ES` voice)
+* 🔊 **audio on every Catalan word, phrase and dialogue line** — vocabulary
+  uses **native-speaker recordings** (Lingua Libre / Wikimedia Commons,
+  CC BY-SA 4.0, shipped as static MP3s); sentences and dialogues fall back
+  to the Web Speech API (prefers a `ca-ES` voice)
 * a full **mock A1 exam** — TTS listening paper, optional exam-condition
   timers, auto-marking, attempt history
 * a searchable, sortable **glossary** (275 entries)
@@ -95,6 +97,25 @@ live requires Paddle's seller verification of your real account + website.
    Approving a refund in the Paddle dashboard revokes course access via the
    webhook. Payouts: SEPA/SWIFT bank transfer or Payoneer.
 
+## Native pronunciation audio
+
+`scripts/fetch-native-audio.mjs` matches every Catalan vocabulary string in
+the course against the ~23,000 native-speaker recordings of the
+[Lingua Libre](https://lingualibre.org) project on Wikimedia Commons,
+downloads the MP3s into `public/audio/ca/` (committed — no runtime
+dependency on Commons) and writes `lib/native-audio.json`. At runtime
+`speak()` plays the native recording when one exists — chaining the parts of
+multi-word entries like *abril, maig, juny* — and falls back to Web Speech
+TTS for sentences and dialogue lines. Re-run the script only when course
+vocabulary changes. Attribution (CC BY-SA 4.0) is rendered on the glossary
+page from the manifest's credits.
+
+**Recording the rest yourself**: the script writes `recordings/TODO.txt` —
+every sentence/dialogue line still on TTS. Record them with a native
+speaker, map them in `recordings/index.json`
+(`{ "Quants anys tens?": "quants-anys.mp3" }`, files in the same folder) and
+re-run the script; own recordings take priority over everything.
+
 ## Source of truth
 
 Course content lives in `course_source.html`. Pages are generated from it at
@@ -131,3 +152,13 @@ across reloads, the mock exam and a 380 px mobile viewport. `gating.test.js`
 verifies the catalog, old-URL redirects, the free preview, that every gated
 page shows the paywall with no leaked content, that `/api/checkout` requires
 login and the webhook rejects unsigned payloads, and the auth pages.
+
+## Roadmap
+
+- [ ] **Sentence/dialogue audio**: the 237 texts in `recordings/TODO.txt`
+      still use browser TTS. Either record them with a native speaker
+      (drop files in `recordings/` + `index.json`, re-run
+      `scripts/fetch-native-audio.mjs`) or pre-generate static MP3s with
+      Azure neural Catalan TTS (`ca-ES-JoanaNeural` / `EnricNeural` /
+      `AlbaNeural`, free tier covers the whole course) once an Azure
+      Speech key exists.
