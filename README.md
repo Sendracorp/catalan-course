@@ -5,7 +5,7 @@ complete beginner's course in Central Catalan (CEFR A1) built to prepare for
 the official A1 exam (*Certificat de nivell inicial de català*).
 **Next.js + TypeScript + React + Supabase + Paddle**, deployable on Vercel.
 
-* a **course catalog** with per-course purchase (one-time, ~$5) — unit 1 of
+* a **course catalog** with per-course purchase (one-time, €70) — unit 1 of
   each course is a **free preview**, no account needed
 * **accounts**: email/password (with verification + password reset) and
   Google login via Supabase Auth
@@ -50,8 +50,9 @@ returns a friendly error.
 | `SUPABASE_SERVICE_ROLE_KEY` | Service role key — **server only**; used by the webhook and /admin |
 | `NEXT_PUBLIC_PADDLE_ENV` | `sandbox` while testing, `production` to go live |
 | `NEXT_PUBLIC_PADDLE_CLIENT_TOKEN` | Paddle client-side token (Developer Tools → Authentication; safe to expose) |
+| `PADDLE_API_KEY` | Paddle API key (server only) — reads the live price so the displayed amount equals what's charged |
 | `PADDLE_WEBHOOK_SECRET` | Secret key of the notification destination below |
-| `PADDLE_PRICE_CATALAN_A1` | Price ID (`pri_…`) of the $5 course product (one var per course slug) |
+| `PADDLE_PRICE_CATALAN_A1` | Price ID (`pri_…`) of the course product (one var per course slug) |
 | `NEXT_PUBLIC_SITE_URL` | Canonical site URL for auth + checkout redirects |
 | `COURSE_BYPASS_PAYWALL` | `true` unlocks everything — **local QA only, never in production** |
 
@@ -83,10 +84,13 @@ unlike Stripe or Lemon Squeezy — supports sellers based in Andorra. Start in
 the **sandbox** (<https://sandbox-vendors.paddle.com>, instant signup); going
 live requires Paddle's seller verification of your real account + website.
 
-1. Create a product "Catalan A1" with a one-time $5 price → copy the
-   **price ID** (`pri_…`) into `PADDLE_PRICE_CATALAN_A1`.
+1. Create a product "Catalan A1" with a one-time **€70** price → copy the
+   **price ID** (`pri_…`) into `PADDLE_PRICE_CATALAN_A1`. (The price shown on
+   the site is read live from Paddle, so whatever you set here is what's
+   displayed and charged — keep them the same product.)
 2. Developer Tools → Authentication → create a **client-side token** →
-   `NEXT_PUBLIC_PADDLE_CLIENT_TOKEN` (and set `NEXT_PUBLIC_PADDLE_ENV`).
+   `NEXT_PUBLIC_PADDLE_CLIENT_TOKEN`, and an **API key** → `PADDLE_API_KEY`
+   (server-only, reads the live price). Set `NEXT_PUBLIC_PADDLE_ENV`.
 3. Developer Tools → Notifications → add a destination
    `https://<your-domain>/api/webhooks/paddle`, subscribe to
    `transaction.completed`, `adjustment.created` and `adjustment.updated`,

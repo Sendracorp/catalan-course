@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import SiteHeader from '@/components/SiteHeader';
+import SiteFooter from '@/components/SiteFooter';
 
 // Auth/ownership state must be evaluated per request, even when the build
 // runs with unconfigured placeholder credentials.
@@ -9,13 +10,15 @@ import BuyButton from '@/components/BuyButton';
 import { COURSES } from '@/lib/courses';
 import { getSessionUser, paywallBypassed, userOwnsCourse } from '@/lib/access';
 import { countPassedExercises } from '@/lib/progress-server';
+import { resolveCoursePrice } from '@/lib/pricing';
 
 export default async function CatalogPage() {
   const user = await getSessionUser();
   const cards = await Promise.all(COURSES.map(async meta => {
     const owns = meta.available && (paywallBypassed() || (user ? await userOwnsCourse(user.id, meta.slug) : false));
     const passed = owns && user ? await countPassedExercises(user.id, meta.slug) : 0;
-    return { meta, owns, passed };
+    const price = await resolveCoursePrice(meta.slug);
+    return { meta, owns, passed, price };
   }));
 
   return (
@@ -31,7 +34,7 @@ export default async function CatalogPage() {
           </p>
         </div>
         <div className="catalog-grid" data-test="catalog">
-          {cards.map(({ meta, owns, passed }) => {
+          {cards.map(({ meta, owns, passed, price }) => {
             const base = `/courses/${meta.slug}`;
             const pct = Math.round(passed / meta.stats.exercises * 100);
             return (
@@ -57,7 +60,7 @@ export default async function CatalogPage() {
                   </>
                 ) : (
                   <div className="course-card-actions">
-                    <BuyButton courseSlug={meta.slug} priceLabel={meta.priceLabel} returnTo={base} />
+                    <BuyButton courseSlug={meta.slug} priceLabel={price.label} returnTo={base} />
                     <Link className="btn" href={`${base}/unit/${meta.freeUnits[0]}`} data-test="free-preview">
                       Free preview · Unit {meta.freeUnits[0]}
                     </Link>
@@ -72,7 +75,11 @@ export default async function CatalogPage() {
             <p>The next level is in the works. Finish A1 first — it’s the foundation for everything that follows.</p>
           </div>
         </div>
+        <p className="catalog-pricing-link">
+          See <Link href="/pricing">full pricing &amp; what’s included →</Link>
+        </p>
       </main>
+      <SiteFooter />
     </>
   );
 }

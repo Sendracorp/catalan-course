@@ -7,6 +7,7 @@ import Dashboard from '@/components/Dashboard';
 import Checklist from '@/components/Checklist';
 import SpeechScope from '@/components/SpeechScope';
 import BuyButton from '@/components/BuyButton';
+import { resolveCoursePrice } from '@/lib/pricing';
 
 export default async function CourseHomePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -15,6 +16,7 @@ export default async function CourseHomePage({ params }: { params: Promise<{ slu
   if (!meta || !course) notFound();
 
   const access = await getCourseAccess(slug);
+  const { label: price } = await resolveCoursePrice(slug);
   const units = course.units.map(u => ({ num: u.num, title: u.title, exerciseIds: u.exerciseIds }));
   const base = `/courses/${slug}`;
 
@@ -33,7 +35,7 @@ export default async function CourseHomePage({ params }: { params: Promise<{ slu
       <>
         {hero}
         <div className="card sales" data-test="sales-page">
-          <h2>Get the full course — {meta.priceLabel}, yours forever</h2>
+          <h2>Get the full course — {price}, yours forever</h2>
           <ul className="sales-list">
             <li>All {meta.stats.units} units with {meta.stats.exercises} interactive, auto-marked exercises</li>
             <li>Full mock A1 exam with per-paper timers and attempt history</li>
@@ -42,7 +44,7 @@ export default async function CourseHomePage({ params }: { params: Promise<{ slu
             <li>One payment, no subscription</li>
           </ul>
           <div className="paywall-actions">
-            <BuyButton courseSlug={slug} priceLabel={meta.priceLabel} returnTo={base} />
+            <BuyButton courseSlug={slug} priceLabel={price} returnTo={base} />
             {!access.user && (
               <Link className="btn" href={`/login?next=${encodeURIComponent(base)}`}>
                 Already bought it? Log in

@@ -2,11 +2,46 @@ import 'server-only';
 
 /* Paddle Billing (merchant of record — supports Andorra-based sellers, unlike
    Stripe/Lemon Squeezy). Checkout happens client-side via the Paddle.js
-   overlay; the server's job is gating (/api/checkout) and the signed webhook.
-   No Paddle API key is needed for this flow. */
+   overlay; the server gates (/api/checkout), verifies the webhook, and reads
+   the live price (PADDLE_API_KEY) so the displayed price === the charged one. */
 
 export function paddleEnvironment(): 'sandbox' | 'production' {
   return process.env.NEXT_PUBLIC_PADDLE_ENV === 'production' ? 'production' : 'sandbox';
+}
+
+function paddleApiBase(): string {
+  return paddleEnvironment() === 'production'
+    ? 'https://api.paddle.com'
+    : 'https://sandbox-api.paddle.com';
+}
+
+function paddleApiKey(): string | null {
+  const k = process.env.PADDLE_API_KEY ?? '';
+  return k && !k.startsWith('YOUR-') ? k : null;
+}
+
+export interface PaddlePrice { amountMinor: number; currency: string }
+
+/** Live unit price for a course from the Paddle API, or null if unavailable
+    (no API key, no price ID, or the request fails). Cached for an hour. */
+export async function getPaddlePrice(courseSlug: string): Promise<PaddlePrice | null> {
+  const key = paddleApiKey();
+  const priceId = priceIdFor(courseSlug);
+  if (!key || !priceId) return null;
+  try {
+    const res = await fetch(`${paddleApiBase()}/prices/${priceId}`, {
+      headers: { Authorization: `Bearer ${key}` },
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return null;
+    const body = await res.json();
+    const up = body?.data?.unit_price;
+    const amountMinor = Number(up?.amount);
+    if (!up?.currency_code || !Number.isFinite(amountMinor)) return null;
+    return { amountMinor, currency: up.currency_code };
+  } catch {
+    return null;
+  }
 }
 
 export function paddleClientToken(): string | null {

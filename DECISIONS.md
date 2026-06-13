@@ -97,7 +97,7 @@ Decisions made while building the site, and why.
 
 17. **Paddle as merchant of record** (originally Lemon Squeezy, swapped the
     same week). A MoR handles EU VAT and global sales tax — worth the higher
-    fee at a $5 price point versus running tax compliance yourself. Lemon
+    fee at this price point versus running tax compliance yourself. Lemon
     Squeezy turned out not to support Andorra-based sellers (it's Stripe-owned
     and Stripe doesn't operate in Andorra; Polar fails the same way via
     Stripe Connect). Paddle supports Andorran sellers, allows self-authored
@@ -146,3 +146,24 @@ Decisions made while building the site, and why.
     true access path is tested. Supabase-dependent specs `test.skip` when
     credentials are placeholders; the logged-out gating spec always runs.
     (Supersedes decision 13.)
+
+24. **Price source of truth = Paddle (live), shown provably in admin.** The
+    amount displayed on the catalog, course page, pricing page and paywall is
+    read live from the Paddle price API (`PADDLE_API_KEY`, cached 1h) via
+    `lib/pricing.ts`, so the shown price can never desync from what's charged.
+    The catalog `priceLabel` (€70) is only a fallback for when Paddle isn't
+    wired up. The admin dashboard shows each course's resolved price, its
+    source (Paddle vs fallback) and the Paddle price ID, making the source of
+    truth auditable. Prices are *edited in Paddle*, not in our admin — an
+    in-app editor could write a price that disagrees with the real charge, so
+    it's deliberately read-only.
+
+25. **Pricing + legal pages for Paddle verification.** Paddle's seller review
+    requires Terms, Refund Policy, Privacy Policy and a Contact page (email +
+    phone), reachable from site navigation. Added `/pricing`, `/terms`,
+    `/refunds`, `/privacy`, `/contact`, linked from a `SiteFooter` on every
+    public page and the course layout. Content follows common practice for EU
+    digital-course sellers: a 14-day money-back guarantee plus the digital
+    right-of-withdrawal waiver on immediate access. Business details live in
+    `lib/site.ts` (legal name / phone / address are placeholders to fill
+    before going live). Not legal advice — review before launch.

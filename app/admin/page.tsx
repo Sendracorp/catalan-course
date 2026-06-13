@@ -3,7 +3,9 @@ import { notFound, redirect } from 'next/navigation';
 import SiteHeader from '@/components/SiteHeader';
 import { getServerSupabase, getSessionUser } from '@/lib/supabase/server';
 import { getAdminSupabase } from '@/lib/supabase/admin';
-import { getCourseMeta } from '@/lib/courses';
+import { COURSES, getCourseMeta } from '@/lib/courses';
+import { priceIdFor } from '@/lib/paddle';
+import { resolveCoursePrice } from '@/lib/pricing';
 
 export const metadata: Metadata = { title: 'Admin' };
 export const dynamic = 'force-dynamic';
@@ -48,6 +50,16 @@ export default async function AdminPage() {
   const revenue = [...revenueByCurrency.entries()]
     .map(([cur, cents]) => `${(cents / 100).toFixed(2)} ${cur}`).join(' + ') || '0';
 
+  // Pricing source of truth: the live Paddle price (falls back to the catalog
+  // label only when Paddle isn't wired up yet). Read-only here — prices are
+  // edited in the Paddle dashboard so the shown price can never desync from
+  // what's actually charged.
+  const pricing = await Promise.all(COURSES.map(async meta => ({
+    meta,
+    priceId: priceIdFor(meta.slug),
+    price: await resolveCoursePrice(meta.slug),
+  })));
+
   return (
     <>
       <SiteHeader />
@@ -60,6 +72,30 @@ export default async function AdminPage() {
             <div><b>{revenue}</b><span>gross revenue (before Paddle fees)</span></div>
           </div>
           <p className="note">Finance detail (fees, payouts, taxes) lives in the Paddle dashboard.</p>
+        </div>
+        <div className="card" data-test="admin-pricing">
+          <h2>Pricing</h2>
+          <table className="account-table">
+            <thead><tr><th>Course</th><th>Price shown</th><th>Source</th><th>Paddle price ID</th></tr></thead>
+            <tbody>
+              {pricing.map(({ meta, priceId, price }) => (
+                <tr key={meta.slug}>
+                  <td>{meta.title}</td>
+                  <td>{price.label || '—'}{price.currency ? ` (${price.currency})` : ''}</td>
+                  <td>{price.source === 'paddle'
+                    ? <span className="owned-tag">live from Paddle ✓</span>
+                    : <span title="Set PADDLE_API_KEY + PADDLE_PRICE_… to pull the live price">catalog fallback</span>}
+                  </td>
+                  <td><code>{priceId ?? 'not set'}</code></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p className="note">
+            Prices are managed in the Paddle dashboard (the merchant of record), so the amount shown
+            here is exactly what customers are charged. To change a price, edit the Paddle price and
+            it updates everywhere within an hour.
+          </p>
         </div>
         <div className="card">
           <h2>Purchases</h2>

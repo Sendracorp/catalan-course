@@ -433,3 +433,28 @@ body.exam-mode .paper-timer { display: inline-flex; }
 .admin-stats div { display: flex; flex-direction: column; }
 .admin-stats b { font-size: 1.6rem; color: var(--red); font-family: Arial, sans-serif; }
 .admin-stats span { font-size: .82rem; color: #777; font-family: Arial, sans-serif; }
+
+/* ---------- site footer ---------- */
+.site-footer { border-top: 1px solid #e8e2d8; margin-top: 32px; padding: 22px clamp(16px, 4vw, 48px); background: #faf7f2; }
+.content .site-footer { margin-left: 0; border-radius: 10px; margin-top: 40px; }
+.site-footer-links { display: flex; flex-wrap: wrap; gap: 16px; font-size: .9rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+.site-footer-links a { color: var(--red); }
+.site-footer-legal { font-size: .8rem; color: #888; margin-top: 10px; font-family: Arial, sans-serif; }
+
+/* ---------- pricing page ---------- */
+.pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.pricing-card { display: flex; flex-direction: column; margin: 0; }
+.pricing-card h2 { border-bottom: 0; margin: .4em 0 .1em; }
+.pricing-amount { font-size: 2.4rem; font-weight: 800; color: var(--red); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; margin: .1em 0 0; }
+.pricing-amount-note { font-size: .82rem; color: #888; font-family: Arial, sans-serif; margin: 0 0 .6em; }
+.pricing-card .paywall-actions { margin-top: auto; }
+.catalog-pricing-link { text-align: center; margin-top: 18px; font-size: .95rem; }
+
+/* ---------- FAQ + legal copy ---------- */
+.faq-item { padding: 10px 0; border-bottom: 1px solid #eee; }
+.faq-item dt { font-weight: 700; color: #2a2f38; }
+.faq-item dd { margin: 4px 0 0; color: #444; }
+.legal h2 { font-size: 1.1rem; margin-top: 1.5em; }
+.legal { max-width: 760px; }
+.legal ul, .legal ol { padding-left: 1.3em; }
+.legal li { margin: 5px 0; }

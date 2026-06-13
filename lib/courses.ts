@@ -9,7 +9,7 @@ export interface CourseMeta {
   title: string;
   tagline: string;
   description: string;
-  priceLabel: string;          // display only — the real price lives on the Paddle price object
+  priceLabel: string;          // fallback label only; the live price comes from Paddle (lib/pricing.ts)
   freeUnits: number[];         // unit numbers available without purchase
   stats: { units: number; exercises: number; glossary: number };
   available: boolean;          // false = "coming soon" card
@@ -23,7 +23,7 @@ export const COURSES: CourseMeta[] = [
     title: 'Catalan from Scratch (A1)',
     tagline: 'A complete beginner’s course in Central Catalan for English-speaking adults — built to pass the official A1 exam.',
     description: '12 progressive units · 300+ words with full IPA · 83 interactive exercises · full mock A1 exam with timers · complete glossary (275 entries).',
-    priceLabel: '$5',
+    priceLabel: '€70',
     freeUnits: [1],
     stats: { units: 12, exercises: 83, glossary: 275 },
     available: true,
