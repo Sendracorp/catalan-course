@@ -16,7 +16,7 @@ test.describe('pricing page', () => {
 test.describe('legal pages render with content', () => {
   for (const [path, heading, needle] of [
     ['/terms', 'Terms & Conditions', 'merchant of record'],
-    ['/refunds', 'Refund Policy', '14 days'],
+    ['/refunds', 'Refund Policy', 'non-refundable'],
     ['/privacy', 'Privacy Policy', 'personal data'],
     ['/contact', 'Contact us', 'Email'],
   ] as const) {

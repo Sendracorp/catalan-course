@@ -9,52 +9,47 @@ export default function RefundsPage() {
   return (
     <LegalPage title="Refund Policy" updated={SITE.lastUpdated}>
       <p>
-        We want you to be happy with your course. This policy explains when and how you can get a
-        refund for a purchase from {SITE.brand}, operated by {SITE.legalName}.
+        This policy explains our approach to refunds for purchases from {SITE.brand}, operated by{' '}
+        {SITE.legalName}.
       </p>
 
-      <h2>14-day money-back guarantee</h2>
+      <h2>Digital courses are non-refundable once accessed</h2>
       <p>
-        If you’re not satisfied, you can request a full refund within <strong>14 days</strong> of your
-        purchase — no need to justify your decision. We’ll refund the full amount you paid to your
-        original payment method.
+        Our courses are digital content delivered online, giving you immediate, lifetime access to all
+        the material. Because of this, purchases are <strong>non-refundable once you have accessed the
+        paid course content</strong>. We encourage you to use the free preview before buying — the
+        first unit of every course, the IPA guide and the exam information are available free, with no
+        account required.
       </p>
 
-      <h2>Digital content and your right of withdrawal</h2>
+      <h2>Your right of withdrawal (EU consumers)</h2>
       <p>
-        Our courses are digital content supplied online. Under EU consumer law, consumers normally
-        have a 14-day right of withdrawal. Because access is granted immediately, by purchasing and
-        starting to use the course you ask us to begin supply right away and acknowledge that the
-        statutory right of withdrawal ends once access has begun. Our voluntary 14-day money-back
-        guarantee above applies regardless, and is more generous than the statutory minimum.
+        EU consumers normally have a 14-day right of withdrawal for online purchases. For digital
+        content, this right ends once supply has begun with your prior consent. At checkout you agree
+        to immediate access and acknowledge that, once the paid content is made available to you, the
+        statutory right of withdrawal no longer applies. Until you access the paid content, you may
+        still request cancellation.
       </p>
 
-      <h2>How to request a refund</h2>
-      <ol>
-        <li>
-          Email us at <a href={`mailto:${SITE.email}`}>{SITE.email}</a> within 14 days of purchase.
-        </li>
-        <li>
-          Include the order or receipt ID from the confirmation email sent by Paddle (our payment
-          provider and merchant of record).
-        </li>
-        <li>
-          We’ll confirm and process the refund. Refunds are issued by Paddle to your original payment
-          method, normally within 14 days of approval (your bank may take a little longer to show it).
-        </li>
-      </ol>
+      <h2>Exceptions — when we will help</h2>
+      <p>We’ll review a refund request in these cases:</p>
+      <ul>
+        <li>A technical problem that prevents you from using the course and that we’re unable to resolve.</li>
+        <li>A duplicate or accidental charge.</li>
+        <li>You bought the course but never accessed anything beyond the free preview.</li>
+      </ul>
 
-      <h2>After 14 days</h2>
+      <h2>How to contact us</h2>
       <p>
-        Beyond the 14-day window we generally don’t offer refunds, since you keep lifetime access to
-        the course. If something has gone wrong — a technical problem you couldn’t resolve, a
-        duplicate or accidental charge — contact us anyway and we’ll do our best to put it right.
+        Email <a href={`mailto:${SITE.email}`}>{SITE.email}</a> with the order or receipt ID from the
+        confirmation email sent by Paddle (our payment provider and merchant of record). Where a refund
+        is granted, it is issued by Paddle to your original payment method, normally within 14 days of
+        approval.
       </p>
 
-      <h2>Contact</h2>
-      <p>
-        {SITE.legalName} · Email <a href={`mailto:${SITE.email}`}>{SITE.email}</a> · Phone{' '}
-        {siteField(SITE.phone, 'contact phone')}. See also our <Link href="/terms">Terms &amp; Conditions</Link>.
+      <p className="note">
+        {SITE.legalName} · Phone {siteField(SITE.phone, 'contact phone')}. See also our{' '}
+        <Link href="/terms">Terms &amp; Conditions</Link>.
       </p>
     </LegalPage>
   );

@@ -60,8 +60,9 @@ export default function TermsPage() {
 
       <h2>6. Refunds</h2>
       <p>
-        Our <Link href="/refunds">Refund Policy</Link> forms part of these terms, including a 14-day
-        money-back guarantee.
+        Our <Link href="/refunds">Refund Policy</Link> forms part of these terms. Courses are digital
+        content and are non-refundable once accessed, subject to the exceptions and your statutory
+        rights described there.
       </p>
 
       <h2>7. Availability and changes</h2>

@@ -163,7 +163,11 @@ Decisions made while building the site, and why.
     phone), reachable from site navigation. Added `/pricing`, `/terms`,
     `/refunds`, `/privacy`, `/contact`, linked from a `SiteFooter` on every
     public page and the course layout. Content follows common practice for EU
-    digital-course sellers: a 14-day money-back guarantee plus the digital
-    right-of-withdrawal waiver on immediate access. Business details live in
+    digital-course sellers: courses are non-refundable once accessed (relying
+    on the EU digital-content withdrawal waiver consented to at checkout), with
+    exceptions for technical failure, duplicate charges, or never accessing
+    beyond the free preview. No money-back guarantee — the course is short
+    enough to finish inside any refund window, so a guarantee would invite
+    finish-then-refund abuse. Business details live in
     `lib/site.ts` (legal name / phone / address are placeholders to fill
     before going live). Not legal advice — review before launch.

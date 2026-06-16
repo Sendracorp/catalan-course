@@ -27,8 +27,8 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
     a: 'Prices are shown excluding tax. Any VAT or sales tax required for your country is calculated and added at checkout by Paddle, our merchant of record.',
   },
   {
-    q: 'What if I change my mind?',
-    a: <>See our <Link href="/refunds">refund policy</Link> — we offer a 14-day money-back guarantee.</>,
+    q: 'Can I get a refund?',
+    a: <>Courses are digital content with immediate lifetime access, so they’re non-refundable once accessed — please use the free preview before buying. See our <Link href="/refunds">refund policy</Link> for the exceptions we do cover.</>,
   },
 ];
 
