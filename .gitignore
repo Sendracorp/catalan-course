@@ -11,3 +11,4 @@ qa/shot-*.png
 /playwright-report/
 /blob-report/
 .playwright/
+.vercel
