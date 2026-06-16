@@ -6,7 +6,7 @@
 
 export const SITE = {
   brand: 'Català from Scratch',
-  legalName: 'Sendracorp, SLU',               // registered legal name
+  legalName: 'SENDRACORP, SLU',               // registered legal name
   email: 'sendracorp@protonmail.com',         // required — buyer contact
   phone: '',                                  // optional — shown only if set
   address: '',                                // optional — shown only if set

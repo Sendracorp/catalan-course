@@ -24,7 +24,7 @@ test.describe('legal pages render with content', () => {
       await page.goto(path);
       await expect(page.locator('h1')).toHaveText(heading);
       await expect(page.locator('article.legal')).toContainText(needle);
-      await expect(page.locator('article.legal')).toContainText('Sendracorp'); // legal name present
+      await expect(page.locator('article.legal')).toContainText(/sendracorp/i); // legal name present
     });
   }
 });
