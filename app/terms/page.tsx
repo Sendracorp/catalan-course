@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import LegalPage from '@/components/LegalPage';
-import { SITE, siteField } from '@/lib/site';
+import { SITE } from '@/lib/site';
 
 export const metadata: Metadata = { title: 'Terms & Conditions' };
 
@@ -99,8 +99,8 @@ export default function TermsPage() {
 
       <h2>12. Contact</h2>
       <p>
-        {SITE.legalName} · {siteField(SITE.address, 'registered address')} · {SITE.country}<br />
-        Email: <a href={`mailto:${SITE.email}`}>{SITE.email}</a> · Phone: {siteField(SITE.phone, 'contact phone')}
+        {SITE.legalName}{SITE.address ? ` · ${SITE.address}` : ''} · {SITE.country}<br />
+        Email: <a href={`mailto:${SITE.email}`}>{SITE.email}</a>{SITE.phone ? ` · Phone: ${SITE.phone}` : ''}
         <br />See our <Link href="/contact">contact page</Link>.
       </p>
     </LegalPage>

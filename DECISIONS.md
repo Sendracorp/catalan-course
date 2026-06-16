@@ -158,16 +158,18 @@ Decisions made while building the site, and why.
     in-app editor could write a price that disagrees with the real charge, so
     it's deliberately read-only.
 
-25. **Pricing + legal pages for Paddle verification.** Paddle's seller review
-    requires Terms, Refund Policy, Privacy Policy and a Contact page (email +
-    phone), reachable from site navigation. Added `/pricing`, `/terms`,
-    `/refunds`, `/privacy`, `/contact`, linked from a `SiteFooter` on every
-    public page and the course layout. Content follows common practice for EU
-    digital-course sellers: courses are non-refundable once accessed (relying
-    on the EU digital-content withdrawal waiver consented to at checkout), with
+25. **Pricing + legal pages for Paddle verification.** Paddle's domain review
+    requires Terms, Refund Policy and Privacy Policy reachable from navigation,
+    the legal name in the Terms, a pricing page, and HTTPS. A support email is
+    enough for buyer contact — phone and physical address are NOT on Paddle's
+    checklist, so in `lib/site.ts` they're optional and the pages omit them
+    when empty (only `legalName` + `email` are needed; legalName is still a
+    placeholder to set before launch). Added `/pricing`, `/terms`, `/refunds`,
+    `/privacy`, `/contact`, linked from a `SiteFooter` on every public page and
+    the course layout. Content follows common practice for EU digital-course
+    sellers: courses are non-refundable once accessed (relying on the EU
+    digital-content withdrawal waiver consented to at checkout), with
     exceptions for technical failure, duplicate charges, or never accessing
     beyond the free preview. No money-back guarantee — the course is short
     enough to finish inside any refund window, so a guarantee would invite
-    finish-then-refund abuse. Business details live in
-    `lib/site.ts` (legal name / phone / address are placeholders to fill
-    before going live). Not legal advice — review before launch.
+    finish-then-refund abuse. Not legal advice — review before launch.

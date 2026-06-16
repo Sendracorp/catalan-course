@@ -1,22 +1,18 @@
-/* Business + contact details used across legal/contact pages and the footer.
-   Paddle's seller verification needs the legal name in the Terms, and a
-   contact page with both an email and a phone number.
+/* Business + contact details used across the legal/contact pages and footer.
+   Paddle's domain review needs your legal name in the Terms and the policy
+   pages reachable from navigation — a support email is enough for contact.
+   Phone and address are OPTIONAL: leave them empty and the pages simply omit
+   them; fill them in if you'd rather show them.
 
-   TODO before going live: fill in legalName, phone and address with your
-   real registered details (these are placeholders). */
+   TODO before going live: set legalName to your real registered name. */
 
 export const SITE = {
   brand: 'Català from Scratch',
   legalName: 'Sendracorp',                    // TODO: registered business / sole-trader legal name
-  email: 'sendracorp@protonmail.com',
-  phone: '',                                  // TODO: required by Paddle — add a contact phone number
-  address: '',                                // TODO: registered business address
+  email: 'sendracorp@protonmail.com',         // required — buyer contact
+  phone: '',                                  // optional — shown only if set
+  address: '',                                // optional — shown only if set
   country: 'Andorra',
   jurisdiction: 'Andorra',
-  lastUpdated: '13 June 2026',
+  lastUpdated: '16 June 2026',
 };
-
-/** A field value, or a clearly-visible placeholder when not yet filled in. */
-export function siteField(value: string, placeholder: string): string {
-  return value.trim() ? value : `[${placeholder}]`;
-}

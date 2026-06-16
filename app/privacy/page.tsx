@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import LegalPage from '@/components/LegalPage';
-import { SITE, siteField } from '@/lib/site';
+import { SITE } from '@/lib/site';
 
 export const metadata: Metadata = { title: 'Privacy Policy' };
 
@@ -60,7 +60,7 @@ export default function PrivacyPage() {
 
       <h2>Contact</h2>
       <p>
-        {SITE.legalName} · {siteField(SITE.address, 'registered address')} · {SITE.country} · Email{' '}
+        {SITE.legalName}{SITE.address ? ` · ${SITE.address}` : ''} · {SITE.country} · Email{' '}
         <a href={`mailto:${SITE.email}`}>{SITE.email}</a>. See also our{' '}
         <Link href="/terms">Terms</Link> and <Link href="/refunds">Refund Policy</Link>.
       </p>

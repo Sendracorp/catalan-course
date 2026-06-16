@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import LegalPage from '@/components/LegalPage';
-import { SITE, siteField } from '@/lib/site';
+import { SITE } from '@/lib/site';
 
 export const metadata: Metadata = { title: 'Refund Policy' };
 
@@ -48,7 +48,8 @@ export default function RefundsPage() {
       </p>
 
       <p className="note">
-        {SITE.legalName} · Phone {siteField(SITE.phone, 'contact phone')}. See also our{' '}
+        {SITE.legalName} · Email <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+        {SITE.phone ? ` · Phone ${SITE.phone}` : ''}. See also our{' '}
         <Link href="/terms">Terms &amp; Conditions</Link>.
       </p>
     </LegalPage>
