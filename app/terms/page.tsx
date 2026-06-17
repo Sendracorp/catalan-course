@@ -92,8 +92,9 @@ export default function TermsPage() {
 
       <h2>11. Governing law</h2>
       <p>
-        These terms are governed by the laws applicable where the Service is operated, without
-        prejudice to any mandatory consumer-protection rights you have where you live.
+        These terms are governed by the laws applicable where the Service is operated. If you are a
+        consumer in the EU/EEA, you additionally keep the mandatory consumer-protection rights of your
+        country of residence — nothing in these terms overrides them.
       </p>
 
       <h2>12. Contact</h2>
