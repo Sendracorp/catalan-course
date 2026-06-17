@@ -11,6 +11,7 @@ export default async function SiteHeader() {
       <Link href="/" className="site-brand" aria-label="Verbadium home"><Logo /></Link>
       <nav className="site-nav">
         <Link href="/">Courses</Link>
+        <Link href="/pricing">Pricing</Link>
         {user ? (
           <>
             <Link href="/account" data-test="account-link">{user.email}</Link>

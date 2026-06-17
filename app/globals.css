@@ -494,13 +494,19 @@ h1, h2, h3, h4,
 .vb-mark { display: block; border-radius: 11px; }
 .vb-logo-word { font-weight: 800; font-size: 1.32rem; color: var(--vb-ink); letter-spacing: -0.03em; }
 
-/* ---- site header ---- */
+/* ---- site header: floating pill nav (detached, blurred island) ---- */
 .site-header {
-  position: sticky; top: 0; z-index: 60;
-  background: rgba(251,248,243,.82); backdrop-filter: saturate(1.4) blur(12px);
-  border-bottom: 1px solid var(--vb-line); color: var(--vb-ink);
-  padding: 13px clamp(16px, 4vw, 48px);
+  position: sticky; top: 14px; z-index: 60;
+  width: min(1060px, calc(100% - 28px)); margin: 14px auto 0;
+  display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  background: rgba(255,255,255,.66); backdrop-filter: saturate(1.6) blur(16px);
+  border: 1px solid rgba(255,255,255,.7); box-shadow: 0 10px 34px rgba(42,36,56,.12);
+  border-radius: 20px; color: var(--vb-ink);
+  padding: 9px 10px 9px 18px;
 }
+.site-nav { display: flex; align-items: center; gap: 8px; }
+.site-nav a { padding: 8px 12px; border-radius: 999px; }
+.site-nav a:hover { background: rgba(110,90,168,.10); }
 .site-header .site-brand { display: inline-flex; color: var(--vb-ink); text-transform: none; }
 /* neutralize the legacy gold/small/uppercase .site-brand span styling for the
    wordmark; text-transform:none also un-caps the inherited SVG tile text (Vb) */
