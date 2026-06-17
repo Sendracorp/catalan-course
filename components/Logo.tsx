@@ -16,8 +16,8 @@ export default function Logo({ variant = 'full', size = 34, className }: {
         </linearGradient>
       </defs>
       <rect width="40" height="40" rx="11" fill="url(#vbMark)" />
-      <text x="20" y="27.5" textAnchor="middle" fontFamily="Verdana, 'Trebuchet MS', system-ui, sans-serif"
-        fontWeight="700" fontSize="19" letterSpacing="-1.2" fill="#2A2438">Vb</text>
+      <text x="20" y="27.5" textAnchor="middle" fontFamily="var(--font-display), 'Hanken Grotesk', Verdana, sans-serif"
+        fontWeight="700" fontSize="19" letterSpacing="-0.5" fill="#2A2438">Vb</text>
       <circle cx="31" cy="9.5" r="1.7" fill="#2A2438" opacity="0.45" />
     </svg>
   );
