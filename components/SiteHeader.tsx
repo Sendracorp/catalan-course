@@ -1,13 +1,14 @@
 import Link from 'next/link';
 import { getSessionUser } from '@/lib/supabase/server';
 import SignOutButton from './SignOutButton';
+import Logo from './Logo';
 
 /* Top bar for non-course pages (catalog, auth, account, admin). */
 export default async function SiteHeader() {
   const user = await getSessionUser();
   return (
     <header className="site-header">
-      <Link href="/" className="site-brand">Verbadium</Link>
+      <Link href="/" className="site-brand" aria-label="Verbadium home"><Logo /></Link>
       <nav className="site-nav">
         <Link href="/">Courses</Link>
         {user ? (
