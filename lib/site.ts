@@ -6,7 +6,7 @@
 
 export const SITE = {
   brand: 'Verbadium',
-  legalName: 'SENDRACORP, SLU',               // registered legal name
+  legalName: 'Verbadium',                     // shown publicly; registered entity lives only in Paddle/checkout
   email: 'support@verbadium.com',             // required — buyer contact
   phone: '',                                  // optional — shown only if set
   address: '',                                // optional — shown only if set

@@ -9,9 +9,8 @@ export default function TermsPage() {
   return (
     <LegalPage title="Terms & Conditions" updated={SITE.lastUpdated}>
       <p>
-        These Terms &amp; Conditions govern your use of {SITE.brand} (the “Service”), operated by{' '}
-        {SITE.legalName} (“we”, “us”), based in {SITE.country}. By creating an account or buying a
-        course you agree to these terms.
+        These Terms &amp; Conditions govern your use of {SITE.brand} (the “Service”), operated by us
+        (“we”, “us”). By creating an account or buying a course you agree to these terms.
       </p>
 
       <h2>1. The Service</h2>
@@ -93,13 +92,12 @@ export default function TermsPage() {
 
       <h2>11. Governing law</h2>
       <p>
-        These terms are governed by the laws of {SITE.jurisdiction}, without prejudice to any
-        mandatory consumer-protection rights you have where you live.
+        These terms are governed by the laws applicable where the Service is operated, without
+        prejudice to any mandatory consumer-protection rights you have where you live.
       </p>
 
       <h2>12. Contact</h2>
       <p>
-        {SITE.legalName}{SITE.address ? ` · ${SITE.address}` : ''} · {SITE.country}<br />
         Email: <a href={`mailto:${SITE.email}`}>{SITE.email}</a>{SITE.phone ? ` · Phone: ${SITE.phone}` : ''}
         <br />See our <Link href="/contact">contact page</Link>.
       </p>

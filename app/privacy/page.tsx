@@ -9,7 +9,7 @@ export default function PrivacyPage() {
   return (
     <LegalPage title="Privacy Policy" updated={SITE.lastUpdated}>
       <p>
-        This policy explains what personal data {SITE.brand} ({SITE.legalName}) collects, why, and
+        This policy explains what personal data {SITE.brand} collects, why, and
         your rights. We are the data controller; contact us at{' '}
         <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
       </p>
@@ -60,8 +60,7 @@ export default function PrivacyPage() {
 
       <h2>Contact</h2>
       <p>
-        {SITE.legalName}{SITE.address ? ` · ${SITE.address}` : ''} · {SITE.country} · Email{' '}
-        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>. See also our{' '}
+        Email <a href={`mailto:${SITE.email}`}>{SITE.email}</a>. See also our{' '}
         <Link href="/terms">Terms</Link> and <Link href="/refunds">Refund Policy</Link>.
       </p>
     </LegalPage>

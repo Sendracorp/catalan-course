@@ -12,11 +12,10 @@ export default function ContactPage() {
         Questions about a course, your account, or a purchase? We’re happy to help.
       </p>
 
-      <h2>{SITE.legalName}</h2>
+      <h2>{SITE.brand}</h2>
       <p>
-        <strong>Email:</strong> <a href={`mailto:${SITE.email}`}>{SITE.email}</a><br />
-        {SITE.phone && <><strong>Phone:</strong> {SITE.phone}<br /></>}
-        <strong>Location:</strong> {SITE.address ? `${SITE.address}, ` : ''}{SITE.country}
+        <strong>Email:</strong> <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+        {SITE.phone && <><br /><strong>Phone:</strong> {SITE.phone}</>}
       </p>
       <p>Email is the fastest way to reach us — we aim to reply within two business days.</p>
 
