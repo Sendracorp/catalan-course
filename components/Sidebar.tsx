@@ -43,8 +43,15 @@ export default function Sidebar({ units, courseSlug, courseLanguage, courseLevel
   }, []);
 
   useEffect(() => { setOpen(false); }, [pathname]);
+  // the toggle lives in the header (<CourseMenuButton/>); talk to it via events
+  useEffect(() => {
+    const toggle = () => setOpen(o => !o);
+    window.addEventListener('vb-nav-toggle', toggle);
+    return () => window.removeEventListener('vb-nav-toggle', toggle);
+  }, []);
   useEffect(() => {
     document.body.classList.toggle('nav-open', open);
+    window.dispatchEvent(new CustomEvent('vb-nav-state', { detail: open }));
     return () => document.body.classList.remove('nav-open');
   }, [open]);
   useEffect(() => {
@@ -62,12 +69,7 @@ export default function Sidebar({ units, courseSlug, courseLanguage, courseLevel
 
   return (
     <>
-      {/* mobile: open the drawer */}
-      <button
-        id="navToggle" className="course-nav-fab" aria-label="Course menu"
-        aria-expanded={open} onClick={() => setOpen(o => !o)}
-      >☰</button>
-
+      {/* mobile drawer toggle lives in the header — see <CourseMenuButton/> */}
       <nav className="course-nav" id="sidebar" aria-label="Course navigation">
         <div className="course-nav-head">
           <Link href={base} className="course-nav-brand">

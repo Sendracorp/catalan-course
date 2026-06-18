@@ -77,16 +77,21 @@ h1, h2, h3, h4, .unit-num, .label, th, .toc-line, .nav-brand, .btn, .chip,
 }
 .course-nav-collapse:hover { background: rgba(17,179,155,.22); border-color: var(--vb-grape); }
 .course-nav-mark { display: none; align-items: center; padding: 2px; }
-.course-nav-fab {
-  align-items: center; gap: 8px; cursor: pointer; color: var(--vb-ink); font-weight: 700; font-size: 1.15rem;
-  background:
-    linear-gradient(120deg, rgba(191,233,216,.5), rgba(187,217,242,.42) 55%, rgba(203,206,248,.42)),
-    rgba(255,255,255,.78);
-  backdrop-filter: saturate(1.7) blur(16px);
-  border: 1px solid rgba(255,255,255,.9); border-radius: 999px; padding: 11px 13px;
-  box-shadow: var(--vb-shadow-lg); transition: transform .15s, box-shadow .15s;
+/* course-units menu toggle — rendered inside the header (<CourseMenuButton/>).
+   Solid, high-contrast brand pill so it actually reads as a control; hidden on
+   desktop where the sidebar is permanent, shown on mobile (see media query). */
+.course-menu-btn {
+  display: none; align-items: center; gap: 8px; cursor: pointer; flex: none;
+  padding: 9px 15px 9px 13px; border: 0; border-radius: 999px;
+  color: #fff; font-family: inherit; font-weight: 700; font-size: .95rem; line-height: 1;
+  background: linear-gradient(135deg, var(--vb-grape), #0c7a69);
+  box-shadow: 0 10px 26px rgba(12,122,105,.32), inset 0 1px 0 rgba(255,255,255,.25);
+  transition: transform .15s, box-shadow .15s;
 }
-.course-nav-fab:hover { transform: translateY(-1px); }
+.course-menu-btn:hover { transform: translateY(-1px); box-shadow: 0 14px 32px rgba(12,122,105,.38), inset 0 1px 0 rgba(255,255,255,.25); }
+.course-menu-btn:active { transform: translateY(0); }
+.course-menu-icon rect { fill: #fff; }
+.course-menu-label { letter-spacing: .01em; }
 
 .course-nav-scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: 0 2px 8px; scrollbar-width: thin; }
 .course-nav .nav-group { padding: 7px 0; border-top: 1px solid rgba(31,42,48,.08); }
@@ -111,9 +116,6 @@ h1, h2, h3, h4, .unit-num, .label, th, .toc-line, .nav-brand, .btn, .chip,
 .nav-badge.done { background: var(--vb-grape); color: #fff; }
 .nav-badge.nav-lock { background: rgba(31,42,48,.07); color: rgba(31,42,48,.5); padding: 3px 7px; }
 .nav-unit .nav-badge { margin-top: 1px; }
-
-/* menu FAB (mobile only) */
-.course-nav-fab { position: fixed; right: 16px; bottom: 18px; z-index: 41; display: none; }
 
 .backdrop { display: none; }
 .content { min-width: 0; padding: 18px 0 56px; }
@@ -143,7 +145,7 @@ h1, h2, h3, h4, .unit-num, .label, th, .toc-line, .nav-brand, .btn, .chip,
   }
   body.nav-open .course-nav { transform: none; }
   .course-nav-collapse { display: none; }
-  .course-nav-fab { display: inline-flex; z-index: 55; }
+  .course-menu-btn { display: inline-flex; }
   body.nav-open .backdrop { display: block; position: fixed; inset: 0; background: rgba(15,25,30,.45); z-index: 65; }
   .content { padding: 8px 14px 48px; }
 }
@@ -627,7 +629,9 @@ h1, h2, h3, h4,
 .site-header.scrolled .site-nav,
 .site-header.scrolled .site-actions { box-shadow: 0 8px 22px rgba(31,42,48,.17); }
 
-@media (max-width: 760px) {
+/* matches the course drawer breakpoint (860px) so the header wraps-centered
+   whenever the course-menu hamburger is shown */
+@media (max-width: 860px) {
   .site-header { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; top: 10px; margin-top: 10px; }
   .site-brand.vb-chip, .site-nav, .site-actions { justify-self: auto; }
   .site-nav a, .site-actions a, .site-actions .site-signout { padding: 8px 12px; }
@@ -685,7 +689,7 @@ h1, h2, h3, h4,
 }
 .account-dropdown-admin { color: #0c7a69 !important; }
 .account-dropdown-sep { height: 1px; margin: 6px 4px; background: rgba(31,42,48,.1); }
-@media (max-width: 760px) { .account-menu { justify-self: auto; } }
+@media (max-width: 860px) { .account-menu { justify-self: auto; } }
 
 /* sticky footer on platform pages (they have a top-level .site-header); the
    course layout has no body > .site-header, so it's untouched */

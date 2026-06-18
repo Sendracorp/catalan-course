@@ -26,7 +26,7 @@ export default async function CourseLayout({ children, params }: {
 
   return (
     <ProgressProvider userId={access.user?.id ?? null} courseSlug={slug} initial={initial}>
-      <SiteHeader />
+      <SiteHeader courseMenu />
       <div className="course-shell">
         <Sidebar
           units={units}
