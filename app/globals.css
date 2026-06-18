@@ -310,6 +310,8 @@ ol.q li { margin: 8px 0; }
 .gap-input.ok { border-color: var(--ok); background: var(--ok-bg); }
 .gap-input.bad { border-color: var(--bad); background: var(--bad-bg); }
 .gap-input.almost { border-color: var(--warn); background: var(--warn-bg); }
+/* revealed correct answer (read-only) — teal, distinct from a graded result */
+.gap-input.revealed { border-color: var(--vb-grape); background: var(--vb-accent-soft); color: #0c7a69; font-weight: 600; cursor: default; }
 .model-input { width: 16em; }
 .free-text { width: 100%; font: inherit; font-size: .95rem; border: 1.5px solid #c9bda9; border-radius: 6px; padding: 8px 10px; background: #fffdf8; margin: 8px 0; }
 .free-text:focus { outline: 2px solid var(--gold); border-color: var(--gold); }
@@ -937,6 +939,7 @@ body:has(> .site-header) .site-footer { margin-top: auto; }
 .content .btn { border-radius: 999px; }
 .content .btn:not(.btn-primary):not(.btn-danger) { background: #fff; border: 1px solid var(--vb-line); color: var(--vb-ink); }
 .content .btn:not(.btn-primary):not(.btn-danger):hover { background: var(--vb-paper); border-color: var(--vb-grape); }
+.content .btn-reveal { color: #0c7a69; border-color: rgba(17,179,155,.45); }
 
 /* progress bars → teal */
 .content .progress-bar { background: #e3efec; }

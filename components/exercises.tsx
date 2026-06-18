@@ -56,8 +56,8 @@ function SelfMark({ value, onMark, yesLabel = '✓ I got it', noLabel = '✗ Not
 }
 
 /** Item html with the fill markers replaced by controlled inputs. */
-function GapSentence({ html, values, results, onChange }:
-  { html: string; values: string[]; results: (CheckResult | null)[]; onChange: (gap: number, v: string) => void }) {
+function GapSentence({ html, values, results, revealed, onChange }:
+  { html: string; values: string[]; results: (CheckResult | null)[]; revealed?: boolean; onChange: (gap: number, v: string) => void }) {
   const segments = html.split(FILL);
   return (
     <>
@@ -67,8 +67,8 @@ function GapSentence({ html, values, results, onChange }:
           {i < segments.length - 1 && (
             <input
               type="text"
-              className={`gap-input${results[i] ? ' ' + results[i] : ''}`}
-              data-gap={i}
+              className={`gap-input${revealed ? ' revealed' : (results[i] ? ' ' + results[i] : '')}`}
+              data-gap={i} readOnly={revealed}
               autoCapitalize="off" autoComplete="off" spellCheck={false}
               value={values[i] ?? ''}
               onChange={e => onChange(i, e.target.value)}
@@ -89,6 +89,7 @@ function GapLike({ ex }: { ex: Exercise }) {
   const [values, setValues] = useState<string[][]>(items.map((_, i) => Array(gapCounts[i]).fill('')));
   const [results, setResults] = useState<(CheckResult | null)[][]>(items.map((_, i) => Array(gapCounts[i]).fill(null)));
   const [score, setScore] = useState<number | null>(null);
+  const [revealed, setRevealed] = useState(false);
   const total = gapCounts.reduce((a, b) => a + b, 0);
 
   function check() {
@@ -103,10 +104,17 @@ function GapLike({ ex }: { ex: Exercise }) {
     setScore(ok);
     setExState(ex.id, ok === total ? 'passed' : 'attempted', ok, total);
   }
+  function reveal() {
+    // fill every blank with its correct answer (read-only, "revealed" style);
+    // stays "attempted" — Retry still lets the learner earn the ✓ themselves
+    setValues(items.map(it => it.answers.slice()));
+    setRevealed(true);
+  }
   function retry() {
     setValues(items.map((_, i) => Array(gapCounts[i]).fill('')));
     setResults(items.map((_, i) => Array(gapCounts[i]).fill(null)));
     setScore(null);
+    setRevealed(false);
   }
   const itemResult = (i: number): CheckResult | null => {
     const r = results[i];
@@ -123,7 +131,7 @@ function GapLike({ ex }: { ex: Exercise }) {
           <li key={i}>
             {isGap ? (
               <GapSentence
-                html={(it as GapItem).html} values={values[i]} results={results[i]}
+                html={(it as GapItem).html} values={values[i]} results={results[i]} revealed={revealed}
                 onChange={(g, v) => setValues(vs => vs.map((row, ri) => ri === i ? row.map((x, gi) => gi === g ? v : x) : row))}
               />
             ) : (
@@ -131,8 +139,8 @@ function GapLike({ ex }: { ex: Exercise }) {
                 <Html html={it.html} className="w-prompt" />{' '}
                 <input
                   type="text"
-                  className={`gap-input${results[i][0] ? ' ' + results[i][0] : ''}`}
-                  data-gap={0}
+                  className={`gap-input${revealed ? ' revealed' : (results[i][0] ? ' ' + results[i][0] : '')}`}
+                  data-gap={0} readOnly={revealed}
                   autoCapitalize="off" autoComplete="off" spellCheck={false}
                   value={values[i][0] ?? ''}
                   onChange={e => setValues(vs => vs.map((row, ri) => ri === i ? [e.target.value] : row))}
@@ -149,6 +157,9 @@ function GapLike({ ex }: { ex: Exercise }) {
       <div className="ex-controls">
         <button type="button" className="btn btn-primary" onClick={check}>Check answers</button>
         <Score score={score} total={total} />
+        {score !== null && score < total && !revealed && (
+          <button type="button" className="btn btn-reveal" onClick={reveal}>Show correct answers</button>
+        )}
         {score !== null && <button type="button" className="btn" onClick={retry}>Retry</button>}
       </div>
     </>
