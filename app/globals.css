@@ -563,17 +563,18 @@ body.exam-mode .paper-timer { display: inline-flex; }
 .mock-history-table td:first-child, .mock-history-table th:first-child { text-align: left; }
 
 /* ---------- auth ---------- */
-.auth-main { max-width: none; display: flex; align-items: center; justify-content: center;
+.auth-main { max-width: none; width: 100%; margin: 0; display: flex; align-items: center; justify-content: center;
   min-height: calc(100svh - 96px); padding: 28px 16px 48px; }
 .auth-card {
-  width: 100%; max-width: 410px; margin: 0; padding: 32px 32px 26px;
+  width: 100%; max-width: 440px; margin: 0; padding: 36px 36px 28px;
   background: var(--vb-surface); border: 1px solid var(--vb-line); border-radius: 22px;
   box-shadow: 0 24px 60px rgba(31,42,48,.13);
 }
-.auth-head { text-align: center; margin-bottom: 20px; }
-.auth-head .vb-mark { width: 44px; height: 44px; }
-.auth-card h2 { margin: 12px 0 5px; font-size: 1.5rem; line-height: 1.1; }
-.auth-sub { color: var(--vb-ink-soft); font-size: .92rem; line-height: 1.45; margin: 0 auto; max-width: 32ch; }
+/* flex column so the (block-level) logo SVG centers with the heading */
+.auth-head { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; margin-bottom: 22px; }
+.auth-head .vb-mark { width: 46px; height: 46px; }
+.auth-card h2 { margin: 8px 0 0; font-size: 1.5rem; line-height: 1.1; }
+.auth-sub { color: var(--vb-ink-soft); font-size: .92rem; line-height: 1.45; margin: 0; max-width: 34ch; }
 
 /* Sign-in-with-Google button — Google branding: white, 1px border, colour mark */
 .auth-google {
@@ -628,6 +629,7 @@ body.exam-mode .paper-timer { display: inline-flex; }
 .pricing-card h2 { border-bottom: 0; margin: .4em 0 .1em; }
 .pricing-amount { font-size: 2.4rem; font-weight: 800; color: var(--red); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; margin: .1em 0 0; }
 .pricing-amount-note { font-size: .82rem; color: #888; font-family: Arial, sans-serif; margin: 0 0 .6em; }
+.pricing-amount.pricing-owned { font-size: 1.15rem; font-weight: 800; color: #0c7a69; margin: .35em 0 .6em; }
 .pricing-card .paywall-actions { margin-top: auto; }
 .catalog-pricing-link { text-align: center; margin-top: 18px; font-size: .95rem; }
 
@@ -719,6 +721,12 @@ h1, h2, h3, h4,
   .site-header { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; top: 10px; margin-top: 10px; }
   .site-brand.vb-chip, .site-nav, .site-actions { justify-self: auto; }
   .site-nav a, .site-actions a, .site-actions .site-signout { padding: 8px 12px; }
+  /* stay permanently in the compact (logo-mark only) form so the header never
+     reflows/reorders on scroll — the scroll-shrink toggle becomes a no-op */
+  .site-header .vb-logo-word { display: none; }
+  .site-header .site-brand.vb-chip { padding: 7px; }
+  .site-header.scrolled { top: 10px; }
+  .site-header.scrolled .site-brand.vb-chip { padding: 7px; }
 }
 .site-header .site-brand { display: inline-flex; color: var(--vb-ink); text-transform: none; }
 /* neutralize the legacy gold/small/uppercase .site-brand span styling for the

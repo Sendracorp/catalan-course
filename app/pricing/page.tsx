@@ -5,6 +5,7 @@ import SiteFooter from '@/components/SiteFooter';
 import BuyButton from '@/components/BuyButton';
 import { COURSES } from '@/lib/courses';
 import { resolveAllPrices } from '@/lib/pricing';
+import { getSessionUser, userOwnsCourse, paywallBypassed } from '@/lib/access';
 
 export const metadata: Metadata = { title: 'Pricing' };
 export const dynamic = 'force-dynamic';
@@ -35,6 +36,16 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
 export default async function PricingPage() {
   const priced = await resolveAllPrices(COURSES);
 
+  // which of these courses the current user already owns (don't show "buy")
+  const user = await getSessionUser();
+  const owned = new Set<string>();
+  if (paywallBypassed()) priced.forEach(({ meta }) => owned.add(meta.slug));
+  else if (user) {
+    await Promise.all(priced.map(async ({ meta }) => {
+      if (await userOwnsCourse(user.id, meta.slug)) owned.add(meta.slug);
+    }));
+  }
+
   return (
     <>
       <SiteHeader />
@@ -48,12 +59,19 @@ export default async function PricingPage() {
         <div className="pricing-grid" data-test="pricing">
           {priced.map(({ meta, price }) => {
             const base = `/courses/${meta.slug}`;
+            const isOwned = owned.has(meta.slug);
             return (
-              <div className="card pricing-card" key={meta.slug} data-test={`pricing-${meta.slug}`}>
+              <div className="card pricing-card" key={meta.slug} data-test={`pricing-${meta.slug}`} data-owned={isOwned || undefined}>
                 <div className="badge">{meta.language} · {meta.level}</div>
                 <h2>{meta.title}</h2>
-                <p className="pricing-amount" data-test="pricing-amount">{price.label}</p>
-                <p className="pricing-amount-note">one-time · tax added at checkout</p>
+                {isOwned ? (
+                  <p className="pricing-amount pricing-owned" data-test="pricing-owned">✓ You own this course</p>
+                ) : (
+                  <>
+                    <p className="pricing-amount" data-test="pricing-amount">{price.label}</p>
+                    <p className="pricing-amount-note">one-time · tax added at checkout</p>
+                  </>
+                )}
                 <ul className="sales-list">
                   <li>{meta.stats.units} units · {meta.stats.exercises} interactive exercises</li>
                   <li>Full mock {meta.level} exam with timers and attempt history</li>
@@ -62,10 +80,16 @@ export default async function PricingPage() {
                   <li>Lifetime access, including updates</li>
                 </ul>
                 <div className="paywall-actions">
-                  <BuyButton courseSlug={meta.slug} priceLabel={price.label} returnTo={base} />
-                  <Link className="btn" href={`${base}/unit/${meta.freeUnits[0]}`}>
-                    Free preview · Unit {meta.freeUnits[0]}
-                  </Link>
+                  {isOwned ? (
+                    <Link className="btn btn-primary" href={base} data-test="pricing-go">Go to your course →</Link>
+                  ) : (
+                    <>
+                      <BuyButton courseSlug={meta.slug} priceLabel={price.label} returnTo={base} />
+                      <Link className="btn" href={`${base}/unit/${meta.freeUnits[0]}`}>
+                        Free preview · Unit {meta.freeUnits[0]}
+                      </Link>
+                    </>
+                  )}
                 </div>
               </div>
             );
