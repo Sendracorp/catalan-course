@@ -727,6 +727,10 @@ h1, h2, h3, h4,
   .site-header .site-brand.vb-chip { padding: 7px; }
   .site-header.scrolled { top: 10px; }
   .site-header.scrolled .site-brand.vb-chip { padding: 7px; }
+  /* one line: collapse the auth actions to just "Log in" (Sign up stays on
+     desktop; new users still convert via in-page Buy / Free-preview CTAs) */
+  .site-actions .site-cta { display: none; }
+  .site-nav { gap: 12px; }
 }
 .site-header .site-brand { display: inline-flex; color: var(--vb-ink); text-transform: none; }
 /* neutralize the legacy gold/small/uppercase .site-brand span styling for the
