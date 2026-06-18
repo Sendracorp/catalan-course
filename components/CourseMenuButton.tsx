@@ -1,10 +1,10 @@
 'use client';
 import { useEffect, useState } from 'react';
+import Logo from './Logo';
 
-/* Course-units menu toggle. Lives in the header (top-left on mobile); the
-   drawer itself is owned by <Sidebar/>, so we talk to it via a window event
-   and mirror its open state for aria-expanded. Hidden on desktop where the
-   sidebar is permanent. */
+/* Course-units menu toggle for mobile: the Verbadium mark *is* the button
+   (with a small lines hint so it reads as a menu). The drawer is owned by
+   <Sidebar/>, so we toggle it via a window event and mirror open state. */
 export default function CourseMenuButton() {
   const [open, setOpen] = useState(false);
   useEffect(() => {
@@ -22,12 +22,12 @@ export default function CourseMenuButton() {
       aria-expanded={open}
       onClick={() => window.dispatchEvent(new CustomEvent('vb-nav-toggle'))}
     >
-      <svg className="course-menu-icon" width="20" height="14" viewBox="0 0 20 14" aria-hidden="true">
-        <rect y="0" width="20" height="2.4" rx="1.2" />
-        <rect y="5.8" width="20" height="2.4" rx="1.2" />
-        <rect y="11.6" width="20" height="2.4" rx="1.2" />
+      <Logo variant="mark" size={32} />
+      <svg className="course-menu-hint" width="13" height="11" viewBox="0 0 13 11" aria-hidden="true">
+        <rect y="0" width="13" height="1.8" rx="0.9" />
+        <rect y="4.6" width="13" height="1.8" rx="0.9" />
+        <rect y="9.2" width="13" height="1.8" rx="0.9" />
       </svg>
-      <span className="course-menu-label">Menu</span>
     </button>
   );
 }

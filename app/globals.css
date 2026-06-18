@@ -62,49 +62,53 @@ h1, h2, h3, h4, .unit-num, .label, th, .toc-line, .nav-brand, .btn, .chip,
   border-radius: 22px; padding: 8px 8px 4px;
   transition: transform .24s ease, opacity .2s ease;
 }
-.course-nav-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 6px 8px; }
-.course-nav-brand { display: flex; flex-direction: column; line-height: 1.05; text-decoration: none; padding: 4px 6px; border-radius: 12px; }
-.course-nav-brand:hover { background: rgba(255,255,255,.55); text-decoration: none; }
-.course-nav-brand .course-name { font-family: var(--font-display), system-ui, sans-serif; font-weight: 800; font-size: 1.02rem; color: var(--vb-ink); letter-spacing: -.02em; }
-.course-nav-brand .course-level { font-size: .64rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--vb-grape); margin-top: 2px; }
+/* head: Verbadium (the product, secondary) above, the course (primary) below */
+.course-nav-head { display: flex; flex-direction: column; gap: 9px; padding: 6px 4px 10px; border-bottom: 1px solid rgba(31,42,48,.08); margin-bottom: 2px; }
+.course-nav-toprow { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 30px; }
+.course-nav-home { display: inline-flex; align-items: center; padding: 3px 6px 3px 3px; border-radius: 10px; text-decoration: none; }
+.course-nav-home:hover { background: rgba(255,255,255,.55); text-decoration: none; }
+.course-nav-home .vb-logo-word { font-size: 1rem; color: var(--vb-ink); }
+.course-nav-home .vb-mark { width: 22px; height: 22px; }
+.course-nav-course { display: flex; flex-direction: column; gap: 3px; text-decoration: none; padding: 0 4px; }
+.course-nav-course:hover { text-decoration: none; }
+.course-nav-course .course-name { font-family: var(--font-display), system-ui, sans-serif; font-weight: 800; font-size: 1.4rem; color: var(--vb-ink); letter-spacing: -.025em; line-height: 1.02; }
+.course-nav-course .course-level { font-size: .66rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--vb-grape); }
 
-/* toggles: clearly-visible teal-tinted control (collapse) + logo-matched pill (reopen) */
 .course-nav-collapse {
   display: inline-flex; align-items: center; justify-content: center; flex: none;
-  width: 34px; height: 34px; cursor: pointer; font-size: 1.1rem; line-height: 1;
+  width: 30px; height: 30px; cursor: pointer; font-size: 1rem; line-height: 1;
   color: #0c7a69; background: var(--vb-accent-soft); border: 1px solid rgba(17,179,155,.28);
-  border-radius: 11px; transition: background .15s, border-color .15s;
+  border-radius: 10px; transition: background .15s, border-color .15s;
 }
 .course-nav-collapse:hover { background: rgba(17,179,155,.22); border-color: var(--vb-grape); }
 .course-nav-mark { display: none; align-items: center; padding: 2px; }
-/* course-units menu toggle — rendered inside the header (<CourseMenuButton/>).
-   Solid, high-contrast brand pill so it actually reads as a control; hidden on
-   desktop where the sidebar is permanent, shown on mobile (see media query). */
+
+/* mobile menu toggle (<CourseMenuButton/>) — the Verbadium mark IS the button,
+   with a small lines hint. Hidden on desktop (permanent sidebar). */
 .course-menu-btn {
-  display: none; align-items: center; gap: 8px; cursor: pointer; flex: none;
-  padding: 9px 15px 9px 13px; border: 0; border-radius: 999px;
-  color: #fff; font-family: inherit; font-weight: 700; font-size: .95rem; line-height: 1;
-  background: linear-gradient(135deg, var(--vb-grape), #0c7a69);
-  box-shadow: 0 10px 26px rgba(12,122,105,.32), inset 0 1px 0 rgba(255,255,255,.25);
-  transition: transform .15s, box-shadow .15s;
+  display: none; align-items: center; gap: 7px; cursor: pointer; flex: none;
+  padding: 4px 10px 4px 4px; border: 1px solid rgba(255,255,255,.9); border-radius: 999px;
+  background:
+    linear-gradient(120deg, rgba(191,233,216,.55), rgba(187,217,242,.46) 55%, rgba(203,206,248,.46)),
+    rgba(255,255,255,.78);
+  box-shadow: 0 6px 18px rgba(31,42,48,.12); transition: transform .15s, box-shadow .15s;
 }
-.course-menu-btn:hover { transform: translateY(-1px); box-shadow: 0 14px 32px rgba(12,122,105,.38), inset 0 1px 0 rgba(255,255,255,.25); }
+.course-menu-btn:hover { transform: translateY(-1px); }
 .course-menu-btn:active { transform: translateY(0); }
-.course-menu-icon rect { fill: #fff; }
-.course-menu-label { letter-spacing: .01em; }
+.course-menu-hint rect { fill: var(--vb-ink); }
 
 .course-nav-scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: 0 2px 8px; scrollbar-width: thin; }
 .course-nav .nav-group { padding: 7px 0; border-top: 1px solid rgba(31,42,48,.08); }
 .course-nav .nav-group:first-child { border-top: 0; }
-.course-nav a {
+.course-nav-scroll a {
   display: flex; justify-content: space-between; align-items: center; gap: 10px;
   color: var(--vb-ink); text-decoration: none; padding: 8px 10px; border-radius: 12px;
   font-size: .9rem; font-weight: 600; transition: background .14s;
 }
-.course-nav a:hover { background: rgba(255,255,255,.62); text-decoration: none; }
-.course-nav a.current { background: var(--vb-accent-soft); color: #0c7a69; }
+.course-nav-scroll a:hover { background: rgba(255,255,255,.62); text-decoration: none; }
+.course-nav-scroll a.current { background: var(--vb-accent-soft); color: #0c7a69; }
 /* unit rows: "Unit N" eyebrow + the unit's title */
-.course-nav a.nav-unit { align-items: flex-start; }
+.course-nav-scroll a.nav-unit { align-items: flex-start; }
 .nav-unit-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
 .nav-unit-num { font-size: .62rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: var(--vb-grape); opacity: .9; }
 .nav-unit-title { font-size: .82rem; line-height: 1.25; color: var(--vb-ink); font-weight: 600; }
@@ -164,8 +168,10 @@ h1, h2, h3, h4, .unit-num, .label, th, .toc-line, .nav-brand, .btn, .chip,
 @media (min-width: 861px) {
   body.nav-collapsed .course-shell { grid-template-columns: 58px 1fr; }
   body.nav-collapsed .course-nav { padding: 8px 6px; }
-  body.nav-collapsed .course-nav-head { flex-direction: column; align-items: center; gap: 10px; padding: 4px 0; }
-  body.nav-collapsed .course-nav-brand,
+  body.nav-collapsed .course-nav-head { align-items: center; gap: 10px; padding: 4px 0; border-bottom: 0; }
+  body.nav-collapsed .course-nav-toprow { flex-direction: column; gap: 10px; }
+  body.nav-collapsed .course-nav-home,
+  body.nav-collapsed .course-nav-course,
   body.nav-collapsed .course-nav-scroll,
   body.nav-collapsed .course-nav-foot { display: none; }
   body.nav-collapsed .course-nav-mark { display: inline-flex; }

@@ -74,17 +74,23 @@ export default function Sidebar({ units, courseSlug, courseLanguage, courseLevel
       {/* mobile drawer toggle lives in the topbar — see <CourseMenuButton/> */}
       <nav className="course-nav" id="sidebar" aria-label="Course navigation">
         <div className="course-nav-head">
-          <Link href={base} className="course-nav-brand">
+          <div className="course-nav-toprow">
+            {/* the product (secondary) — back to all courses */}
+            <Link href="/" className="course-nav-home" aria-label="Verbadium — all courses"><Logo size={22} /></Link>
+            {/* collapsed rail: just the mark */}
+            <Link href={base} className="course-nav-mark" aria-label="Course home"><Logo variant="mark" size={30} /></Link>
+            <button
+              className="course-nav-collapse"
+              aria-label={collapsed ? 'Expand course menu' : 'Collapse course menu'}
+              aria-pressed={collapsed}
+              onClick={() => collapse(!collapsed)}
+            >{collapsed ? '»' : '«'}</button>
+          </div>
+          {/* this course (primary context) */}
+          <Link href={base} className="course-nav-course">
             <span className="course-name">{courseLanguage}</span>
             <span className="course-level">{courseLevel}</span>
           </Link>
-          <Link href={base} className="course-nav-mark" aria-label="Verbadium home"><Logo variant="mark" size={30} /></Link>
-          <button
-            className="course-nav-collapse"
-            aria-label={collapsed ? 'Expand course menu' : 'Collapse course menu'}
-            aria-pressed={collapsed}
-            onClick={() => collapse(!collapsed)}
-          >{collapsed ? '»' : '«'}</button>
         </div>
 
         <div className="course-nav-scroll">
