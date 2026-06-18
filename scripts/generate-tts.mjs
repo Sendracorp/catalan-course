@@ -45,6 +45,15 @@ function plain(html) {
     .replace(/&lt;/g, '<').replace(/&gt;/g, '>');
 }
 
+/* Catalan A1 cardinal numbers — they appear in answer keys/prose, not as
+   span.ca vocab, so they need explicit coverage to be usable in audio drills. */
+const NUMBERS = [
+  'zero', 'un', 'dos', 'tres', 'quatre', 'cinc', 'sis', 'set', 'vuit', 'nou', 'deu',
+  'onze', 'dotze', 'tretze', 'catorze', 'quinze', 'setze', 'disset', 'divuit', 'dinou',
+  'vint', 'trenta', 'quaranta', 'cinquanta', 'seixanta', 'setanta', 'vuitanta', 'noranta', 'cent',
+  'vint-i-u', 'vint-i-dos', 'vint-i-cinc', 'trenta-tres', 'quaranta-quatre', 'seixanta-vuit',
+];
+
 // ── collect every speakable text, mirroring components/SpeechScope.tsx ──
 function collect() {
   const src = fs.readFileSync(SRC, 'utf8');
@@ -69,6 +78,16 @@ function collect() {
       add(p[2], speakers.get(spk));
     }
   }
+
+  // audio exercises ("Listen and …"): guarantee every clip they reference exists
+  for (const ex of src.matchAll(/<div class="ex"[^>]*>([\s\S]*?)<\/div>/g)) {
+    if (!/<h4>\s*Listen\b/.test(ex[1])) continue;
+    for (const li of ex[1].matchAll(/<li>([\s\S]*?)<\/li>/g)) add(plain(li[1]).split(/\s*=\s*/)[0], 0);
+  }
+
+  // Catalan numbers (for number listening drills)
+  for (const n of NUMBERS) add(n, 0);
+
   return out;
 }
 

@@ -35,6 +35,15 @@ function norm(s) {
 }
 const stripArticle = s => s.replace(/^(els|les|el|la|un|una)\s+/, '').replace(/^l['’]\s*/, '').trim();
 
+/* A1 cardinal numbers live in answer keys/prose, not as span.ca vocab — but
+   Lingua Libre records them, so collect them too for native coverage. */
+const NUMBERS = [
+  'zero', 'un', 'dos', 'tres', 'quatre', 'cinc', 'sis', 'set', 'vuit', 'nou', 'deu',
+  'onze', 'dotze', 'tretze', 'catorze', 'quinze', 'setze', 'disset', 'divuit', 'dinou',
+  'vint', 'trenta', 'quaranta', 'cinquanta', 'seixanta', 'setanta', 'vuitanta', 'noranta', 'cent',
+  'vint-i-u', 'vint-i-dos', 'vint-i-cinc', 'trenta-tres', 'quaranta-quatre', 'seixanta-vuit',
+];
+
 function collectTexts() {
   const src = fs.readFileSync(path.join(ROOT, 'course_source.html'), 'utf8');
   const texts = new Set();
@@ -44,6 +53,15 @@ function collectTexts() {
       if (t) texts.add(t);
     }
   }
+  // audio exercises ("Listen and …") + numbers — so they're matched to Lingua Libre
+  for (const ex of src.matchAll(/<div class="ex"[^>]*>([\s\S]*?)<\/div>/g)) {
+    if (!/<h4>\s*Listen\b/.test(ex[1])) continue;
+    for (const li of ex[1].matchAll(/<li>([\s\S]*?)<\/li>/g)) {
+      const t = norm(stripTags(li[1]).split(/\s*=\s*/)[0]);
+      if (t) texts.add(t);
+    }
+  }
+  for (const n of NUMBERS) texts.add(norm(n));
   return [...texts];
 }
 

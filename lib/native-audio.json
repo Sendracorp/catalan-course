@@ -1,11 +1,11 @@
 {
  "source": "Lingua Libre (lingualibre.org) via Wikimedia Commons",
  "license": "CC BY-SA 4.0",
- "fetched": "2026-06-12",
+ "fetched": "2026-06-18",
  "credits": {
-  "Unjoanqualsevol": 205,
-  "Marvives": 79,
-  "Millars": 53,
+  "Unjoanqualsevol": 230,
+  "Marvives": 82,
+  "Millars": 54,
   "Toniher": 9,
   "TaronjaSatsuma": 6
  },
@@ -843,6 +843,93 @@
   "marcar / escollir": [
    "/audio/ca/marcar-82229e.mp3",
    "/audio/ca/escollir-ac12c5.mp3"
+  ],
+  "vint": [
+   "/audio/ca/vint-d06ba8.mp3"
+  ],
+  "cent": [
+   "/audio/ca/cent-a405f8.mp3"
+  ],
+  "zero": [
+   "/audio/ca/zero-f4098f.mp3"
+  ],
+  "un": [
+   "/audio/ca/un-e033ca.mp3"
+  ],
+  "dos": [
+   "/audio/ca/dos-1cf087.mp3"
+  ],
+  "tres": [
+   "/audio/ca/tres-74b8d2.mp3"
+  ],
+  "quatre": [
+   "/audio/ca/quatre-a0e545.mp3"
+  ],
+  "vuit": [
+   "/audio/ca/vuit-2fc95b.mp3"
+  ],
+  "nou": [
+   "/audio/ca/nou-9955d5.mp3"
+  ],
+  "deu": [
+   "/audio/ca/deu-d3c077.mp3"
+  ],
+  "onze": [
+   "/audio/ca/onze-b846d9.mp3"
+  ],
+  "dotze": [
+   "/audio/ca/dotze-bb6c03.mp3"
+  ],
+  "tretze": [
+   "/audio/ca/tretze-859d05.mp3"
+  ],
+  "catorze": [
+   "/audio/ca/catorze-841c4d.mp3"
+  ],
+  "quinze": [
+   "/audio/ca/quinze-cdbc42.mp3"
+  ],
+  "setze": [
+   "/audio/ca/setze-e1b840.mp3"
+  ],
+  "disset": [
+   "/audio/ca/disset-56252d.mp3"
+  ],
+  "divuit": [
+   "/audio/ca/divuit-eb54a8.mp3"
+  ],
+  "dinou": [
+   "/audio/ca/dinou-ea7adc.mp3"
+  ],
+  "trenta": [
+   "/audio/ca/trenta-596c0e.mp3"
+  ],
+  "quaranta": [
+   "/audio/ca/quaranta-6ce46c.mp3"
+  ],
+  "cinquanta": [
+   "/audio/ca/cinquanta-b0d0fe.mp3"
+  ],
+  "seixanta": [
+   "/audio/ca/seixanta-dad863.mp3"
+  ],
+  "setanta": [
+   "/audio/ca/setanta-397814.mp3"
+  ],
+  "vuitanta": [
+   "/audio/ca/vuitanta-1a19e7.mp3"
+  ],
+  "noranta": [
+   "/audio/ca/noranta-e1172d.mp3"
+  ],
+  "vint-i-u": [
+   "/audio/ca/vint-i-u-20ee28.mp3"
+  ],
+  "vint-i-dos": [
+   "/audio/ca/vint-i-dos-248c1a.mp3"
+  ],
+  "vint-i-cinc": [
+   "/audio/ca/vint-i-cinc-a7e5d3.mp3"
   ]
  }
 }

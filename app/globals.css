@@ -312,6 +312,12 @@ ol.q li { margin: 8px 0; }
 .gap-input.almost { border-color: var(--warn); background: var(--warn-bg); }
 /* revealed correct answer (read-only) — teal, distinct from a graded result */
 .gap-input.revealed { border-color: var(--vb-grape); background: var(--vb-accent-soft); color: #0c7a69; font-weight: 600; cursor: default; }
+/* listen / listen-match exercises */
+.listen-q li { margin: 9px 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.listen-input { width: 14em; }
+.listen-ca { font-size: .85rem; color: var(--vb-ink-soft); font-style: italic; }
+.listen-play { font-size: 1.05rem; cursor: pointer; }
+.listen-match .listen-audio { display: inline-flex; align-items: center; gap: 6px; }
 .model-input { width: 16em; }
 .free-text { width: 100%; font: inherit; font-size: .95rem; border: 1.5px solid #c9bda9; border-radius: 6px; padding: 8px 10px; background: #fffdf8; margin: 8px 0; }
 .free-text:focus { outline: 2px solid var(--gold); border-color: var(--gold); }

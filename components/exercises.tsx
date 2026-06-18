@@ -1,12 +1,13 @@
 'use client';
 /* The exercise engine: renders all ten exercise types and checks answers
    against the parsed answer key. Markup/class names mirror the course CSS. */
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import type {
-  ChoiceItem, Exercise, GapItem, MatchItem, PlainItem, ReorderItem, TFItem, WriteItem,
+  ChoiceItem, Exercise, GapItem, ListenItem, MatchItem, PlainItem, ReorderItem, TFItem, WriteItem,
 } from '@/lib/types';
 import { CheckResult, checkText, joinTokens, normSentence } from '@/lib/check';
 import { exState, setExState, subscribe } from '@/lib/progress';
+import { speak, stopSpeak } from '@/lib/speech';
 
 const FILL = '<span class="fill">___</span>';
 
@@ -554,6 +555,171 @@ function Personal({ ex }: { ex: Exercise }) {
   );
 }
 
+// ------------------------------------------------------------------------ listen
+
+/* Listen → write the English. Audio comes from speak() (native recording or
+   the pre-generated Google clip); the Catalan stays hidden until revealed. */
+function Listen({ ex }: { ex: Exercise }) {
+  const items = ex.items as ListenItem[];
+  const [values, setValues] = useState<string[]>(items.map(() => ''));
+  const [results, setResults] = useState<(CheckResult | null)[]>(items.map(() => null));
+  const [score, setScore] = useState<number | null>(null);
+  const [revealed, setRevealed] = useState(false);
+  const [showCa, setShowCa] = useState(false);
+  const [playing, setPlaying] = useState<number | null>(null);
+  const total = items.length;
+
+  function play(i: number) {
+    stopSpeak(); setPlaying(i);
+    speak(items[i].ca, () => setPlaying(p => (p === i ? null : p)));
+  }
+  function check() {
+    let ok = 0;
+    const res = items.map((it, i) => {
+      let r: CheckResult = 'bad';
+      for (const a of it.answers) {
+        const c = checkText(values[i] ?? '', a);
+        if (c === 'ok') { r = 'ok'; break; }
+        if (c === 'almost' && r === 'bad') r = 'almost';
+      }
+      if (r !== 'bad') ok++;
+      return r;
+    });
+    setResults(res); setScore(ok);
+    setExState(ex.id, ok === total ? 'passed' : 'attempted', ok, total);
+  }
+  function reveal() { setValues(items.map(it => it.answers[0])); setShowCa(true); setRevealed(true); }
+  function retry() {
+    setValues(items.map(() => '')); setResults(items.map(() => null));
+    setScore(null); setRevealed(false); setShowCa(false);
+  }
+
+  return (
+    <>
+      <ol className="q listen-q">
+        {items.map((it, i) => (
+          <li key={i}>
+            <button
+              type="button" className={`say listen-play${playing === i ? ' speaking' : ''}`}
+              title="Play audio" aria-label={`Play audio ${i + 1}`} onClick={() => play(i)}
+            >🔊</button>{' '}
+            <input
+              type="text"
+              className={`gap-input listen-input${revealed ? ' revealed' : (results[i] ? ' ' + results[i] : '')}`}
+              readOnly={revealed} placeholder="…in English"
+              autoCapitalize="off" autoComplete="off" spellCheck={false}
+              value={values[i] ?? ''}
+              onChange={e => setValues(v => v.map((x, vi) => vi === i ? e.target.value : x))}
+            />{' '}
+            {showCa && <span className="listen-ca">{it.ca}</span>}{' '}
+            <Feedback res={results[i]} />
+          </li>
+        ))}
+      </ol>
+      <div className="ex-controls">
+        <button type="button" className="btn btn-primary" onClick={check}>Check answers</button>
+        <Score score={score} total={total} />
+        {score !== null && !showCa && <button type="button" className="btn" onClick={() => setShowCa(true)}>Show the Catalan</button>}
+        {score !== null && score < total && !revealed && (
+          <button type="button" className="btn btn-reveal" onClick={reveal}>Show correct answers</button>
+        )}
+        {score !== null && <button type="button" className="btn" onClick={retry}>Retry</button>}
+      </div>
+    </>
+  );
+}
+
+// --------------------------------------------------------------------- listenmatch
+
+function hashStr(s: string): number {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
+  return h;
+}
+
+/* Hear each clip, match it to its written Catalan form. Identity pairing
+   (audio i ↔ text i); the written column is shuffled deterministically so it
+   is stable across SSR/hydration. */
+function ListenMatch({ ex }: { ex: Exercise }) {
+  const items = ex.items as ListenItem[];
+  // rotate the written column by a per-exercise offset so no row lines up with
+  // its clip — positional guessing fails, you must actually listen. Deterministic
+  // (SSR-safe); a non-zero rotation has no fixed points.
+  const order = useMemo(() => {
+    const n = items.length;
+    if (n < 2) return items.map((_, i) => i);
+    const offset = 1 + (Math.abs(hashStr(ex.id)) % (n - 1));
+    return items.map((_, i) => (i + offset) % n);
+  }, [ex.id, items.length]);
+  const [chosen, setChosen] = useState<Record<number, number>>({});  // left index → written-item index
+  const [selLeft, setSelLeft] = useState<number | null>(null);
+  const [checked, setChecked] = useState(false);
+  const [playing, setPlaying] = useState<number | null>(null);
+
+  function play(i: number) { stopSpeak(); setPlaying(i); speak(items[i].ca, () => setPlaying(p => (p === i ? null : p))); }
+  function clickLeft(i: number) {
+    if (checked) return;
+    setSelLeft(i);
+    if (chosen[i] !== undefined) setChosen(c => { const n = { ...c }; delete n[i]; return n; });
+    play(i);
+  }
+  function clickRight(idx: number) {
+    if (checked || selLeft === null) return;
+    setChosen(c => {
+      const n = { ...c };
+      for (const k of Object.keys(n)) if (n[+k] === idx) delete n[+k];
+      n[selLeft] = idx;
+      return n;
+    });
+    setSelLeft(null);
+  }
+  const shown = (i: number) => items[i].label ?? items[i].ca;  // digit if given, else the word
+  const score = items.filter((_, i) => chosen[i] === i).length;
+  function check() { setChecked(true); setExState(ex.id, score === items.length ? 'passed' : 'attempted', score, items.length); }
+  function retry() { setChosen({}); setSelLeft(null); setChecked(false); }
+
+  return (
+    <>
+      <div className="match listen-match">
+        <div className="match-col match-left">
+          {items.map((_, i) => {
+            let cls = 'match-item listen-audio';
+            if (selLeft === i) cls += ' sel';
+            if (chosen[i] !== undefined) cls += ' paired';
+            if (checked) cls += chosen[i] === i ? ' ok' : ' bad';
+            return (
+              <button key={i} type="button" className={cls} onClick={() => clickLeft(i)}>
+                <span className={`say${playing === i ? ' speaking' : ''}`} aria-hidden="true">🔊</span> Clip {i + 1}
+                {(chosen[i] !== undefined || checked) && (
+                  <span className="pair-tag">
+                    {checked && chosen[i] !== i
+                      ? `${chosen[i] !== undefined ? shown(chosen[i]) + ' ' : ''}✗ → ${shown(i)}`
+                      : chosen[i] !== undefined ? `→ ${shown(chosen[i])}` : ''}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+        <div className="match-col match-right">
+          {order.map(idx => (
+            <button
+              key={idx} type="button"
+              className={`match-item${Object.values(chosen).includes(idx) ? ' paired' : ''}`}
+              onClick={() => clickRight(idx)}
+            >{shown(idx)}</button>
+          ))}
+        </div>
+      </div>
+      <div className="ex-controls">
+        <button type="button" className="btn btn-primary" onClick={check} disabled={checked}>Check answers</button>
+        <Score score={checked ? score : null} total={items.length} />
+        {checked && <button type="button" className="btn" onClick={retry}>Retry</button>}
+      </div>
+    </>
+  );
+}
+
 // --------------------------------------------------------------------- dispatcher
 
 export default function ExerciseCard({ ex }: { ex: Exercise }) {
@@ -564,6 +730,8 @@ export default function ExerciseCard({ ex }: { ex: Exercise }) {
     ex.type === 'reorder' ? <Reorder ex={ex} /> :
     ex.type === 'model' ? <Model ex={ex} /> :
     ex.type === 'free' ? <Free ex={ex} /> :
+    ex.type === 'listen' ? <Listen ex={ex} /> :
+    ex.type === 'listenmatch' ? <ListenMatch ex={ex} /> :
     <Personal ex={ex} />;
   const showNote = !['model', 'free', 'personal'].includes(ex.type) && ex.noteHtml;
   return (

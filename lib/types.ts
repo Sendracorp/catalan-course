@@ -1,6 +1,7 @@
 export type ExerciseType =
   | 'gap' | 'write' | 'paradigm' | 'tf' | 'choice'
-  | 'match' | 'reorder' | 'model' | 'free' | 'personal';
+  | 'match' | 'reorder' | 'model' | 'free' | 'personal'
+  | 'listen' | 'listenmatch';
 
 export interface GapItem { html: string; gaps: number; answers: string[] }
 export interface WriteItem { html: string; answers: string[]; ipaNote?: string }
@@ -9,6 +10,11 @@ export interface ChoiceItem { html: string; answer: string }
 export interface MatchItem { left: string; letter: string; right: string }
 export interface ReorderItem { tokens: string[]; answer: string }
 export interface PlainItem { html: string }
+/** Audio item: `ca` is the Catalan played aloud (must have audio). For the
+    `listen` type, `answers` are accepted English translations; for
+    `listenmatch`, `label` is what's shown in the written column (e.g. a digit
+    "20" for the spoken "vint") — defaults to `ca` when omitted. */
+export interface ListenItem { ca: string; answers: string[]; label?: string }
 
 export interface Exercise {
   id: string;
@@ -16,7 +22,7 @@ export interface Exercise {
   title: string;            // html
   noteHtml: string;         // html ('' if none)
   keyHtml: string;          // answer-key html for model reveals
-  items: (GapItem | WriteItem | TFItem | ChoiceItem | MatchItem | ReorderItem | PlainItem)[];
+  items: (GapItem | WriteItem | TFItem | ChoiceItem | MatchItem | ReorderItem | PlainItem | ListenItem)[];
   pairs?: Record<string, string>;  // match: 1-based index → letter
   options?: string[];              // choice categories
   ipa?: boolean;                   // IPA-lenient checking (EX 1.1)

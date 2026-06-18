@@ -1,4 +1,4 @@
-# 237 course texts without native audio (fall back to TTS).
+# 240 course texts without native audio (fall back to TTS).
 # Record these with a native speaker, list them in recordings/index.json
 # as { "<text>": "<file.mp3>" }, then re-run scripts/fetch-native-audio.mjs.
 
@@ -166,6 +166,7 @@ quant és? / quant val
 quantes pomes vols
 quants anys tens
 quants anys tens? — tinc trenta anys
+quaranta-quatre
 quin dia és avui
 quin temps fa
 quin temps fa avui
@@ -180,6 +181,7 @@ què voleu (prendre)
 res més, gràcies
 ros / morè
 salutacions / una abraçada
+seixanta-vuit
 simpàtic / simpàtica
 soc anglès
 soc de manchester
@@ -202,6 +204,7 @@ tens germans
 tinc
 tinc gana son
 tinc trenta-dos anys
+trenta-tres
 tx ; -ig final
 té
 un / uns
