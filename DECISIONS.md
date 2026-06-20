@@ -182,3 +182,32 @@ Decisions made while building the site, and why.
     ("Catalan from Scratch (A1)" in `lib/courses.ts`). The in-course sidebar
     shows the Verbadium brand + course label (language · level). Course content
     is untouched.
+
+## Scaling decisions (audio, SEO, multilingual — June 2026)
+
+> Full architecture + roadmap: **`LOCALIZATION.md`** (read it before changing
+> the content model, audio pipeline, or adding a language/level).
+
+27. **Audio is a shared, course-agnostic Catalan library**, keyed by
+    `nativeKey(text)`. Runtime priority: admin override → native (Lingua Libre)
+    → Google TTS → browser TTS (`lib/speech.ts`). Mediums add **no** audio;
+    levels add new words. Manifests lazy-loaded. Never key audio per
+    course/medium.
+28. **Admin/teacher audio overrides** (`/admin/audio`, migration `0004`):
+    record (in-browser → MP3 via lamejs) or upload; stored in a **public**
+    Supabase Storage bucket `course-audio` (CDN-served) with metadata in
+    `audio_overrides` — **never bytes in Postgres**. Override wins at runtime.
+29. **Audio storage = static `/public` now; bucket + Cloudflare cache later.**
+    Cost-neutral once cached; move when audio volume/management demands (≈A2+).
+    Public bucket is fine: the paywall guards the course *experience*, not asset
+    URLs. Private+signed = real speed/complexity cost for low value; only if
+    audio piracy becomes a real problem.
+30. **Multilingual courses = spine + teaching layer; medium is presentation,
+    not a product.** One Paddle price per *level* unlocks every *medium*. The
+    Catalan spine (text/IPA/structure/answers) + audio are shared; per-medium
+    translation overlays provide prose/glosses/instructions, keyed, with English
+    fallback. Author the master in English; never copy whole courses per
+    language. (Plan + keys in `LOCALIZATION.md` §3.)
+31. **Marketing/legal/localized pages render static.** The header's account
+    state resolves client-side (`AccountSlot`) so `SiteHeader` does no
+    server-side session read — keep new public pages static.

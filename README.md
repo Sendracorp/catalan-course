@@ -138,7 +138,8 @@ build time by `lib/course.ts`, which **asserts content fidelity** — exactly
 source drifts. The catalog itself is `lib/courses.ts`; adding a course means
 adding an entry there, a content source wired in `lib/content.ts`, and a
 `PADDLE_PRICE_<SLUG>` env var. See `DESIGN.md` for architecture and
-`DECISIONS.md` for the choices made.
+`DECISIONS.md` for the choices made. For how the app scales to more levels and
+teaching languages (and the audio library), see **`LOCALIZATION.md`**.
 
 ## Deploy on Vercel
 

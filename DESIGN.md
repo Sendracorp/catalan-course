@@ -138,6 +138,17 @@ one-shot flag — React can re-apply `dangerouslySetInnerHTML` content on
 subtree re-renders (hydration click-replay), which would otherwise silently
 strip the injected buttons.
 
+## Scaling: audio library & multilingual courses
+
+See **`LOCALIZATION.md`** for the full architecture and roadmap — how the app
+scales to more levels (A2, B1…) and teaching languages (en/es/fr/ru). Essentials:
+audio is a **shared, course-agnostic Catalan library** keyed by `nativeKey(text)`
+(native → TTS → admin override); a **medium is a presentation choice, not a
+product**; multilingual courses = a shared **Catalan spine** + per-medium
+**teaching-layer** translation overlays (never copy courses per language).
+Localized **marketing** pages (`/ca /es /fr /ru`) are shipped (`lib/i18n.ts`);
+localized **course content** is the planned next phase.
+
 ## Platform layer (accounts, payments, multi-course)
 
 ```
