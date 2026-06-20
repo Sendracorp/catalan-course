@@ -41,7 +41,8 @@ medium, and never copy a whole course per language. (See §2, §3.)
 
 | Area | State | Key files |
 |---|---|---|
-| Course content | **One level (Catalan A1), English-medium only**, authored in HTML, parsed with fidelity asserts (12 units / 108 exercises / 275 glossary) | `course_source.html`, `lib/course.ts`, `lib/courses.ts` |
+| Course content | **One level (Catalan A1)**, authored in HTML (English master), parsed with fidelity asserts (12 units / 108 exercises / 275 glossary) | `course_source.html`, `lib/course.ts`, `lib/courses.ts` |
+| **Course i18n engine** | **Shipped (Phase 2).** Spine vs teaching-layer split: `extractCatalog`/`localizeCourse`; `getCourseContent(slug, medium)` (en = source, untouched; others overlay a translation file with English fallback). 923-key English catalog generated. **Medium *selection/rendering* not wired yet** (Phase 3). | `lib/i18n-course.ts`, `lib/content.ts`, `i18n/catalan-a1.en.json`, `app/api/admin/i18n/[slug]/route.ts`, `tests/unit/i18n-course.test.ts` |
 | Audio | Shared Catalan library: native (Lingua Libre) + Google TTS, static MP3s; admin overrides via Supabase Storage | `public/audio/ca/`, `lib/native-audio.json`, `lib/tts-audio.json`, `lib/speech.ts`, `scripts/fetch-native-audio.mjs`, `scripts/generate-tts.mjs` |
 | Exercise engine | 10 written + 3 audio types (`listen`, `dictation`, `listenmatch`); audio types are **h4-detected** (no `EX_TYPES` entry) | `components/exercises.tsx`, `lib/types.ts`, `lib/course.ts` |
 | Admin audio | Record/upload overrides (in-browser → MP3 via lamejs); override wins at runtime | `app/admin/audio/`, `components/admin/AudioManager.tsx`, `lib/audio-overrides.ts`, `lib/to-mp3.ts`, migration `0004` |
@@ -208,20 +209,36 @@ Per **level**, separate:
 - **Phase 0 — done:** shared audio library; admin overrides; 3 audio exercise
   types; SEO; **localized marketing landing pages** (ca/es/fr/ru); perf (static
   pages, lazy audio).
-- **Phase 1 — A2 content (English medium):** author Catalan A2 in the current
-  format. Validates the *level* dimension. Add `catalan-a2` to `lib/courses.ts`
-  (+ content source + `PADDLE_PRICE_CATALAN_A2`). Audio auto-shares via the
-  text-keyed library (new A2 words get native/TTS via the existing scripts).
-- **Phase 2 — spine/teaching engine:** implement the extraction + overlay
-  (§3.2–3.5). Refactor A1/A2 so English medium = the source; **no behavior
-  change for English**. Ship the `i18n/<level>.en.json` catalogs.
-- **Phase 3 — first non-English medium (Spanish):** translate the A1 catalog,
-  wire medium selection + the localized course renderer; the existing `/es`
-  landing now funnels into a *Spanish-medium* course. Then fr/ru = translation
-  files only.
+- **Phase 2 — spine/teaching engine — DONE (did this before A2).** `lib/i18n-course.ts`
+  (`extractCatalog`/`localizeCourse`), `getCourseContent(slug, medium)` (en =
+  source/untouched; others overlay with English fallback), `i18n/catalan-a1.en.json`
+  (923 keys), admin extract route, lossless-roundtrip unit tests. English
+  rendering unchanged.
+- **Phase 3 — wire medium + first non-English medium:** (a) pick the medium
+  (cookie/account, pre-set from the localized landing pages) and pass it into
+  `getCourseContent` + the course layout/pages; (b) translate `i18n/catalan-a1.es.json`
+  and verify the Spanish-medium course renders; (c) then fr/ru = translation files
+  only. **This is the next build.**
+- **Phase 1 (later) — A2 content:** author Catalan A2 (English master). Add
+  `catalan-a2` to `lib/courses.ts` (+ content source in `lib/content.ts` +
+  `PADDLE_PRICE_CATALAN_A2`). Audio auto-shares via the text-keyed library; run
+  `npm run audio:native` + `audio:tts` for new words. Then generate its `.en`
+  catalog and translate per medium. (Can come after Phase 3 — order is flexible.)
 - **Phase 4 — audio to bucket + Cloudflare** (if volume/management demands).
 
-Pick up at the lowest unchecked phase; each is independently shippable.
+## How to add a teaching medium (Phase 3 recipe)
+1. **Get the English catalog:** `i18n/<slug>.en.json` (committed). Regenerate
+   after content changes via the admin route `GET /api/admin/i18n/<slug>` (signed
+   in as an admin) → save over the file.
+2. **Translate:** copy it to `i18n/<slug>.<medium>.json` and translate the
+   **values**. Keep the **keys** and any inline Catalan (`<span class="ca">…`,
+   IPA, Catalan words) intact — translate the surrounding teaching text only.
+   Missing keys fall back to English automatically.
+3. **Render:** `getCourseContent(slug, medium)` already applies it. What's left
+   (Phase 3a) is choosing the `medium` per visitor and threading it into the
+   course layout/pages (today they default to `'en'`).
+4. **Guardrail:** add a CI check that every `<slug>.<medium>.json` has the same
+   key set as `<slug>.en.json` (catches drift), mirroring the fidelity asserts.
 
 ---
 
