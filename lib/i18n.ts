@@ -2,18 +2,19 @@
    + shell). English stays at root; ca/es/fr are SEO landing pages that funnel
    into the (English-taught) course. No dependency — just typed dictionaries. */
 
-export const LOCALES = ['en', 'ca', 'es', 'fr'] as const;
+export const LOCALES = ['en', 'ca', 'es', 'fr', 'ru'] as const;
 export type Locale = (typeof LOCALES)[number];
-export const LOCALE_LABEL: Record<Locale, string> = { en: 'English', ca: 'Català', es: 'Español', fr: 'Français' };
+export const LOCALE_LABEL: Record<Locale, string> = { en: 'English', ca: 'Català', es: 'Español', fr: 'Français', ru: 'Русский' };
 
 /* Canonical paths per page, per locale (localized slugs carry the keyword). */
 export const PATHS = {
-  home: { en: '/', ca: '/ca', es: '/es', fr: '/fr' },
+  home: { en: '/', ca: '/ca', es: '/es', fr: '/fr', ru: '/ru' },
   course: {
     en: '/courses/catalan-a1',
     ca: '/ca/curs-de-catala',
     es: '/es/curso-de-catalan',
     fr: '/fr/cours-de-catalan',
+    ru: '/ru/kurs-katalanskogo',
   },
 } as const;
 export type PageKey = keyof typeof PATHS;
@@ -159,7 +160,36 @@ const fr: Dict = {
     mor: 'Paiements et TVA gérés par Paddle.com, notre revendeur officiel.' },
 };
 
-const DICTS: Record<Locale, Dict> = { en, ca, es, fr };
+const ru: Dict = {
+  nav: { course: 'Курс', pricing: 'Цены', login: 'Войти', signup: 'Создать аккаунт' },
+  langLabel: 'Язык',
+  home: { badge: 'ИНТЕРАКТИВНЫЕ КУРСЫ ЯЗЫКОВ', h1: 'Учите каталанский как следует',
+    sub: 'Курс каталанского с упором на экзамен: полная транскрипция МФА, аудио носителей языка, упражнения с автопроверкой и настоящий пробный экзамен.',
+    seeCourse: 'Посмотреть курс' },
+  card: { level: 'Начальный · A1', buy: 'Получить курс', preview: 'Бесплатный доступ', lifetime: 'Разовая оплата · доступ навсегда' },
+  course: {
+    name: 'Каталанский с нуля (A1)',
+    tagline: 'Полный курс центральнокаталанского для начинающих, созданный для сдачи официального экзамена A1.',
+    metaTitle: 'Курс каталанского онлайн (A1) — подготовка к официальному экзамену',
+    metaDesc: 'Учите каталанский онлайн: интерактивный курс A1 для официального экзамена (Certificat de nivell inicial de català), официального языка Андорры. Аудио носителей языка, полная МФА-транскрипция, более 100 упражнений и пробный экзамен. Бесплатный доступ.',
+    salesHeading: 'Получите полный курс — {price}, навсегда',
+    bullets: [
+      'Все {units} разделов с {exercises} интерактивными упражнениями с автопроверкой',
+      'Полный пробный экзамен A1 с таймерами и историей попыток',
+      'Полный глоссарий ({glossary} записей) с аудио носителей языка и МФА',
+      'Упражнения на аудирование, диктант и перевод',
+      'Прогресс сохраняется в вашем аккаунте — продолжайте с любого устройства',
+    ],
+    taughtInEnglish: 'Преподавание ведётся на английском языке (объяснения и переводы на английском).',
+    previewLead: 'Попробуйте перед покупкой:', previewLink: 'раздел {n} бесплатный, без регистрации.',
+    alreadyBought: 'Уже купили? Войдите',
+  },
+  footer: { tagline: 'Учите каталанский как следует — интерактивные курсы с полной МФА-транскрипцией, аудио носителей языка, упражнениями с автопроверкой и настоящими пробными экзаменами.',
+    learn: 'Учить', legal: 'Правовая информация', help: 'Помощь', terms: 'Условия', refunds: 'Возвраты', privacy: 'Конфиденциальность', contact: 'Контакты',
+    mor: 'Платежи и НДС обрабатывает Paddle.com, наш официальный продавец.' },
+};
+
+const DICTS: Record<Locale, Dict> = { en, ca, es, fr, ru };
 export function getDict(locale: Locale): Dict { return DICTS[locale] ?? en; }
 
 /** Fill {key} placeholders. */
