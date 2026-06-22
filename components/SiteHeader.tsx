@@ -10,7 +10,7 @@ import { PATHS, type Locale, type PageKey } from '@/lib/i18n';
 export default function SiteHeader({ lang = 'en', page = 'home' }: { lang?: Locale; page?: PageKey } = {}) {
   return (
     <header className="site-header">
-      <Link href={PATHS.home[lang]} className="site-brand vb-chip" aria-label="Verbadium home"><Logo size={40} /></Link>
+      <Link href={(PATHS.home as Record<string, string>)[lang]} className="site-brand vb-chip" aria-label="Verbadium home"><Logo size={40} /></Link>
       <HeaderNav lang={lang} page={page} />
       <AccountSlot lang={lang} />
     </header>

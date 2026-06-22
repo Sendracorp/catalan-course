@@ -30,7 +30,7 @@ export default function HeaderNav({ lang = 'en', page = 'home' }: { lang?: Local
           <Link href="/pricing" className={active('/pricing')}>Pricing</Link>
         </>
       ) : (
-        <Link href={PATHS.course[lang]} className={active(PATHS.course[lang])}>{d.nav.course}</Link>
+        <Link href={(PATHS.course as Record<string, string>)[lang]} className={active((PATHS.course as Record<string, string>)[lang])}>{d.nav.course}</Link>
       )}
     </nav>
   );

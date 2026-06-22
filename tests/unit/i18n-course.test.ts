@@ -40,7 +40,7 @@ describe('course i18n engine', () => {
   });
 });
 
-describe.each(['es', 'fr', 'ru'])('%s translation catalog', medium => {
+describe.each(['es', 'fr', 'ru', 'de'])('%s translation catalog', medium => {
   const course = getCourse();
   const en = extractCatalog(course);
   const dict: Record<string, string> = JSON.parse(

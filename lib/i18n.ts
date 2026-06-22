@@ -2,9 +2,12 @@
    + shell). English stays at root; ca/es/fr are SEO landing pages that funnel
    into the (English-taught) course. No dependency — just typed dictionaries. */
 
-export const LOCALES = ['en', 'ca', 'es', 'fr', 'ru'] as const;
+// en/ca/es/fr/ru have marketing landing pages; de is a TEACHING MEDIUM only
+// (course content + chrome), with no marketing page — the iterations over
+// LOCALES that touch PATHS guard against locales missing a route.
+export const LOCALES = ['en', 'ca', 'es', 'fr', 'ru', 'de'] as const;
 export type Locale = (typeof LOCALES)[number];
-export const LOCALE_LABEL: Record<Locale, string> = { en: 'English', ca: 'Català', es: 'Español', fr: 'Français', ru: 'Русский' };
+export const LOCALE_LABEL: Record<Locale, string> = { en: 'English', ca: 'Català', es: 'Español', fr: 'Français', ru: 'Русский', de: 'Deutsch' };
 
 /* Canonical paths per page, per locale (localized slugs carry the keyword). */
 export const PATHS = {
@@ -22,7 +25,8 @@ export type PageKey = keyof typeof PATHS;
 /** hreflang map for next/metadata `alternates.languages` (+ x-default = English). */
 export function hreflang(page: PageKey): Record<string, string> {
   const out: Record<string, string> = {};
-  for (const l of LOCALES) out[l] = PATHS[page][l];
+  const map = PATHS[page] as Record<string, string | undefined>;
+  for (const l of LOCALES) { const href = map[l]; if (href) out[l] = href; }  // skip mediums without a marketing route (de)
   out['x-default'] = PATHS[page].en;
   return out;
 }
@@ -189,7 +193,8 @@ const ru: Dict = {
     mor: 'Платежи и НДС обрабатывает Paddle.com, наш официальный продавец.' },
 };
 
-const DICTS: Record<Locale, Dict> = { en, ca, es, fr, ru };
+// de has no marketing Dict (no landing page); getDict falls back to English.
+const DICTS: Partial<Record<Locale, Dict>> = { en, ca, es, fr, ru };
 export function getDict(locale: Locale): Dict { return DICTS[locale] ?? en; }
 
 /** Fill {key} placeholders. */

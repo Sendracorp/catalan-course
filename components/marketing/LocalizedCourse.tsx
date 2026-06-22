@@ -24,7 +24,7 @@ export default function LocalizedCourse({ lang }: { lang: Locale }) {
     '@type': 'Course',
     name: d.course.name,
     description: d.course.tagline,
-    url: `${SITE_URL}${PATHS.course[lang]}`,
+    url: `${SITE_URL}${(PATHS.course as Record<string, string>)[lang]}`,
     inLanguage: 'ca',
     educationalLevel: `${meta.level} (CEFR)`,
     teaches: `${meta.language} ${meta.level}`,

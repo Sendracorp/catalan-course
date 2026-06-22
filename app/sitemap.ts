@@ -26,12 +26,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     );
     for (const u of c.freeUnits) entries.push({ url: `${b}/unit/${u}`, changeFrequency: 'monthly', priority: 0.7 });
   }
-  // localized marketing landing pages (ca/es/fr)
+  // localized marketing landing pages (ca/es/fr/ru) — skip mediums with no route (de)
+  const home = PATHS.home as Record<string, string | undefined>;
+  const course = PATHS.course as Record<string, string | undefined>;
   for (const l of LOCALES) {
-    if (l === 'en') continue;
+    if (l === 'en' || !home[l] || !course[l]) continue;
     entries.push(
-      { url: `${SITE_URL}${PATHS.home[l]}`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
-      { url: `${SITE_URL}${PATHS.course[l]}`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
+      { url: `${SITE_URL}${home[l]}`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
+      { url: `${SITE_URL}${course[l]}`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
     );
   }
   return entries;
