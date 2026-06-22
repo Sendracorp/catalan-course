@@ -231,11 +231,13 @@ Per **level**, separate:
   **With Spanish selected, content AND chrome render in Spanish.**
   - **Still pending:** native review of the AI Spanish (content + chrome) before
     heavy marketing.
-- **fr + ru — DONE.** Full content catalogs (`i18n/catalan-a1.fr.json`, `.ru.json`,
-  923 keys each) + chrome dictionaries in `lib/ui.ts` (131 keys each), both added
+- **fr + ru + de — DONE.** Full content catalogs (`i18n/catalan-a1.{fr,ru,de}.json`,
+  923 keys each) + chrome dictionaries in `lib/ui.ts` (131 keys each), all added
   to `AVAILABLE_MEDIUMS`. Validated (key parity + HTML + Catalan-span) and live,
-  opt-in. **All four mediums (en/es/fr/ru) now render content AND chrome.** AI
-  drafts pending native review.
+  opt-in. **Five mediums (en/es/fr/ru/de) now render content AND chrome.** AI
+  drafts pending native review. Note: `de` is a teaching medium with NO marketing
+  landing page — it's in `LOCALES` but the PATHS-touching iterations (sitemap,
+  LangSwitcher, hreflang) skip locales without a route, and `DICTS` is Partial.
 
 ### Adding another teaching language later (the recipe)
 1. `python` split `i18n/catalan-a1.en.json` into chunks → fan out Claude
