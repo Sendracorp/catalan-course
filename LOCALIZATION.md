@@ -235,9 +235,14 @@ Per **level**, separate:
   923 keys each) + chrome dictionaries in `lib/ui.ts` (131 keys each), all added
   to `AVAILABLE_MEDIUMS`. Validated (key parity + HTML + Catalan-span) and live,
   opt-in. **Five mediums (en/es/fr/ru/de) now render content AND chrome.** AI
-  drafts pending native review. Note: `de` is a teaching medium with NO marketing
-  landing page — it's in `LOCALES` but the PATHS-touching iterations (sitemap,
-  LangSwitcher, hreflang) skip locales without a route, and `DICTS` is Partial.
+  drafts pending native review.
+- **German SEO — DONE.** `/de` + `/de/katalanisch-kurs` localized marketing pages
+  (static, de_DE OG, canonical, hreflang) like ca/es/fr/ru; German marketing
+  `Dict` + PATHS routes in `lib/i18n.ts`. Marketing locales with no medium
+  (ca→English course) and mediums with/without marketing are both handled: the
+  PATHS-touching iterations skip routeless locales, and `DICTS` is `Partial`.
+  The es/fr/ru/de course landings now correctly state the teaching language
+  ("taught in Spanish/French/Russian/German"); ca still says English (no ca medium).
 
 ### Adding another teaching language later (the recipe)
 1. `python` split `i18n/catalan-a1.en.json` into chunks → fan out Claude
