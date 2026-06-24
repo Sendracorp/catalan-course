@@ -19,7 +19,9 @@ export async function proxy(request: NextRequest) {
       },
     },
   });
-  try { await supabase.auth.getUser(); } catch { /* offline / bad creds: continue logged out */ }
+  // getClaims() refreshes the session cookie when the token is expired but
+  // otherwise verifies it locally (asymmetric signing key) — no Auth round-trip.
+  try { await supabase.auth.getClaims(); } catch { /* offline / bad creds: continue logged out */ }
   return response;
 }
 

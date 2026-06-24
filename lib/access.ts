@@ -1,6 +1,6 @@
 import 'server-only';
-import type { User } from '@supabase/supabase-js';
-import { getServerSupabase, getSessionUser } from './supabase/server';
+import { cache } from 'react';
+import { getServerSupabase, getSessionUser, type SessionUser } from './supabase/server';
 import { getCourseMeta } from './courses';
 
 export { getSessionUser };
@@ -24,15 +24,25 @@ export async function userOwnsCourse(userId: string, courseSlug: string): Promis
 }
 
 export interface CourseAccess {
-  user: User | null;
+  user: SessionUser | null;
   owns: boolean;
 }
 
-export async function getCourseAccess(courseSlug: string): Promise<CourseAccess> {
+export const getCourseAccess = cache(async (courseSlug: string): Promise<CourseAccess> => {
   const user = await getSessionUser();
   const owns = paywallBypassed() || (user ? await userOwnsCourse(user.id, courseSlug) : false);
   return { user, owns };
-}
+});
+
+/** Whether the user is an admin. Cached per request; reads its own profile row
+    via the cookie-bound client (RLS: a user can read their own profile). */
+export const isUserAdmin = cache(async (userId: string): Promise<boolean> => {
+  const supabase = await getServerSupabase();
+  if (!supabase) return false;
+  const { data } = await supabase
+    .from('profiles').select('is_admin').eq('id', userId).maybeSingle();
+  return !!data?.is_admin;
+});
 
 /** Units in freeUnits are the free preview; everything else needs ownership. */
 export function canAccessUnit(courseSlug: string, unitNum: number, access: CourseAccess): boolean {

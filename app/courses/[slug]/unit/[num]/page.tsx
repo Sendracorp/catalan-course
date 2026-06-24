@@ -21,13 +21,12 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 export default async function UnitPage({ params }: { params: Params }) {
   const { slug, num } = await params;
   const meta = getCourseMeta(slug);
-  const medium = await getMedium(slug);
+  // medium (cookie) and access (auth + ownership) are independent — run together.
+  const [medium, access] = await Promise.all([getMedium(slug), getCourseAccess(slug)]);
   const course = getCourseContent(slug, medium);
   if (!meta || !course) notFound();
   const unit = course.units.find(u => u.num === +num);
   if (!unit) notFound();
-
-  const access = await getCourseAccess(slug);
   if (!canAccessUnit(slug, unit.num, access)) {
     return (
       <Paywall

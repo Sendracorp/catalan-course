@@ -1,13 +1,13 @@
 import type { Locale } from './i18n';
+import { interpolate, type Strings, type BuyLabels } from './ui-runtime';
 
 /* App-CHROME strings for the course experience (nav, buttons, exam UI, paywall,
    account menu…). Distinct from the COURSE CONTENT catalog (i18n/<slug>.<m>.json,
    applied by lib/i18n-course.ts). Keys fall back to English if a locale lacks one.
-   Client components read these via useUI() (see components/CourseLocale.tsx);
-   server components call tUI(locale, key, vars). Some values contain inline
-   <b>…</b> and are rendered via dangerouslySetInnerHTML at the call site. */
-
-type Strings = Record<string, string>;
+   This module is SERVER-side: client components get the active locale's dict via
+   uiDict() handed through CourseLocaleProvider, then read it with useUI() — so
+   only one locale's strings ship to the browser, not the whole map.
+   Some values contain inline <b>…</b> rendered via dangerouslySetInnerHTML. */
 
 const en: Strings = {
   // nav / sidebar
@@ -694,7 +694,23 @@ export const UI: Record<Locale, Strings> = { en, es, ca: en, fr, ru, de };
 /** Translate a chrome key for a locale, with {placeholder} interpolation and
     English fallback. */
 export function tUI(locale: Locale, key: string, vars?: Record<string, string | number>): string {
-  let s = UI[locale]?.[key] ?? en[key] ?? key;
-  if (vars) for (const [k, v] of Object.entries(vars)) s = s.replaceAll(`{${k}}`, String(v));
-  return s;
+  return interpolate(UI[locale]?.[key] ?? en[key] ?? key, vars);
+}
+
+/** The full chrome dictionary for one locale, English-filled. Handed to the
+    client provider so the browser only ever receives the active locale. */
+export function uiDict(locale: Locale): Strings {
+  return locale === 'en' ? en : { ...en, ...UI[locale] };
+}
+
+/** The chrome strings <BuyButton> needs, resolved for a locale. Lets that
+    client component take a small prop instead of importing this whole map. */
+export function buyLabels(locale: Locale): BuyLabels {
+  return {
+    errStart: tUI(locale, 'buy.errStart'),
+    errLoad: tUI(locale, 'buy.errLoad'),
+    errConn: tUI(locale, 'buy.errConn'),
+    opening: tUI(locale, 'buy.opening'),
+    buy: tUI(locale, 'buy.buy'),   // template, still contains {price}
+  };
 }

@@ -12,9 +12,9 @@ import SiteFooter from '@/components/SiteFooter';
 import { getAudioOverrides } from '@/lib/audio-overrides';
 import { getCourseContent } from '@/lib/content';
 import { getMedium, availableMediums } from '@/lib/medium';
+import { uiDict } from '@/lib/ui';
 import { getCourseMeta } from '@/lib/courses';
-import { getCourseAccess } from '@/lib/access';
-import { getServerSupabase } from '@/lib/supabase/server';
+import { getCourseAccess, isUserAdmin } from '@/lib/access';
 import { loadInitialProgress } from '@/lib/progress-server';
 
 export default async function CourseLayout({ children, params }: {
@@ -23,24 +23,23 @@ export default async function CourseLayout({ children, params }: {
 }) {
   const { slug } = await params;
   const meta = getCourseMeta(slug);
-  const medium = await getMedium(slug);
+  // medium (cookie) and access (auth + ownership) are independent — run together.
+  const [medium, access] = await Promise.all([getMedium(slug), getCourseAccess(slug)]);
   const course = getCourseContent(slug, medium);
   if (!meta || !course) notFound();
 
-  const access = await getCourseAccess(slug);
-  let isAdmin = false;
-  if (access.user) {
-    const supabase = await getServerSupabase();
-    const { data: profile } = await supabase!
-      .from('profiles').select('is_admin').eq('id', access.user.id).maybeSingle();
-    isAdmin = !!profile?.is_admin;
-  }
-  const initial = access.user ? await loadInitialProgress(access.user.id, slug) : {};
+  // Admin check, saved progress and audio overrides don't depend on one another
+  // — fan them out instead of awaiting in series.
+  const userId = access.user?.id ?? null;
+  const [isAdmin, initial, audioOverrides] = await Promise.all([
+    userId ? isUserAdmin(userId) : Promise.resolve(false),
+    userId ? loadInitialProgress(userId, slug) : Promise.resolve({} as Record<string, unknown>),
+    getAudioOverrides(slug),
+  ]);
   const units = course.units.map(u => ({ num: u.num, title: u.title, exerciseIds: u.exerciseIds }));
-  const audioOverrides = await getAudioOverrides(slug);
 
   return (
-    <CourseLocaleProvider locale={medium}>
+    <CourseLocaleProvider locale={medium} dict={uiDict(medium)}>
     <ProgressProvider userId={access.user?.id ?? null} courseSlug={slug} initial={initial}>
       <AudioOverridesProvider map={audioOverrides} />
       <CourseTopbar userEmail={access.user?.email ?? null} isAdmin={isAdmin} owns={access.owns} courseSlug={slug} locale={medium} />

@@ -2,18 +2,18 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { initializePaddle } from '@paddle/paddle-js';
-import { tUI } from '@/lib/ui';
-import type { Locale } from '@/lib/i18n';
+import { interpolate, type BuyLabels } from '@/lib/ui-runtime';
 
 /* Opens the Paddle overlay checkout. /api/checkout is the auth gate —
    401 sends the user to /login and back here afterwards. Access itself is
    granted by the transaction.completed webhook, not the success redirect.
-   Takes a `locale` prop (not useUI) — also used outside the course provider. */
-export default function BuyButton({ courseSlug, priceLabel, returnTo, locale = 'en' }: {
+   Takes pre-resolved `labels` (not useUI) — also used outside the course
+   provider, and avoids pulling the whole UI map into the client bundle. */
+export default function BuyButton({ courseSlug, priceLabel, returnTo, labels }: {
   courseSlug: string;
   priceLabel: string;
   returnTo: string;
-  locale?: Locale;
+  labels: BuyLabels;
 }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
@@ -34,12 +34,12 @@ export default function BuyButton({ courseSlug, priceLabel, returnTo, locale = '
       }
       const body = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setError(body.error ?? tUI(locale, 'buy.errStart'));
+        setError(body.error ?? labels.errStart);
         return;
       }
       const paddle = await initializePaddle({ environment: body.environment, token: body.clientToken });
       if (!paddle) {
-        setError(tUI(locale, 'buy.errLoad'));
+        setError(labels.errLoad);
         return;
       }
       paddle.Checkout.open({
@@ -52,7 +52,7 @@ export default function BuyButton({ courseSlug, priceLabel, returnTo, locale = '
         },
       });
     } catch {
-      setError(tUI(locale, 'buy.errConn'));
+      setError(labels.errConn);
     } finally {
       setBusy(false);
     }
@@ -61,7 +61,7 @@ export default function BuyButton({ courseSlug, priceLabel, returnTo, locale = '
   return (
     <span className="buy-wrap">
       <button type="button" className="btn btn-primary buy-btn" onClick={buy} disabled={busy}>
-        {busy ? tUI(locale, 'buy.opening') : tUI(locale, 'buy.buy', { price: priceLabel })}
+        {busy ? labels.opening : interpolate(labels.buy, { price: priceLabel })}
       </button>
       {error && <span className="buy-error">{error}</span>}
     </span>

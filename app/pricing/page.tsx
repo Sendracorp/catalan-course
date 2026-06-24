@@ -4,6 +4,7 @@ import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import BuyButton from '@/components/BuyButton';
 import JsonLd from '@/components/JsonLd';
+import { buyLabels } from '@/lib/ui';
 import { COURSES } from '@/lib/courses';
 import { resolveAllPrices } from '@/lib/pricing';
 import { getSessionUser, userOwnsCourse, paywallBypassed } from '@/lib/access';
@@ -106,7 +107,7 @@ export default async function PricingPage() {
                     <Link className="btn btn-primary" href={base} data-test="pricing-go">Go to your course →</Link>
                   ) : (
                     <>
-                      <BuyButton courseSlug={meta.slug} priceLabel={price.label} returnTo={base} />
+                      <BuyButton courseSlug={meta.slug} priceLabel={price.label} returnTo={base} labels={buyLabels('en')} />
                       <Link className="btn" href={`${base}/unit/${meta.freeUnits[0]}`}>
                         Free preview · Unit {meta.freeUnits[0]}
                       </Link>

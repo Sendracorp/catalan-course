@@ -16,13 +16,16 @@ export default async function AccountPage() {
   if (!user) redirect('/login?next=/account');
 
   const supabase = await getServerSupabase();
-  const [{ data: purchases }, { data: grants }] = await Promise.all([
+  const [{ data: purchases }, { data: grants }, { data: profile }] = await Promise.all([
     supabase!.from('purchases')
       .select('course_slug, status, created_at')
       .eq('user_id', user.id).order('created_at', { ascending: false }),
     supabase!.from('access_grants')
       .select('course_slug, created_at')
       .eq('user_id', user.id).is('revoked_at', null).order('created_at', { ascending: false }),
+    // "Member since" — the JWT carries no account-creation date, so read it from
+    // the profile row (created at signup).
+    supabase!.from('profiles').select('created_at').eq('id', user.id).maybeSingle(),
   ]);
 
   // One row per course; access = paid purchase OR active grant. A live grant
@@ -50,7 +53,9 @@ export default async function AccountPage() {
         <div className="card">
           <h2>Your account</h2>
           <p><b>Email:</b> {user.email}</p>
-          <p><b>Member since:</b> {new Date(user.created_at).toLocaleDateString('en-GB')}</p>
+          {profile?.created_at && (
+            <p><b>Member since:</b> {new Date(profile.created_at).toLocaleDateString('en-GB')}</p>
+          )}
           <div className="paywall-actions">
             <Link className="btn" href="/forgot-password">Change password</Link>
           </div>

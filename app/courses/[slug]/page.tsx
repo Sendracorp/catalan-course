@@ -10,6 +10,7 @@ import Checklist from '@/components/Checklist';
 import SpeechScope from '@/components/SpeechScope';
 import BuyButton from '@/components/BuyButton';
 import JsonLd from '@/components/JsonLd';
+import { buyLabels } from '@/lib/ui';
 import { resolveCoursePrice } from '@/lib/pricing';
 import { SITE } from '@/lib/site';
 import { hreflang } from '@/lib/i18n';
@@ -39,12 +40,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function CourseHomePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const meta = getCourseMeta(slug);
-  const medium = await getMedium(slug);
+  // medium, access and price are mutually independent — resolve in parallel.
+  const [medium, access, { label: price }] = await Promise.all([
+    getMedium(slug), getCourseAccess(slug), resolveCoursePrice(slug),
+  ]);
   const course = getCourseContent(slug, medium);
   if (!meta || !course) notFound();
-
-  const access = await getCourseAccess(slug);
-  const { label: price } = await resolveCoursePrice(slug);
   const units = course.units.map(u => ({ num: u.num, title: u.title, exerciseIds: u.exerciseIds }));
   const base = `/courses/${slug}`;
 
@@ -98,7 +99,7 @@ export default async function CourseHomePage({ params }: { params: Promise<{ slu
             <li>One payment, no subscription</li>
           </ul>
           <div className="paywall-actions">
-            <BuyButton courseSlug={slug} priceLabel={price} returnTo={base} locale={medium} />
+            <BuyButton courseSlug={slug} priceLabel={price} returnTo={base} labels={buyLabels(medium)} />
             {!access.user && (
               <Link className="btn" href={`/login?next=${encodeURIComponent(base)}`}>
                 Already bought it? Log in

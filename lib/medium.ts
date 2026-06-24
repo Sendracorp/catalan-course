@@ -1,4 +1,5 @@
 import 'server-only';
+import { cache } from 'react';
 import { cookies } from 'next/headers';
 import { LOCALES, type Locale } from './i18n';
 
@@ -18,8 +19,8 @@ export function availableMediums(slug: string): Locale[] {
 
 /** The learner's chosen teaching medium for a course (cookie), gated to the
     mediums that are actually available; defaults to English. */
-export async function getMedium(slug: string): Promise<Locale> {
+export const getMedium = cache(async (slug: string): Promise<Locale> => {
   const v = (await cookies()).get(MEDIUM_COOKIE)?.value;
   const avail = availableMediums(slug);
   return v && (LOCALES as readonly string[]).includes(v) && avail.includes(v as Locale) ? (v as Locale) : 'en';
-}
+});

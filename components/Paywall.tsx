@@ -2,7 +2,7 @@ import Link from 'next/link';
 import BuyButton from './BuyButton';
 import type { CourseMeta } from '@/lib/courses';
 import { resolveCoursePrice } from '@/lib/pricing';
-import { tUI } from '@/lib/ui';
+import { tUI, buyLabels } from '@/lib/ui';
 import type { Locale } from '@/lib/i18n';
 
 /* Server lock screen shown in place of gated content. Resolves the live
@@ -25,7 +25,7 @@ export default async function Paywall({ meta, what, loggedIn, returnTo, locale =
       </p>
       <p dangerouslySetInnerHTML={{ __html: tUI(locale, 'pw.oneTime', { price: `<b>${price}</b>`, units: meta.stats.units }) }} />
       <div className="paywall-actions">
-        <BuyButton courseSlug={meta.slug} priceLabel={price} returnTo={returnTo} locale={locale} />
+        <BuyButton courseSlug={meta.slug} priceLabel={price} returnTo={returnTo} labels={buyLabels(locale)} />
         {!loggedIn && (
           <Link className="btn" href={`/login?next=${encodeURIComponent(returnTo)}`}>
             {tUI(locale, 'pw.alreadyBought')}

@@ -13,6 +13,7 @@ export const metadata: Metadata = {
 };
 
 import BuyButton from '@/components/BuyButton';
+import { buyLabels } from '@/lib/ui';
 import { COURSES } from '@/lib/courses';
 import { getSessionUser, paywallBypassed, userOwnsCourse } from '@/lib/access';
 import { countPassedExercises } from '@/lib/progress-server';
@@ -21,9 +22,13 @@ import { resolveCoursePrice } from '@/lib/pricing';
 export default async function CatalogPage() {
   const user = await getSessionUser();
   const cards = await Promise.all(COURSES.map(async meta => {
-    const owns = meta.available && (paywallBypassed() || (user ? await userOwnsCourse(user.id, meta.slug) : false));
+    // Ownership and price are independent — resolve them together; only the
+    // passed-count depends on ownership, so it stays sequential.
+    const ownsPromise = meta.available && !paywallBypassed() && user
+      ? userOwnsCourse(user.id, meta.slug)
+      : Promise.resolve(meta.available && paywallBypassed());
+    const [owns, price] = await Promise.all([ownsPromise, resolveCoursePrice(meta.slug)]);
     const passed = owns && user ? await countPassedExercises(user.id, meta.slug) : 0;
-    const price = await resolveCoursePrice(meta.slug);
     return { meta, owns, passed, price };
   }));
 
@@ -66,7 +71,7 @@ export default async function CatalogPage() {
                   </>
                 ) : (
                   <div className="course-card-actions">
-                    <BuyButton courseSlug={meta.slug} priceLabel={price.label} returnTo={base} />
+                    <BuyButton courseSlug={meta.slug} priceLabel={price.label} returnTo={base} labels={buyLabels('en')} />
                     <Link className="btn" href={`${base}/unit/${meta.freeUnits[0]}`} data-test="free-preview">
                       Free preview · Unit {meta.freeUnits[0]}
                     </Link>
