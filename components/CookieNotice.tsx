@@ -20,15 +20,15 @@ const NOTICE: Record<string, Strings> = {
     learn: 'Més informació', ok: 'Entesos',
   },
   es: {
-    body: 'Solo usamos cookies esenciales para que el sitio funcione y mantener tu sesión iniciada, además de analíticas respetuosas con la privacidad y sin cookies. Sin anuncios ni seguimiento de terceros.',
+    body: 'Solo usamos cookies esenciales para hacer funcionar el sitio y mantener tu sesión iniciada, además de analíticas respetuosas con la privacidad y sin cookies. Sin anuncios ni seguimiento de terceros.',
     learn: 'Más información', ok: 'Entendido',
   },
   fr: {
-    body: 'Nous n’utilisons que des cookies essentiels pour faire fonctionner le site et vous garder connecté, ainsi que des statistiques respectueuses de la vie privée et sans cookies. Pas de publicité ni de suivi tiers.',
+    body: 'Nous n’utilisons que des cookies essentiels pour faire fonctionner le site et vous garder connecté, ainsi que des statistiques respectueuses de la vie privée et sans cookies. Pas de publicité ni de suivi par des tiers.',
     learn: 'En savoir plus', ok: 'J’ai compris',
   },
   ru: {
-    body: 'Мы используем только необходимые файлы cookie для работы сайта и сохранения входа, а также аналитику без файлов cookie, уважающую конфиденциальность. Без рекламы и стороннего отслеживания.',
+    body: 'Мы используем только необходимые файлы cookie для работы сайта и чтобы вы оставались в системе, а также аналитику без файлов cookie, не нарушающую вашу конфиденциальность. Без рекламы и стороннего отслеживания.',
     learn: 'Подробнее', ok: 'Понятно',
   },
   de: {
