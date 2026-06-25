@@ -32,12 +32,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // localized marketing landing pages (ca/es/fr/ru) — skip mediums with no route (de)
   const home = PATHS.home as Record<string, string | undefined>;
   const course = PATHS.course as Record<string, string | undefined>;
+  const pricing = PATHS.pricing as Record<string, string | undefined>;
   for (const l of LOCALES) {
     if (l === 'en' || !home[l] || !course[l]) continue;
     entries.push(
       { url: `${SITE_URL}${home[l]}`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
       { url: `${SITE_URL}${course[l]}`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
     );
+    if (pricing[l]) entries.push({ url: `${SITE_URL}${pricing[l]}`, changeFrequency: 'monthly', priority: 0.7 });
   }
   return entries;
 }

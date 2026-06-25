@@ -12,7 +12,7 @@ import JsonLd from '@/components/JsonLd';
 import { buyLabels } from '@/lib/ui';
 import { resolveCoursePrice } from '@/lib/pricing';
 import { SITE } from '@/lib/site';
-import { hreflang, getDict, t } from '@/lib/i18n';
+import { hreflang, getDict, t, PATHS } from '@/lib/i18n';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://verbadium.com';
 
@@ -88,23 +88,22 @@ export default async function CourseHomePage({ params }: { params: Promise<{ slu
       <>
         <JsonLd data={courseLd} />
         {hero}
-        <div className="card sales" data-test="sales-page">
+        {/* Concise paywall — the full pitch + FAQ live on the pricing page. */}
+        <div className="card paywall" data-test="sales-page">
           <h2>{t(d.course.salesHeading, vars)}</h2>
-          <ul className="sales-list">
-            {d.course.bullets.map((b, i) => <li key={i}>{t(b, vars)}</li>)}
-          </ul>
+          <p className="paywall-preview">
+            {d.course.previewLead}{' '}
+            <Link href={`${base}/unit/${previewUnit}`} data-test="preview-link">{t(d.course.previewLink, { n: previewUnit })}</Link>
+          </p>
           <div className="paywall-actions">
             <BuyButton courseSlug={slug} priceLabel={price} returnTo={base} labels={buyLabels(medium)} />
+            <Link className="btn" href={(PATHS.pricing as Record<string, string>)[medium]}>{d.nav.pricing}</Link>
             {!access.user && (
               <Link className="btn" href={`/login?next=${encodeURIComponent(base)}`}>
                 {d.course.alreadyBought}
               </Link>
             )}
           </div>
-          <p className="paywall-preview">
-            {d.course.previewLead}{' '}
-            <Link href={`${base}/unit/${previewUnit}`} data-test="preview-link">{t(d.course.previewLink, { n: previewUnit })}</Link>
-          </p>
         </div>
         <div className="card">
           <SpeechScope html={course.introHtml} />

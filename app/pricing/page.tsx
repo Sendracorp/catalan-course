@@ -5,6 +5,7 @@ import SiteFooter from '@/components/SiteFooter';
 import BuyButton from '@/components/BuyButton';
 import JsonLd from '@/components/JsonLd';
 import { buyLabels } from '@/lib/ui';
+import { hreflang } from '@/lib/i18n';
 import { courseFamilies } from '@/lib/courses';
 import { resolveAllPrices } from '@/lib/pricing';
 import { getSessionUser, userOwnsCourse, paywallBypassed } from '@/lib/access';
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
   title: 'Pricing — one-time €70, lifetime access',
   description:
     'Verbadium pricing: buy the Catalan A1 course once for €70 and keep it forever — no subscription. Includes every unit, 100+ exercises, the mock exam, audio glossary and progress tracking. Free preview, no account needed.',
-  alternates: { canonical: '/pricing' },
+  alternates: { canonical: '/pricing', languages: hreflang('pricing') },
 };
 export const dynamic = 'force-dynamic';
 
@@ -72,7 +73,7 @@ export default async function PricingPage() {
 
   return (
     <>
-      <SiteHeader />
+      <SiteHeader page="pricing" />
       <JsonLd data={FAQ_JSONLD} />
       <main className="site-main">
         <div className="hero">
@@ -133,7 +134,7 @@ export default async function PricingPage() {
           </dl>
         </div>
       </main>
-      <SiteFooter />
+      <SiteFooter page="pricing" />
     </>
   );
 }

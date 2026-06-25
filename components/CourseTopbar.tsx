@@ -2,7 +2,7 @@ import Link from 'next/link';
 import CourseMenuButton from './CourseMenuButton';
 import AccountMenu from './AccountMenu';
 import { tUI } from '@/lib/ui';
-import type { Locale } from '@/lib/i18n';
+import { PATHS, type Locale } from '@/lib/i18n';
 
 /* Mobile-only course app-bar (desktop hides it — the sidebar carries identity
    + account there). Menu toggle on the left; account / conversion on the right.
@@ -15,7 +15,7 @@ export default function CourseTopbar({ userEmail, isAdmin = false, owns, courseS
     <div className="course-topbar">
       <CourseMenuButton />
       <div className="course-topbar-right">
-        {!owns && <Link href="/pricing" className="course-topbar-cta">{tUI(locale, 'nav.getCourse')}</Link>}
+        {!owns && <Link href={(PATHS.pricing as Record<string, string>)[locale]} className="course-topbar-cta">{tUI(locale, 'nav.getCourse')}</Link>}
         {userEmail ? (
           <AccountMenu userEmail={userEmail} isAdmin={isAdmin} />
         ) : (

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { SITE } from '@/lib/site';
 import Logo from './Logo';
 import LangSwitcher from './LangSwitcher';
-import { getDict, type Locale, type PageKey } from '@/lib/i18n';
+import { getDict, PATHS, type Locale, type PageKey } from '@/lib/i18n';
 
 /* Branded footer (deep teal panel). Keeps the verification links Paddle's
    domain review expects, plus brand + legal/MoR line and a language switcher.
@@ -21,8 +21,8 @@ export default function SiteFooter({ lang = 'en', page = 'home' }: { lang?: Loca
         <nav className="footer-cols" aria-label="Footer">
           <div className="footer-col">
             <h4>{d.footer.learn}</h4>
-            <Link href="/">{lang === 'en' ? 'Courses' : d.nav.course}</Link>
-            <Link href="/pricing">{d.nav.pricing}</Link>
+            <Link href={lang === 'en' ? '/' : (PATHS.course as Record<string, string>)[lang]}>{lang === 'en' ? 'Courses' : d.nav.course}</Link>
+            <Link href={(PATHS.pricing as Record<string, string>)[lang]}>{d.nav.pricing}</Link>
           </div>
           <div className="footer-col">
             <h4>{d.footer.legal}</h4>
