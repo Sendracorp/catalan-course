@@ -387,9 +387,9 @@ const ru: Dict = {
   account: {
     title: 'Ваш аккаунт', email: 'Эл. почта', memberSince: 'С нами с',
     changePassword: 'Изменить пароль', yourCourses: 'Ваши курсы',
-    colCourse: 'Курс', colSince: 'С', colAccess: 'Доступ', open: 'Открыть',
+    colCourse: 'Курс', colSince: 'Дата', colAccess: 'Доступ', open: 'Открыть',
     noCoursesPre: 'Пока нет курсов — ', browse: 'посмотрите курсы',
-    statusActive: 'Активен', statusGranted: 'Предоставлен (бесплатный доступ)', statusRefunded: 'Возвращён',
+    statusActive: 'Активен', statusGranted: 'Предоставлен (бесплатный доступ)', statusRefunded: 'Возврат',
   },
   pricing: {
     title: 'Простая разовая оплата', sub: 'Купите курс один раз и пользуйтесь им всегда. Без подписки.',

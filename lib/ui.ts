@@ -195,7 +195,7 @@ const es: Strings = {
   "ex.note": "Nota",
   "ex.personalNote": "Respuestas personales: complétalas como práctica para el examen.",
   "glos.heading": "Glosario: todas las palabras del curso",
-  "glos.intro": "Por orden alfabético (sin tener en cuenta los artículos). U = la unidad donde aparece la palabra por primera vez. Las pronunciaciones son en catalán central, AFI. Haz clic en una cabecera de columna para ordenar; haz clic en 🔊 para oír la palabra.",
+  "glos.intro": "Por orden alfabético (sin tener en cuenta los artículos). U = la unidad donde aparece la palabra por primera vez. Las pronunciaciones son en catalán central, en AFI. Haz clic en un encabezado de columna para ordenar; haz clic en 🔊 para oír la palabra.",
   "glos.searchPh": "Busca en el glosario…",
   "glos.entries": "entradas",
   "glos.listen": "Escuchar",
