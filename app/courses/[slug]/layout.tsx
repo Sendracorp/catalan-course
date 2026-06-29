@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Sidebar from '@/components/Sidebar';
 import CourseTopbar from '@/components/CourseTopbar';
@@ -15,6 +16,16 @@ import { getDict } from '@/lib/i18n';
 import { getCourseMeta, mediumForSlug, courseFamilies } from '@/lib/courses';
 import { getCourseAccess, isUserAdmin, ownedCourseSlugs, paywallBypassed } from '@/lib/access';
 import { loadInitialProgress } from '@/lib/progress-server';
+
+/* Non-English course variants (catalan-a1-es/-fr/-ru/-de) duplicate the
+   localized marketing landings (/es/curso-de-catalan, …) which carry the
+   hreflang cluster and rank for localized keywords. Keep the variant app pages
+   out of the index so they don't compete; the English course (catalan-a1) stays
+   indexed as the en member of that cluster. Cascades to all course sub-pages. */
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  return mediumForSlug(slug) === 'en' ? {} : { robots: { index: false, follow: true } };
+}
 
 export default async function CourseLayout({ children, params }: {
   children: React.ReactNode;
