@@ -3,7 +3,9 @@ import { courseFamilies } from '@/lib/courses';
 import { PATHS, LOCALES, type PageKey } from '@/lib/i18n';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://verbadium.com';
-const abs = (p: string) => (p.startsWith('http') ? p : `${SITE_URL}${p}`);
+// Root '/' maps to the bare origin (no trailing slash) so sitemap alternates
+// match the on-page canonical + hreflang exactly (mismatch weakens the cluster).
+const abs = (p: string) => (p === '/' ? SITE_URL : p.startsWith('http') ? p : `${SITE_URL}${p}`);
 
 /* hreflang alternates (absolute URLs + x-default) for a localized page type —
    emitted as <xhtml:link> children so the sitemap reinforces the same clusters

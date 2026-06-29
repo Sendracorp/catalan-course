@@ -13,11 +13,33 @@ export const metadata: Metadata = {
 };
 
 import CourseFamilyCard, { type FamilyCardData } from '@/components/CourseFamilyCard';
+import JsonLd from '@/components/JsonLd';
 import { buyLabels } from '@/lib/ui';
 import { courseFamilies } from '@/lib/courses';
 import { getSessionUser, paywallBypassed, userOwnsCourse } from '@/lib/access';
 import { countPassedExercises } from '@/lib/progress-server';
 import { resolveCoursePrice } from '@/lib/pricing';
+import { SITE } from '@/lib/site';
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://verbadium.com';
+
+// Entity schema for AI/search — identifies Verbadium as the publisher and links
+// the locale variants of the site (helps Google AI + entity recognition).
+const siteLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'EducationalOrganization', '@id': `${SITE_URL}/#org`,
+      name: SITE.brand, url: SITE_URL,
+      description: 'Interactive, exam-focused online language courses — starting with Catalan A1.',
+    },
+    {
+      '@type': 'WebSite', '@id': `${SITE_URL}/#website`,
+      url: SITE_URL, name: SITE.brand, publisher: { '@id': `${SITE_URL}/#org` },
+      inLanguage: ['en', 'ca', 'es', 'fr', 'ru', 'de'],
+    },
+  ],
+};
 
 export default async function CatalogPage() {
   // The root catalog is the English page; localized visitors use /es, /fr, … —
@@ -49,6 +71,7 @@ export default async function CatalogPage() {
 
   return (
     <>
+      <JsonLd data={siteLd} />
       <SiteHeader />
       <main className="site-main">
         <div className="hero">
