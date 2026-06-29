@@ -6,6 +6,7 @@ import { exState, subscribe } from '@/lib/progress';
 import Logo from './Logo';
 import SignOutButton from './SignOutButton';
 import { useUI } from './CourseLocale';
+import { LOCALE_LABEL, type Locale } from '@/lib/i18n';
 
 export interface UnitMeta { num: number; title: string; exerciseIds: string[] }
 
@@ -24,7 +25,7 @@ function useUnitProgress(units: UnitMeta[]) {
   };
 }
 
-export default function Sidebar({ units, courseSlug, courseLanguage, courseLevel, owns, freeUnits, userEmail, isAdmin = false }: {
+export default function Sidebar({ units, courseSlug, courseLanguage, courseLevel, owns, freeUnits, userEmail, isAdmin = false, medium = 'en', ownedLanguages = [] }: {
   units: UnitMeta[];
   courseSlug: string;
   courseLanguage: string;
@@ -33,6 +34,8 @@ export default function Sidebar({ units, courseSlug, courseLanguage, courseLevel
   freeUnits: number[];
   userEmail: string | null;
   isAdmin?: boolean;
+  medium?: Locale;
+  ownedLanguages?: { medium: Locale; slug: string }[];
 }) {
   const pathname = usePathname() ?? '/';
   const base = `/courses/${courseSlug}`;
@@ -132,8 +135,22 @@ export default function Sidebar({ units, courseSlug, courseLanguage, courseLevel
           </div>
         </div>
 
-        {/* pinned base: conversion (non-owners) + account / session */}
+        {/* pinned base: language switch (owned variants) + conversion + account */}
         <div className="course-nav-foot">
+          {ownedLanguages.length > 1 && (
+            <div className="nav-langs">
+              <span className="nav-langs-label">{t('ui.explainedIn')}</span>
+              <div className="nav-langs-list">
+                {ownedLanguages.map(l => l.medium === medium ? (
+                  <span key={l.medium} className="nav-lang current" aria-current="true">{LOCALE_LABEL[l.medium]}</span>
+                ) : (
+                  <Link key={l.medium} href={pathname.replace(`/courses/${courseSlug}`, `/courses/${l.slug}`)} className="nav-lang">
+                    {LOCALE_LABEL[l.medium]}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
           {!owns && (
             <Link href="/pricing" className="nav-foot-cta">{t('nav.getFull')}</Link>
           )}
@@ -143,7 +160,7 @@ export default function Sidebar({ units, courseSlug, courseLanguage, courseLevel
               <span className="nav-foot-email" title={userEmail}>{userEmail}</span>
               <Link href="/account" className="nav-foot-link">{t('nav.account')}</Link>
               {isAdmin && <Link href="/admin" className="nav-foot-link">{t('nav.admin')}</Link>}
-              <SignOutButton className="nav-foot-link nav-foot-signout" />
+              <SignOutButton className="nav-foot-link nav-foot-signout" lang={medium} />
             </div>
           ) : (
             <Link href={`/login?next=${encodeURIComponent(pathname)}`} className="nav-foot-link nav-foot-auth" data-test="nav-login">{t('auth.login')}</Link>

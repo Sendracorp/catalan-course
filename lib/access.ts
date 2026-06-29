@@ -23,6 +23,23 @@ export async function userOwnsCourse(userId: string, courseSlug: string): Promis
   return !!(paid.data?.length || granted.data?.length);
 }
 
+/** Which of the given course slugs the user owns (paid OR active grant) — one
+    batched query pair, for showing the languages of a course a learner owns. */
+export async function ownedCourseSlugs(userId: string, slugs: string[]): Promise<Set<string>> {
+  const supabase = await getServerSupabase();
+  if (!supabase || slugs.length === 0) return new Set();
+  const [paid, granted] = await Promise.all([
+    supabase.from('purchases').select('course_slug')
+      .eq('user_id', userId).eq('status', 'paid').in('course_slug', slugs),
+    supabase.from('access_grants').select('course_slug')
+      .eq('user_id', userId).is('revoked_at', null).in('course_slug', slugs),
+  ]);
+  const set = new Set<string>();
+  for (const r of (paid.data ?? []) as { course_slug: string }[]) set.add(r.course_slug);
+  for (const r of (granted.data ?? []) as { course_slug: string }[]) set.add(r.course_slug);
+  return set;
+}
+
 export interface CourseAccess {
   user: SessionUser | null;
   owns: boolean;

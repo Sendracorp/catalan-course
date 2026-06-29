@@ -4,8 +4,8 @@ import { redirect } from 'next/navigation';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import { getServerSupabase, getSessionUser } from '@/lib/supabase/server';
-import { getCourseMeta, mediumForSlug } from '@/lib/courses';
-import { getDict, LOCALE_LABEL } from '@/lib/i18n';
+import { getCourseMeta, mediumForSlug, familyOf, courseFamilies } from '@/lib/courses';
+import { getDict, LOCALE_LABEL, PATHS, type Locale } from '@/lib/i18n';
 import { preferredMedium } from '@/lib/medium';
 
 export const metadata: Metadata = { title: 'Your account' };
@@ -54,6 +54,24 @@ export default async function AccountPage() {
   const statusLabel = (s: AccessRow['status']) =>
     s === 'Active' ? d.statusActive : s === 'Granted' ? d.statusGranted : d.statusRefunded;
 
+  // For each owned course family, the languages the learner doesn't own yet —
+  // so they can add another language of a course they already have.
+  const ownedMediums = new Map<string, Set<Locale>>();
+  for (const r of rows) {
+    const fam = familyOf(r.slug);
+    if (!fam) continue;
+    if (!ownedMediums.has(fam)) ownedMediums.set(fam, new Set());
+    ownedMediums.get(fam)!.add(mediumForSlug(r.slug));
+  }
+  const addable = [...ownedMediums.entries()]
+    .map(([fam, owned]) => ({
+      fam,
+      missing: (courseFamilies().find(f => f.family === fam)?.variants ?? [])
+        .map(v => v.medium).filter(m => !owned.has(m)),
+    }))
+    .filter(x => x.missing.length > 0);
+  const pricing = PATHS.pricing as Record<string, string>;
+
   return (
     <>
       <SiteHeader lang={l} />
@@ -90,6 +108,17 @@ export default async function AccountPage() {
           ) : (
             <p>{d.noCoursesPre}<Link href="/">{d.browse}</Link>.</p>
           )}
+          {addable.map(({ fam, missing }) => (
+            <p key={fam} className="course-langs">
+              <span className="course-langs-label">{d.addLanguage}:</span>{' '}
+              {missing.map((m, i) => (
+                <span key={m}>
+                  {i > 0 && <span aria-hidden="true"> · </span>}
+                  <Link href={pricing[m]} hrefLang={m}>{LOCALE_LABEL[m]}</Link>
+                </span>
+              ))}
+            </p>
+          ))}
         </div>
       </main>
       <SiteFooter lang={l} />

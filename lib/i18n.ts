@@ -73,6 +73,7 @@ export interface Dict {
     colCourse: string; colSince: string; colAccess: string; open: string;
     noCoursesPre: string; browse: string;
     statusActive: string; statusGranted: string; statusRefunded: string;
+    addLanguage: string;   // "Add another language" — links to other languages of an owned course
   };
   // Header account menu (shared by the marketing header and the course shell).
   acct: { myCourses: string; account: string; admin: string; accountMenu: string; logout: string };
@@ -137,6 +138,7 @@ const en: Dict = {
     colCourse: 'Course', colSince: 'Since', colAccess: 'Access', open: 'Open',
     noCoursesPre: 'No courses yet — ', browse: 'browse the courses',
     statusActive: 'Active', statusGranted: 'Granted (free access)', statusRefunded: 'Refunded',
+    addLanguage: 'Add another language',
   },
   pricing: {
     title: 'Simple, one-time pricing', sub: 'Buy a course once, keep it forever. No subscription.',
@@ -208,6 +210,7 @@ const ca: Dict = {
     colCourse: 'Curs', colSince: 'Des de', colAccess: 'Accés', open: 'Obre',
     noCoursesPre: 'Encara no tens cursos: ', browse: 'explora els cursos',
     statusActive: 'Actiu', statusGranted: 'Concedit (accés gratuït)', statusRefunded: 'Reemborsat',
+    addLanguage: 'Afegeix un altre idioma',
   },
   pricing: {
     title: 'Preu únic i senzill', sub: 'Compra un curs una vegada i queda-te’l per sempre. Sense subscripció.',
@@ -279,6 +282,7 @@ const es: Dict = {
     colCourse: 'Curso', colSince: 'Desde', colAccess: 'Acceso', open: 'Abrir',
     noCoursesPre: 'Aún no tienes cursos: ', browse: 'explora los cursos',
     statusActive: 'Activo', statusGranted: 'Concedido (acceso gratuito)', statusRefunded: 'Reembolsado',
+    addLanguage: 'Añade otro idioma',
   },
   pricing: {
     title: 'Precio único y sencillo', sub: 'Compra un curso una vez y consérvalo para siempre. Sin suscripción.',
@@ -350,6 +354,7 @@ const fr: Dict = {
     colCourse: 'Cours', colSince: 'Depuis', colAccess: 'Accès', open: 'Ouvrir',
     noCoursesPre: 'Aucun cours pour l’instant — ', browse: 'parcourez les cours',
     statusActive: 'Actif', statusGranted: 'Accordé (accès gratuit)', statusRefunded: 'Remboursé',
+    addLanguage: 'Ajouter une autre langue',
   },
   pricing: {
     title: 'Un tarif simple et unique', sub: 'Achetez un cours une fois, gardez-le pour toujours. Sans abonnement.',
@@ -421,6 +426,7 @@ const ru: Dict = {
     colCourse: 'Курс', colSince: 'Дата', colAccess: 'Доступ', open: 'Открыть',
     noCoursesPre: 'Пока нет курсов — ', browse: 'посмотрите курсы',
     statusActive: 'Активен', statusGranted: 'Предоставлен (бесплатный доступ)', statusRefunded: 'Возврат',
+    addLanguage: 'Добавить другой язык',
   },
   pricing: {
     title: 'Простая разовая оплата', sub: 'Купите курс один раз и пользуйтесь им всегда. Без подписки.',
@@ -493,6 +499,7 @@ const de: Dict = {
     colCourse: 'Kurs', colSince: 'Seit', colAccess: 'Zugang', open: 'Öffnen',
     noCoursesPre: 'Noch keine Kurse — ', browse: 'Kurse durchsuchen',
     statusActive: 'Aktiv', statusGranted: 'Gewährt (kostenloser Zugang)', statusRefunded: 'Erstattet',
+    addLanguage: 'Weitere Sprache hinzufügen',
   },
   pricing: {
     title: 'Einfacher Einmalpreis', sub: 'Kauf einen Kurs einmal, behalte ihn für immer. Kein Abo.',

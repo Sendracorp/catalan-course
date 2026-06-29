@@ -7,14 +7,13 @@ import GlossaryDrawer from '@/components/GlossaryDrawer';
 import ProgressProvider from '@/components/ProgressProvider';
 import AudioOverridesProvider from '@/components/AudioOverridesProvider';
 import { CourseLocaleProvider } from '@/components/CourseLocale';
-import MediumSwitcher from '@/components/MediumSwitcher';
 import SiteFooter from '@/components/SiteFooter';
 import { getAudioOverrides } from '@/lib/audio-overrides';
 import { getCourseContent } from '@/lib/content';
 import { uiDict } from '@/lib/ui';
 import { getDict } from '@/lib/i18n';
 import { getCourseMeta, mediumForSlug, courseFamilies } from '@/lib/courses';
-import { getCourseAccess, isUserAdmin } from '@/lib/access';
+import { getCourseAccess, isUserAdmin, ownedCourseSlugs, paywallBypassed } from '@/lib/access';
 import { loadInitialProgress } from '@/lib/progress-server';
 
 export default async function CourseLayout({ children, params }: {
@@ -28,18 +27,22 @@ export default async function CourseLayout({ children, params }: {
   const course = getCourseContent(slug);
   if (!meta || !course) notFound();
 
-  // Sibling language variants of this course, for the in-course switcher.
+  // Sibling language variants of this course.
   const siblings = (courseFamilies().find(f => f.family === meta.family)?.variants ?? [])
     .map(v => ({ medium: v.medium, slug: v.slug }));
 
-  // Admin check, saved progress and audio overrides don't depend on one another
-  // — fan them out instead of awaiting in series.
+  // Admin check, saved progress, audio overrides and owned-sibling lookup don't
+  // depend on one another — fan them out instead of awaiting in series.
   const userId = access.user?.id ?? null;
-  const [isAdmin, initial, audioOverrides] = await Promise.all([
+  const [isAdmin, initial, audioOverrides, ownedSet] = await Promise.all([
     userId ? isUserAdmin(userId) : Promise.resolve(false),
     userId ? loadInitialProgress(userId, slug) : Promise.resolve({} as Record<string, unknown>),
     getAudioOverrides(slug),
+    userId ? ownedCourseSlugs(userId, siblings.map(s => s.slug)) : Promise.resolve(new Set<string>()),
   ]);
+  // The languages of THIS course the learner owns (incl. the current one) — for
+  // the in-course language switcher in the sidebar.
+  const ownedLanguages = paywallBypassed() ? siblings : siblings.filter(s => ownedSet.has(s.slug));
   const units = course.units.map(u => ({ num: u.num, title: u.title, exerciseIds: u.exerciseIds }));
 
   return (
@@ -57,9 +60,10 @@ export default async function CourseLayout({ children, params }: {
           freeUnits={meta.freeUnits}
           userEmail={access.user?.email ?? null}
           isAdmin={isAdmin}
+          medium={medium}
+          ownedLanguages={ownedLanguages}
         />
         <main className="content">
-          <MediumSwitcher current={medium} variants={siblings} />
           {children}
         </main>
       </div>
