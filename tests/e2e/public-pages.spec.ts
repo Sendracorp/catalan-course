@@ -7,7 +7,9 @@ test.describe('pricing page', () => {
   test('shows the course price and FAQ', async ({ page }) => {
     await page.goto('/pricing');
     await expect(page.locator('[data-test="pricing"]')).toBeVisible();
-    await expect(page.locator('[data-test="pricing-catalan-a1"] [data-test="pricing-amount"]')).toContainText('€70');
+    // Asserts a euro price is shown (live Paddle price, or the catalog fallback) —
+    // not a hardcoded amount, so it survives price changes.
+    await expect(page.locator('[data-test="pricing-catalan-a1"] [data-test="pricing-amount"]')).toContainText(/€\s*\d/);
     await expect(page.locator('.faq-item')).not.toHaveCount(0);
     await expect(page.locator('[data-test="pricing-catalan-a1"] .buy-btn')).toBeVisible();
   });

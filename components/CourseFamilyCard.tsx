@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { getDict, t, type Locale } from '@/lib/i18n';
 import type { BuyLabels } from '@/lib/ui-runtime';
 import BuyButton from './BuyButton';
+import AvailableLanguages from './AvailableLanguages';
 
 /* One catalog card per course family, rendered entirely in the PAGE's language
    (so a page never mixes languages). Each language is its own course; to view
@@ -40,6 +41,7 @@ export default function CourseFamilyCard({ card, locale = 'en' }: { card: Family
       <h2>{d.course.name}</h2>
       <p>{d.course.tagline}</p>
       <p className="course-card-meta">{d.course.taughtInEnglish}</p>
+      <AvailableLanguages mediums={card.variants.map(v => v.medium)} label={d.card.availableIn} />
 
       {v.owns ? (
         <>

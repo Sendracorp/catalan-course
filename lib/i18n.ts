@@ -45,7 +45,8 @@ export interface Dict {
   langLabel: string;                 // a11y label for the language switcher
   home: { badge: string; h1: string; sub: string; seeCourse: string };
   card: { level: string; buy: string; preview: string; lifetime: string;
-    purchased: string; cont: string; start: string; progress: string };  // progress uses {passed} {total}
+    purchased: string; cont: string; start: string; progress: string;  // progress uses {passed} {total}
+    availableIn: string };   // "Available in" — precedes the list of teaching languages
   course: {
     subject: string;                 // the subject language's name, in this locale (badge)
     name: string; tagline: string; metaTitle: string; metaDesc: string;
@@ -88,7 +89,8 @@ const en: Dict = {
     sub: 'Exam-focused Catalan courses with full IPA pronunciation, native-speaker audio, auto-marked exercises and real mock exams.',
     seeCourse: 'See the course' },
   card: { level: 'Beginner · A1', buy: 'Get the course', preview: 'Free preview', lifetime: 'One payment · lifetime access',
-    purchased: 'Purchased ✓', cont: 'Continue learning', start: 'Start the course', progress: '{passed} of {total} exercises passed' },
+    purchased: 'Purchased ✓', cont: 'Continue learning', start: 'Start the course', progress: '{passed} of {total} exercises passed',
+    availableIn: 'Available in' },
   course: {
     subject: 'Catalan',
     name: 'Catalan from Scratch (A1)',
@@ -158,7 +160,8 @@ const ca: Dict = {
     sub: 'Curs de català enfocat a l’examen, amb pronunciació AFI completa, àudio de parlants nadius, exercicis autocorregits i un examen de mostra real.',
     seeCourse: 'Veure el curs' },
   card: { level: 'Principiant · A1', buy: 'Aconsegueix el curs', preview: 'Prova gratuïta', lifetime: 'Un sol pagament · accés de per vida',
-    purchased: 'Comprat ✓', cont: 'Continua aprenent', start: 'Comença el curs', progress: '{passed} de {total} exercicis superats' },
+    purchased: 'Comprat ✓', cont: 'Continua aprenent', start: 'Comença el curs', progress: '{passed} de {total} exercicis superats',
+    availableIn: 'Disponible en' },
   course: {
     subject: 'Català',
     name: 'Català des de zero (A1)',
@@ -228,7 +231,8 @@ const es: Dict = {
     sub: 'Curso de catalán enfocado al examen, con pronunciación AFI completa, audio de hablantes nativos, ejercicios autocorregidos y un examen de prueba real.',
     seeCourse: 'Ver el curso' },
   card: { level: 'Principiante · A1', buy: 'Consigue el curso', preview: 'Prueba gratis', lifetime: 'Un solo pago · acceso de por vida',
-    purchased: 'Comprado ✓', cont: 'Continuar aprendiendo', start: 'Empezar el curso', progress: '{passed} de {total} ejercicios superados' },
+    purchased: 'Comprado ✓', cont: 'Continuar aprendiendo', start: 'Empezar el curso', progress: '{passed} de {total} ejercicios superados',
+    availableIn: 'Disponible en' },
   course: {
     subject: 'Catalán',
     name: 'Catalán desde cero (A1)',
@@ -298,7 +302,8 @@ const fr: Dict = {
     sub: 'Cours de catalan axé sur l’examen, avec prononciation API complète, audio de locuteurs natifs, exercices autocorrigés et un examen blanc réel.',
     seeCourse: 'Voir le cours' },
   card: { level: 'Débutant · A1', buy: 'Obtenir le cours', preview: 'Aperçu gratuit', lifetime: 'Un seul paiement · accès à vie',
-    purchased: 'Acheté ✓', cont: 'Continuer l’apprentissage', start: 'Commencer le cours', progress: '{passed} sur {total} exercices réussis' },
+    purchased: 'Acheté ✓', cont: 'Continuer l’apprentissage', start: 'Commencer le cours', progress: '{passed} sur {total} exercices réussis',
+    availableIn: 'Disponible en' },
   course: {
     subject: 'Catalan',
     name: 'Le catalan à partir de zéro (A1)',
@@ -368,7 +373,8 @@ const ru: Dict = {
     sub: 'Курс каталанского с упором на экзамен: полная транскрипция МФА, аудио носителей языка, упражнения с автопроверкой и настоящий пробный экзамен.',
     seeCourse: 'Посмотреть курс' },
   card: { level: 'Начальный · A1', buy: 'Получить курс', preview: 'Бесплатный доступ', lifetime: 'Разовая оплата · доступ навсегда',
-    purchased: 'Куплено ✓', cont: 'Продолжить обучение', start: 'Начать курс', progress: '{passed} из {total} упражнений пройдено' },
+    purchased: 'Куплено ✓', cont: 'Продолжить обучение', start: 'Начать курс', progress: '{passed} из {total} упражнений пройдено',
+    availableIn: 'Доступно на языках' },
   course: {
     subject: 'Каталанский',
     name: 'Каталанский с нуля (A1)',
@@ -439,7 +445,8 @@ const de: Dict = {
     sub: 'Prüfungsorientierter Katalanisch-Kurs mit vollständiger IPA-Lautschrift, Audio von Muttersprachlern, automatisch korrigierten Übungen und einer echten Musterprüfung.',
     seeCourse: 'Zum Kurs' },
   card: { level: 'Anfänger · A1', buy: 'Kurs holen', preview: 'Kostenlose Vorschau', lifetime: 'Einmalige Zahlung · lebenslanger Zugang',
-    purchased: 'Gekauft ✓', cont: 'Weiterlernen', start: 'Kurs starten', progress: '{passed} von {total} Übungen bestanden' },
+    purchased: 'Gekauft ✓', cont: 'Weiterlernen', start: 'Kurs starten', progress: '{passed} von {total} Übungen bestanden',
+    availableIn: 'Verfügbar auf' },
   course: {
     subject: 'Katalanisch',
     name: 'Katalanisch von Grund auf (A1)',

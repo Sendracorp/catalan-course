@@ -3,6 +3,7 @@ import Link from 'next/link';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import BuyButton from '@/components/BuyButton';
+import AvailableLanguages from '@/components/AvailableLanguages';
 import JsonLd from '@/components/JsonLd';
 import { buyLabels } from '@/lib/ui';
 import { hreflang } from '@/lib/i18n';
@@ -57,9 +58,10 @@ const FAQ_JSONLD = {
 };
 
 export default async function PricingPage() {
-  // One row per course family (its primary/English variant). Other languages
-  // are reachable from the catalog's language chooser.
-  const priced = await resolveAllPrices(courseFamilies().map(f => f.variants[0]));
+  // One row per course family (its primary/English variant). Each card lists the
+  // languages the course can be bought in (AvailableLanguages).
+  const families = courseFamilies();
+  const priced = await resolveAllPrices(families.map(f => f.variants[0]));
 
   // which of these courses the current user already owns (don't show "buy")
   const user = await getSessionUser();
@@ -86,6 +88,7 @@ export default async function PricingPage() {
           {priced.map(({ meta, price }) => {
             const base = `/courses/${meta.slug}`;
             const isOwned = owned.has(meta.slug);
+            const mediums = families.find(f => f.family === meta.family)?.variants.map(v => v.medium) ?? [];
             return (
               <div className="card pricing-card" key={meta.slug} data-test={`pricing-${meta.slug}`} data-owned={isOwned || undefined}>
                 <div className="badge">{meta.language} · {meta.level}</div>
@@ -117,6 +120,7 @@ export default async function PricingPage() {
                     </>
                   )}
                 </div>
+                <AvailableLanguages mediums={mediums} label="Available in" />
               </div>
             );
           })}

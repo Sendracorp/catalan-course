@@ -4,8 +4,9 @@ import SiteFooter from '../SiteFooter';
 import JsonLd from '../JsonLd';
 import SetMedium from '../SetMedium';
 import BuyButton from '../BuyButton';
+import AvailableLanguages from '../AvailableLanguages';
 import { getDict, t, PATHS, type Locale } from '@/lib/i18n';
-import { getCourseMeta, variantForMedium } from '@/lib/courses';
+import { getCourseMeta, variantForMedium, courseFamilies } from '@/lib/courses';
 import { buyLabels } from '@/lib/ui';
 
 /* Localized pricing page (price + what's included + FAQ), mirroring /pricing.
@@ -17,6 +18,7 @@ export default function LocalizedPricing({ lang }: { lang: Locale }) {
   const meta = getCourseMeta('catalan-a1')!;
   const variant = variantForMedium('catalan-a1', lang) ?? meta;
   const base = `/courses/${variant.slug}`;
+  const familyMediums = (courseFamilies().find(f => f.family === 'catalan-a1')?.variants ?? []).map(v => v.medium);
   const price = meta.priceLabel;
   const preview = `${base}/unit/${meta.freeUnits[0]}`;
   const vars = { units: meta.stats.units, exercises: meta.stats.exercises, glossary: meta.stats.glossary, price };
@@ -54,6 +56,7 @@ export default function LocalizedPricing({ lang }: { lang: Locale }) {
               <BuyButton courseSlug={variant.slug} priceLabel={price} returnTo={base} labels={buyLabels(lang)} />
               <Link className="btn" href={preview}>{d.card.preview}</Link>
             </div>
+            <AvailableLanguages mediums={familyMediums} label={d.card.availableIn} />
           </div>
         </div>
 

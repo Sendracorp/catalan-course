@@ -4,8 +4,8 @@ import { redirect } from 'next/navigation';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import { getServerSupabase, getSessionUser } from '@/lib/supabase/server';
-import { getCourseMeta } from '@/lib/courses';
-import { getDict } from '@/lib/i18n';
+import { getCourseMeta, mediumForSlug } from '@/lib/courses';
+import { getDict, LOCALE_LABEL } from '@/lib/i18n';
 import { preferredMedium } from '@/lib/medium';
 
 export const metadata: Metadata = { title: 'Your account' };
@@ -78,7 +78,7 @@ export default async function AccountPage() {
                   const meta = getCourseMeta(r.slug);
                   return (
                     <tr key={r.slug}>
-                      <td>{meta ? dict.course.name : r.slug}</td>
+                      <td>{meta ? `${dict.course.name} — ${LOCALE_LABEL[mediumForSlug(r.slug)]}` : r.slug}</td>
                       <td>{fmtDate(r.date)}</td>
                       <td>{statusLabel(r.status)}</td>
                       <td>{r.open && meta && <Link href={`/courses/${meta.slug}`}>{d.open} →</Link>}</td>
