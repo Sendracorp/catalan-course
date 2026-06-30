@@ -56,6 +56,87 @@ export async function getOverviewStats(): Promise<OverviewStats> {
   return { users: users.count ?? 0, paid: paid.count ?? 0, grants: grants.count ?? 0, resets: resets.count ?? 0, revenue };
 }
 
+/* ── Sales & campaign attribution ────────────────────────────────────────────
+   Aggregated in JS from purchases.attribution (first-party UTM/gclid/referrer
+   captured at checkout). Accurate revenue source of truth — Paddle holds fees. */
+
+interface PurchaseRow {
+  user_id: string; course_slug: string; status: string;
+  amount_cents: number | null; currency: string | null;
+  attribution: Record<string, string> | null; created_at: string; refunded_at: string | null;
+}
+export interface SourceStat { key: string; sales: number; refunds: number; grossCents: number }
+export interface RecentSale {
+  email: string | null; course_slug: string; status: string;
+  amountCents: number | null; currency: string | null; source: string; campaign: string | null; created_at: string;
+}
+export interface SalesBreakdown {
+  paid: number; refunded: number; customers: number;
+  grossCents: number; refundedCents: number; netCents: number; currency: string;
+  bySource: SourceStat[]; byCampaign: SourceStat[]; byCourse: SourceStat[];
+  recent: RecentSale[];
+}
+
+const EMPTY_SALES: SalesBreakdown = {
+  paid: 0, refunded: 0, customers: 0, grossCents: 0, refundedCents: 0, netCents: 0, currency: 'EUR',
+  bySource: [], byCampaign: [], byCourse: [], recent: [],
+};
+
+export async function getSalesBreakdown(): Promise<SalesBreakdown> {
+  const a = getAdminSupabase();
+  if (!a) return EMPTY_SALES;
+  const { data } = await a.from('purchases')
+    .select('user_id,course_slug,status,amount_cents,currency,attribution,created_at,refunded_at')
+    .order('created_at', { ascending: false });
+  const rows = (data ?? []) as PurchaseRow[];
+
+  // Emails for the most-recent rows only.
+  const recentRows = rows.slice(0, 25);
+  const ids = [...new Set(recentRows.map(r => r.user_id))];
+  const emailMap = new Map<string, string | null>();
+  if (ids.length) {
+    const { data: profs } = await a.from('profiles').select('id,email').in('id', ids);
+    for (const p of (profs ?? []) as { id: string; email: string | null }[]) emailMap.set(p.id, p.email);
+  }
+
+  const srcKey = (attr: PurchaseRow['attribution']) => attr?.utm_source || attr?.referrer || 'direct';
+  const bump = (m: Map<string, SourceStat>, key: string, r: PurchaseRow) => {
+    const s = m.get(key) ?? { key, sales: 0, refunds: 0, grossCents: 0 };
+    if (r.status === 'paid') { s.sales++; s.grossCents += r.amount_cents ?? 0; }
+    else if (r.status === 'refunded') s.refunds++;
+    m.set(key, s);
+  };
+  const bySrc = new Map<string, SourceStat>(), byCamp = new Map<string, SourceStat>(), byCourse = new Map<string, SourceStat>();
+  const curCount = new Map<string, number>();
+  const customers = new Set<string>();
+  let paid = 0, refunded = 0, grossCents = 0, refundedCents = 0;
+
+  for (const r of rows) {
+    if (r.status === 'paid') {
+      paid++; grossCents += r.amount_cents ?? 0; customers.add(r.user_id);
+      const c = (r.currency ?? 'EUR').toUpperCase();
+      curCount.set(c, (curCount.get(c) ?? 0) + 1);
+    } else if (r.status === 'refunded') { refunded++; refundedCents += r.amount_cents ?? 0; }
+    bump(bySrc, srcKey(r.attribution), r);
+    bump(byCourse, r.course_slug, r);
+    const camp = r.attribution?.utm_campaign;
+    if (camp) bump(byCamp, camp, r);
+  }
+  const currency = [...curCount.entries()].sort((x, y) => y[1] - x[1])[0]?.[0] ?? 'EUR';
+  const sort = (m: Map<string, SourceStat>) => [...m.values()].sort((x, y) => y.sales - x.sales || y.grossCents - x.grossCents);
+
+  return {
+    paid, refunded, customers: customers.size,
+    grossCents, refundedCents, netCents: grossCents - refundedCents, currency,
+    bySource: sort(bySrc), byCampaign: sort(byCamp), byCourse: sort(byCourse),
+    recent: recentRows.map(r => ({
+      email: emailMap.get(r.user_id) ?? null, course_slug: r.course_slug, status: r.status,
+      amountCents: r.amount_cents, currency: r.currency,
+      source: srcKey(r.attribution), campaign: r.attribution?.utm_campaign ?? null, created_at: r.created_at,
+    })),
+  };
+}
+
 export interface CourseProgress { course_slug: string; passed: number; attempted: number; total: number }
 export interface UserDetail {
   profile: { id: string; email: string | null; created_at: string; is_admin: boolean; display_name: string | null } | null;

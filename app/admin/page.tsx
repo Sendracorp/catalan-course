@@ -72,7 +72,7 @@ export default async function AdminPage({ searchParams }: {
             Grant a course to anyone from their user page below — or{' '}
             <Link href={`/admin/users/${user.id}`}>to yourself</Link>. Manage{' '}
             <Link href="/admin/audio">audio recordings</Link> · view{' '}
-            <Link href="/admin/analytics">learning analytics</Link>.
+            <Link href="/admin/analytics">learning analytics</Link> · <Link href="/admin/sales">sales &amp; campaigns</Link>.
           </p>
           <div className="admin-stats">
             <div><b>{stats.users}</b><span>registered students</span></div>
