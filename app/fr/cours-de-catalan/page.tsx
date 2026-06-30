@@ -1,13 +1,8 @@
 import type { Metadata } from 'next';
 import LocalizedCourse from '@/components/marketing/LocalizedCourse';
-import { getDict, hreflang, PATHS } from '@/lib/i18n';
+import { getDict, localizedMeta } from '@/lib/i18n';
 const d = getDict('fr');
 
-export const metadata: Metadata = {
-  title: d.course.metaTitle,
-  description: d.course.metaDesc,
-  alternates: { canonical: PATHS.course.fr, languages: hreflang('course') },
-  openGraph: { title: `${d.course.metaTitle} — Verbadium`, description: d.course.metaDesc, url: PATHS.course.fr, locale: 'fr_FR' },
-};
+export const metadata: Metadata = localizedMeta('fr', 'course', d.course.metaTitle, d.course.metaDesc);
 
 export default function Page() { return <LocalizedCourse lang="fr" />; }

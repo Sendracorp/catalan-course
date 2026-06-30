@@ -2,6 +2,8 @@
    + shell). English stays at root; ca/es/fr are SEO landing pages that funnel
    into the (English-taught) course. No dependency — just typed dictionaries. */
 
+import type { Metadata } from 'next';
+
 // en/ca/es/fr/ru have marketing landing pages; de is a TEACHING MEDIUM only
 // (course content + chrome), with no marketing page — the iterations over
 // LOCALES that touch PATHS guard against locales missing a route.
@@ -38,6 +40,24 @@ export function hreflang(page: PageKey): Record<string, string> {
   for (const l of LOCALES) { const href = map[l]; if (href) out[l] = href; }  // skip mediums without a marketing route (de)
   out['x-default'] = PATHS[page].en;
   return out;
+}
+
+const OG_LOCALE: Record<Locale, string> = { en: 'en_US', ca: 'ca_ES', es: 'es_ES', fr: 'fr_FR', ru: 'ru_RU', de: 'de_DE' };
+
+/* Metadata for a localized marketing page. Centralizes canonical + hreflang +
+   OpenGraph/Twitter (incl. the social image — page-level openGraph would
+   otherwise REPLACE the root's and drop the inherited image). `title` is bare:
+   the root layout's title template appends " — Verbadium" for the document
+   title; OG/Twitter titles have no template, so we add it explicitly. */
+export function localizedMeta(lang: Locale, page: PageKey, title: string, description: string): Metadata {
+  const url = (PATHS[page] as Record<string, string>)[lang];
+  const ogTitle = `${title} — Verbadium`;
+  return {
+    title, description,
+    alternates: { canonical: url, languages: hreflang(page) },
+    openGraph: { type: 'website', siteName: 'Verbadium', url, locale: OG_LOCALE[lang], title: ogTitle, description, images: ['/opengraph-image'] },
+    twitter: { card: 'summary_large_image', title: ogTitle, description, images: ['/opengraph-image'] },
+  };
 }
 
 export interface Dict {
