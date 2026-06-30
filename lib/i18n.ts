@@ -22,6 +22,14 @@ export const PATHS = {
     ru: '/ru/kurs-katalanskogo',
     de: '/de/katalanisch-kurs',
   },
+  courseA2: {
+    en: '/courses/catalan-a2',
+    ca: '/ca/curs-de-catala-a2',
+    es: '/es/curso-de-catalan-a2',
+    fr: '/fr/cours-de-catalan-a2',
+    ru: '/ru/kurs-katalanskogo-a2',
+    de: '/de/katalanisch-kurs-a2',
+  },
   pricing: {
     en: '/pricing',
     ca: '/ca/preus',
