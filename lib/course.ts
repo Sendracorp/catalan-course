@@ -1,8 +1,8 @@
 /**
- * Build-time parser for course_source.html — the single source of truth.
- * Runs on the server (Next.js build / SSG). Throws if the fidelity counts
- * drift: 12 units, 108 exercises, 275 glossary rows, 15 checklist items —
- * so `next build` fails loudly instead of shipping lost content.
+ * Build-time parser for the single-source course HTML files. Course-agnostic:
+ * driven by a CourseConfig so each level (A1, A2, …) plugs in its own source
+ * file, exercise-type map and fidelity counts. Throws if the counts drift, so
+ * `next build` fails loudly instead of shipping lost content.
  */
 import fs from 'fs';
 import path from 'path';
@@ -13,9 +13,19 @@ import type {
 function fail(msg: string): never { throw new Error('COURSE PARSE FAILED: ' + msg); }
 function assert(cond: unknown, msg: string): asserts cond { if (!cond) fail(msg); }
 
-// ---------------------------------------------------------------- helpers
+export interface CourseConfig {
+  file: string;
+  exTypes: Record<string, ExerciseType>;
+  answerOverrides: Record<string, string[][]>;
+  oralEx: Set<string>;
+  ipaInputEx: Set<string>;
+  capsEx: Set<string>;
+  writeDotsEx: Set<string>;            // write exercises whose key is '·'-separated
+  counts: { units: number; exercises: number; glossary: number; checklist: number; keyedEx: number };
+  p3bModelLabel: string;               // answer-key label for the mock writing model
+}
 
-interface Block { tag: string; cls: string; outer: string; inner: string }
+// ---------------------------------------------------------------- helpers
 
 function matchTag(html: string, openStart: number): { tag: string; end: number } {
   const m = /^<([a-zA-Z][a-zA-Z0-9]*)/.exec(html.slice(openStart));
@@ -30,6 +40,8 @@ function matchTag(html: string, openStart: number): { tag: string; end: number }
   }
   fail('matchTag: unbalanced <' + tag + '> at ' + openStart);
 }
+
+interface Block { tag: string; cls: string; outer: string; inner: string }
 
 function topLevel(html: string): Block[] {
   const blocks: Block[] = [];
@@ -58,32 +70,6 @@ function extBlank(html: string): string {
   return html.replace(/<a href="http/g, '<a target="_blank" rel="noopener" href="http');
 }
 
-// -------------------------------------------------- exercise classification
-
-const EX_TYPES: Record<string, ExerciseType> = {
-  '1.1': 'write', '1.2': 'write', '1.3': 'write', '1.4': 'tf', '1.5': 'match', '1.6': 'model',
-  '2.1': 'gap', '2.2': 'match', '2.3': 'model', '2.4': 'reorder', '2.5': 'model', '2.6': 'write', '2.7': 'write', '2.8': 'free',
-  '3.1': 'gap', '3.2': 'write', '3.3': 'gap', '3.4': 'write', '3.5': 'model', '3.6': 'gap', '3.7': 'gap',
-  '4.1': 'write', '4.2': 'gap', '4.3': 'gap', '4.4': 'model', '4.5': 'gap', '4.6': 'model', '4.7': 'free',
-  '5.1': 'gap', '5.2': 'gap', '5.3': 'model', '5.4': 'paradigm', '5.5': 'model', '5.6': 'model', '5.7': 'model',
-  '6.1': 'gap', '6.2': 'gap', '6.3': 'gap', '6.4': 'write', '6.5': 'model', '6.6': 'model', '6.7': 'free',
-  '7.1': 'write', '7.2': 'gap', '7.3': 'write', '7.4': 'reorder', '7.5': 'model', '7.6': 'model', '7.7': 'free',
-  '8.1': 'gap', '8.2': 'model', '8.3': 'write', '8.4': 'choice', '8.5': 'gap', '8.6': 'model', '8.7': 'free',
-  '9.1': 'gap', '9.2': 'gap', '9.3': 'gap', '9.4': 'model', '9.5': 'model', '9.6': 'model', '9.7': 'write',
-  '10.1': 'gap', '10.2': 'gap', '10.3': 'model', '10.4': 'model', '10.5': 'model', '10.6': 'write', '10.7': 'free',
-  '11.1': 'gap', '11.2': 'write', '11.3': 'gap', '11.4': 'model', '11.5': 'model', '11.6': 'write', '11.7': 'free',
-  '12.1': 'model', '12.2': 'gap', '12.3': 'free', '12.4': 'free', '12.5': 'personal', '12.6': 'free',
-};
-const ORAL_EX = new Set(['6.7', '8.7', '12.6']);
-const IPA_INPUT_EX = new Set(['1.1']);
-const CAPS_EX = new Set(['1.3']);
-
-// explicit overrides where mechanical parsing of the key is ambiguous
-const ANSWER_OVERRIDES: Record<string, string[][]> = {
-  '6.2': [['el meu'], ['la meva'], ['els meus'], ['les meves']],
-  '6.3': [['el teu'], ['la nostra'], ['els seus'], ['les seves']],
-};
-
 function splitNumbered(txt: string): string[] {
   return txt.split(/\s*\d+\)\s*/).filter(s => s.trim() !== '').map(s => s.replace(/[.\s]+$/, '').trim());
 }
@@ -91,9 +77,8 @@ function splitDots(txt: string): string[] {
   return txt.split('·').map(s => s.replace(/[.\s]+$/, '').trim()).filter(Boolean);
 }
 
-/* Audio exercises are self-describing via their title (so they need no
-   EX_TYPES entry): "Listen and …" → listen (write English) / listenmatch
-   (match) / dictation (write the Catalan). */
+/* Audio exercises are self-describing via their title (no exTypes entry needed):
+   "Listen and …" → listen (write English) / listenmatch (match) / dictation. */
 function audioType(headHtml: string): ExerciseType | null {
   const t = headHtml.replace(/<[^>]+>/g, '');
   if (!/^\s*Listen\b/i.test(t)) return null;
@@ -103,7 +88,7 @@ function audioType(headHtml: string): ExerciseType | null {
 }
 
 function parseExercise(id: string, type: ExerciseType, headHtml: string, body: string,
-  answerKey: Record<string, string>): Exercise {
+  answerKey: Record<string, string>, cfg: CourseConfig): Exercise {
   const keyHtml = answerKey[id] || '';
   const keyTxt = stripTags(keyHtml);
   const liMatches = [...body.matchAll(/<li>([\s\S]*?)<\/li>/g)].map(m => m[1]);
@@ -114,7 +99,7 @@ function parseExercise(id: string, type: ExerciseType, headHtml: string, body: s
   };
 
   if (type === 'gap') {
-    const overrides = ANSWER_OVERRIDES[id] || null;
+    const overrides = cfg.answerOverrides[id] || null;
     const keyItems = overrides ? null : splitNumbered(keyTxt);
     liMatches.forEach((li, i) => {
       const gaps = (li.match(/<span class="fill">/g) || []).length;
@@ -130,11 +115,11 @@ function parseExercise(id: string, type: ExerciseType, headHtml: string, body: s
       (ex.items as GapItem[]).push({ html: li, gaps, answers });
     });
   } else if (type === 'write') {
-    const keyItems = (id === '3.2' || id === '4.1') ? splitDots(keyTxt) : splitNumbered(keyTxt);
+    const keyItems = cfg.writeDotsEx.has(id) ? splitDots(keyTxt) : splitNumbered(keyTxt);
     assert(keyItems.length === liMatches.length, id + ': ' + liMatches.length + ' items vs ' + keyItems.length + ' answers');
     liMatches.forEach((li, i) => (ex.items as WriteItem[]).push({ html: li, answers: [keyItems[i]] }));
-    ex.ipa = IPA_INPUT_EX.has(id);
-    ex.caps = CAPS_EX.has(id);
+    ex.ipa = cfg.ipaInputEx.has(id);
+    ex.caps = cfg.capsEx.has(id);
   } else if (type === 'tf') {
     const keyItems = splitNumbered(keyTxt);
     assert(keyItems.length === liMatches.length, id + ' tf count mismatch');
@@ -185,7 +170,7 @@ function parseExercise(id: string, type: ExerciseType, headHtml: string, body: s
     if (!liMatches.length && noteM) ex.items.push({ html: '' });
   } else if (type === 'free' || type === 'personal') {
     liMatches.forEach(li => ex.items.push({ html: li }));
-    ex.oral = ORAL_EX.has(id);
+    ex.oral = cfg.oralEx.has(id);
   } else if (type === 'listen') {
     const keyItems = splitNumbered(keyTxt);
     assert(keyItems.length === liMatches.length, id + ' listen count mismatch');
@@ -196,15 +181,12 @@ function parseExercise(id: string, type: ExerciseType, headHtml: string, body: s
       (ex.items as ListenItem[]).push({ ca, answers });
     });
   } else if (type === 'listenmatch') {
-    // "<spoken Catalan> = <shown label>" (label optional, e.g. a digit);
-    // audio ↔ written identity match, no answer key needed
     liMatches.forEach(li => {
       const [ca, label] = stripTags(li).split(/\s*=\s*/);
       assert(ca && ca.trim(), id + ' listenmatch empty item');
       (ex.items as ListenItem[]).push({ ca: ca.trim(), answers: [], label: label?.trim() || undefined });
     });
   } else if (type === 'dictation') {
-    // hear the Catalan, write it — the spoken text is its own answer
     liMatches.forEach(li => {
       const ca = stripTags(li).trim();
       assert(ca, id + ' dictation empty item');
@@ -216,8 +198,8 @@ function parseExercise(id: string, type: ExerciseType, headHtml: string, body: s
 
 // ------------------------------------------------------------------- parse
 
-function parse(): Course {
-  const src = fs.readFileSync(path.join(process.cwd(), 'course_source.html'), 'utf8');
+function parse(cfg: CourseConfig): Course {
+  const src = fs.readFileSync(path.join(process.cwd(), cfg.file), 'utf8');
   const bodyHtml = src.slice(src.indexOf('<body>') + 6, src.indexOf('</body>'));
   const allBlocks = topLevel(bodyHtml);
   const unitDivs = allBlocks.filter(b => b.tag === 'div' && b.cls === 'unit');
@@ -236,10 +218,10 @@ function parse(): Course {
     else if (/Mock exam/.test(label)) mockDiv = d;
     else if (/Appendix/.test(label)) glossaryDiv = d;
   }
-  assert(rawUnits.length === 12, 'expected 12 units, got ' + rawUnits.length);
+  assert(rawUnits.length === cfg.counts.units, 'expected ' + cfg.counts.units + ' units, got ' + rawUnits.length);
   assert(ipaGuideDiv && examPrepDiv && mockDiv && glossaryDiv, 'missing special sections');
 
-  const introStart = bodyHtml.indexOf('<h1 class="page-title">How to use this course</h1>');
+  const introStart = bodyHtml.indexOf('<h1 class="page-title">How to use this course');
   const introEnd = bodyHtml.indexOf('<!-- IPA GUIDE -->');
   const introHtml = extBlank(bodyHtml.slice(introStart, introEnd));
 
@@ -249,7 +231,7 @@ function parse(): Course {
   const glossary = [...glosTableM[1].matchAll(
     /<tr><td class="ca">([\s\S]*?)<\/td><td class="pron">([\s\S]*?)<\/td><td class="en">([\s\S]*?)<\/td><td>(\d+)<\/td><\/tr>/g,
   )].map(m => ({ ca: stripTags(m[1]), ipa: stripTags(m[2]), en: stripTags(m[3]), unit: +m[4] }));
-  assert(glossary.length === 275, 'expected 275 glossary rows, got ' + glossary.length);
+  assert(glossary.length === cfg.counts.glossary, 'expected ' + cfg.counts.glossary + ' glossary rows, got ' + glossary.length);
 
   // answer key
   const answerKey: Record<string, string> = {};
@@ -260,12 +242,12 @@ function parse(): Course {
       answerKey[stripTags(m[1]).trim()] = m[2].replace(/^[\s.·]+/, '').replace(/\s+$/, '').trim();
     }
   }
-  assert(answerKey['1.1'] && answerKey['12.4'] && answerKey['Paper 1'], 'answer key parse failed');
+  assert(answerKey['Paper 1'] && Object.keys(answerKey).length > 20, 'answer key parse failed');
 
   // checklist
   const checklistDiv = answerDivs[1];
   const checklist = [...checklistDiv.inner.matchAll(/<li>([\s\S]*?)<\/li>/g)].map(m => m[1].trim());
-  assert(checklist.length === 15, 'expected 15 checklist items, got ' + checklist.length);
+  assert(checklist.length === cfg.counts.checklist, 'expected ' + cfg.counts.checklist + ' checklist items, got ' + checklist.length);
   const checklistFootM = checklistDiv.inner.match(/<p class="note"[^>]*>[\s\S]*?<\/p>/);
   const citeM = checklistDiv.inner.match(/<p><small class="cite">[\s\S]*?<\/small><\/p>/);
 
@@ -284,9 +266,9 @@ function parse(): Course {
         const id = labM[1];
         const titleM = b.inner.match(/<h4>([\s\S]*?)<\/h4>/);
         assert(titleM, 'exercise without title: ' + id);
-        const type = audioType(titleM[1]) ?? EX_TYPES[id];
-        assert(type, 'exercise ' + id + ' missing from EX_TYPES — source changed?');
-        blocks.push({ kind: 'exercise', ex: parseExercise(id, type, titleM[1], b.inner, answerKey) });
+        const type = audioType(titleM[1]) ?? cfg.exTypes[id];
+        assert(type, 'exercise ' + id + ' missing from exTypes — source changed?');
+        blocks.push({ kind: 'exercise', ex: parseExercise(id, type, titleM[1], b.inner, answerKey, cfg) });
         exerciseIds.push(id);
         totalEx++;
       } else {
@@ -295,8 +277,9 @@ function parse(): Course {
     }
     return { num, title: headM[1], blocks, exerciseIds };
   });
-  assert(totalEx === 108, 'expected 108 exercises, got ' + totalEx);
-  assert(Object.keys(EX_TYPES).length === 83, 'EX_TYPES must list exactly 83 keyed (non-audio) exercises');
+  assert(totalEx === cfg.counts.exercises, 'expected ' + cfg.counts.exercises + ' exercises, got ' + totalEx);
+  assert(Object.keys(cfg.exTypes).length === cfg.counts.keyedEx,
+    'exTypes must list exactly ' + cfg.counts.keyedEx + ' keyed (non-audio) exercises, has ' + Object.keys(cfg.exTypes).length);
 
   // mock exam
   const papers = topLevel(mockDiv.inner).filter(b => b.tag === 'div' && b.cls === 'exam');
@@ -337,14 +320,13 @@ function parse(): Course {
     introNote: introNoteM[0], script: scriptM[1],
     p1items, p1answers,
     p2notice: p2noticeM[1], p2aItems, p2aKeyHtml: answerKey['Paper 2A'], p2bItems, p2bPairs,
-    p3form, p3bTask: p3bTaskM[0], p3bModel: answerKey['Paper 3B model (38 words)'],
+    p3form, p3bTask: p3bTaskM[0], p3bModel: answerKey[cfg.p3bModelLabel],
     p4qs, p4role: p4roleM[0], p4mark: p4markM[0],
     p4model: answerKey['Paper 4 model answers (Part 1)'],
     p4roleModel: answerKey['Paper 4 role-play skeleton'],
   };
 
-  // condensed IPA cheat sheet for the always-available drawer: everything
-  // from the "Vowels" heading up to (not including) the resources box.
+  // condensed IPA cheat sheet
   const ipaCheatParts: string[] = [];
   let collecting = false;
   for (const b of topLevel(ipaGuideDiv.inner)) {
@@ -357,7 +339,7 @@ function parse(): Course {
     'IPA cheat sheet extraction failed');
 
   return {
-    counts: { units: 12, exercises: totalEx, glossary: glossary.length },
+    counts: { units: cfg.counts.units, exercises: totalEx, glossary: glossary.length },
     introHtml,
     ipaGuideHtml: extBlank(ipaGuideDiv.inner),
     ipaCheatHtml,
@@ -369,8 +351,75 @@ function parse(): Course {
   };
 }
 
-let cached: Course | null = null;
+// --------------------------------------------------------- course configs
+
+const A1_EX_TYPES: Record<string, ExerciseType> = {
+  '1.1': 'write', '1.2': 'write', '1.3': 'write', '1.4': 'tf', '1.5': 'match', '1.6': 'model',
+  '2.1': 'gap', '2.2': 'match', '2.3': 'model', '2.4': 'reorder', '2.5': 'model', '2.6': 'write', '2.7': 'write', '2.8': 'free',
+  '3.1': 'gap', '3.2': 'write', '3.3': 'gap', '3.4': 'write', '3.5': 'model', '3.6': 'gap', '3.7': 'gap',
+  '4.1': 'write', '4.2': 'gap', '4.3': 'gap', '4.4': 'model', '4.5': 'gap', '4.6': 'model', '4.7': 'free',
+  '5.1': 'gap', '5.2': 'gap', '5.3': 'model', '5.4': 'paradigm', '5.5': 'model', '5.6': 'model', '5.7': 'model',
+  '6.1': 'gap', '6.2': 'gap', '6.3': 'gap', '6.4': 'write', '6.5': 'model', '6.6': 'model', '6.7': 'free',
+  '7.1': 'write', '7.2': 'gap', '7.3': 'write', '7.4': 'reorder', '7.5': 'model', '7.6': 'model', '7.7': 'free',
+  '8.1': 'gap', '8.2': 'model', '8.3': 'write', '8.4': 'choice', '8.5': 'gap', '8.6': 'model', '8.7': 'free',
+  '9.1': 'gap', '9.2': 'gap', '9.3': 'gap', '9.4': 'model', '9.5': 'model', '9.6': 'model', '9.7': 'write',
+  '10.1': 'gap', '10.2': 'gap', '10.3': 'model', '10.4': 'model', '10.5': 'model', '10.6': 'write', '10.7': 'free',
+  '11.1': 'gap', '11.2': 'write', '11.3': 'gap', '11.4': 'model', '11.5': 'model', '11.6': 'write', '11.7': 'free',
+  '12.1': 'model', '12.2': 'gap', '12.3': 'free', '12.4': 'free', '12.5': 'personal', '12.6': 'free',
+};
+
+const A1_CONFIG: CourseConfig = {
+  file: 'course_source.html',
+  exTypes: A1_EX_TYPES,
+  answerOverrides: {
+    '6.2': [['el meu'], ['la meva'], ['els meus'], ['les meves']],
+    '6.3': [['el teu'], ['la nostra'], ['els seus'], ['les seves']],
+  },
+  oralEx: new Set(['6.7', '8.7', '12.6']),
+  ipaInputEx: new Set(['1.1']),
+  capsEx: new Set(['1.3']),
+  writeDotsEx: new Set(['3.2', '4.1']),
+  counts: { units: 12, exercises: 108, glossary: 275, checklist: 15, keyedEx: 83 },
+  p3bModelLabel: 'Paper 3B model (38 words)',
+};
+
+const A2_EX_TYPES: Record<string, ExerciseType> = {
+  '1.1': 'paradigm', '1.2': 'gap', '1.3': 'write', '1.4': 'tf', '1.5': 'match', '1.6': 'gap', '1.7': 'reorder', '1.10': 'free',
+  '2.1': 'gap', '2.2': 'match', '2.3': 'write', '2.4': 'gap', '2.5': 'choice', '2.6': 'tf', '2.7': 'reorder', '2.10': 'free',
+  '3.1': 'paradigm', '3.2': 'write', '3.3': 'gap', '3.4': 'tf', '3.5': 'match', '3.6': 'gap', '3.7': 'reorder', '3.10': 'free',
+  '4.1': 'paradigm', '4.2': 'gap', '4.3': 'write', '4.4': 'tf', '4.5': 'match', '4.6': 'gap', '4.7': 'reorder', '4.10': 'free',
+  '5.1': 'paradigm', '5.2': 'gap', '5.3': 'write', '5.4': 'tf', '5.5': 'match', '5.6': 'gap', '5.7': 'reorder', '5.10': 'free',
+  '6.1': 'gap', '6.2': 'write', '6.3': 'tf', '6.4': 'match', '6.5': 'gap', '6.6': 'reorder', '6.9': 'free',
+  '7.1': 'gap', '7.2': 'write', '7.3': 'tf', '7.4': 'match', '7.5': 'gap', '7.6': 'reorder', '7.9': 'personal',
+  '8.1': 'gap', '8.2': 'write', '8.3': 'tf', '8.4': 'match', '8.5': 'gap', '8.6': 'reorder', '8.9': 'personal',
+  '9.1': 'paradigm', '9.2': 'gap', '9.3': 'write', '9.4': 'tf', '9.5': 'match', '9.6': 'gap', '9.7': 'reorder', '9.10': 'free',
+  '10.1': 'gap', '10.2': 'write', '10.3': 'tf', '10.4': 'match', '10.5': 'gap', '10.6': 'reorder', '10.9': 'free',
+  '11.1': 'paradigm', '11.2': 'gap', '11.3': 'write', '11.4': 'tf', '11.5': 'match', '11.6': 'gap', '11.7': 'reorder', '11.10': 'free',
+  '12.1': 'gap', '12.2': 'write', '12.3': 'tf', '12.4': 'match', '12.5': 'gap', '12.6': 'reorder', '12.9': 'free',
+  '13.1': 'gap', '13.2': 'write', '13.3': 'tf', '13.4': 'match', '13.5': 'gap', '13.6': 'reorder', '13.9': 'free',
+  '14.1': 'gap', '14.2': 'write', '14.3': 'tf', '14.4': 'match', '14.5': 'gap', '14.6': 'reorder', '14.9': 'free',
+  '15.1': 'gap', '15.2': 'write', '15.3': 'tf', '15.4': 'match', '15.5': 'gap', '15.6': 'reorder', '15.9': 'free',
+};
+
+const A2_CONFIG: CourseConfig = {
+  file: 'course_source_a2.html',
+  exTypes: A2_EX_TYPES,
+  answerOverrides: {},
+  oralEx: new Set(),
+  ipaInputEx: new Set(),
+  capsEx: new Set(),
+  writeDotsEx: new Set(),
+  counts: { units: 15, exercises: 142, glossary: 135, checklist: 15, keyedEx: 112 },
+  p3bModelLabel: 'Paper 3B model (50 words)',
+};
+
+let cachedA1: Course | null = null;
+let cachedA2: Course | null = null;
 export function getCourse(): Course {
-  if (!cached) cached = parse();
-  return cached;
+  if (!cachedA1) cachedA1 = parse(A1_CONFIG);
+  return cachedA1;
+}
+export function getCourseA2(): Course {
+  if (!cachedA2) cachedA2 = parse(A2_CONFIG);
+  return cachedA2;
 }

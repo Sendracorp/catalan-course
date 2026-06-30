@@ -36,9 +36,21 @@ const A1 = {
   stats: { units: 12, exercises: 108, glossary: 275 },
 };
 
-// The teaching languages Catalan A1 is sold in. English keeps the bare
-// `catalan-a1` slug (its original URL); others get a `-<medium>` suffix.
-const A1_VARIANTS: { medium: Locale; audienceLanguage: string }[] = [
+const A2 = {
+  family: 'catalan-a2',
+  language: 'Catalan',
+  level: 'A2',
+  title: 'Catalan: Next Steps (A2)',
+  tagline: 'The A2 (bàsic) course — past tenses, pronouns and everyday functions, built to pass the official A2 exam.',
+  description: '15 units · past tenses, weak & combined pronouns, future/conditional · 142 interactive exercises · full mock A2 exam · glossary with IPA.',
+  priceLabel: '€25',
+  freeUnits: [1],
+  stats: { units: 15, exercises: 142, glossary: 140 },
+};
+
+// The teaching languages each course is sold in. English keeps the bare
+// `<family>` slug (its original URL); others get a `-<medium>` suffix.
+const VARIANTS: { medium: Locale; audienceLanguage: string }[] = [
   { medium: 'en', audienceLanguage: 'English' },
   { medium: 'es', audienceLanguage: 'Spanish' },
   { medium: 'fr', audienceLanguage: 'French' },
@@ -46,13 +58,17 @@ const A1_VARIANTS: { medium: Locale; audienceLanguage: string }[] = [
   { medium: 'de', audienceLanguage: 'German' },
 ];
 
-export const COURSES: CourseMeta[] = A1_VARIANTS.map(({ medium, audienceLanguage }) => ({
-  ...A1,
-  slug: medium === 'en' ? A1.family : `${A1.family}-${medium}`,
-  medium,
-  audienceLanguage,
-  available: true,
-}));
+function expand(base: typeof A1 | typeof A2, available: boolean): CourseMeta[] {
+  return VARIANTS.map(({ medium, audienceLanguage }) => ({
+    ...base,
+    slug: medium === 'en' ? base.family : `${base.family}-${medium}`,
+    medium,
+    audienceLanguage,
+    available,
+  }));
+}
+
+export const COURSES: CourseMeta[] = [...expand(A1, true), ...expand(A2, true)];
 
 /** A sellable course variant by slug (only `available` ones). */
 export function getCourseMeta(slug: string): CourseMeta | undefined {

@@ -3,13 +3,15 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type { Course } from './types';
 import type { Locale } from './i18n';
-import { getCourse } from './course';
+import { getCourse, getCourseA2 } from './course';
 import { localizeCourse } from './i18n-course';
 import { familyOf, mediumForSlug } from './courses';
 
 // Content is shared across a family's language variants — keyed by family.
 function familyCourse(family: string | undefined): Course | null {
-  return family === 'catalan-a1' ? getCourse() : null;
+  return family === 'catalan-a1' ? getCourse()
+    : family === 'catalan-a2' ? getCourseA2()
+    : null;
 }
 
 function loadDict(family: string, medium: Locale): Record<string, string> {
