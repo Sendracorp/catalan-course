@@ -45,20 +45,26 @@ const NUMBERS = [
 ];
 
 function collectTexts() {
-  const src = fs.readFileSync(path.join(ROOT, 'course_source.html'), 'utf8');
+  // Audio is course-agnostic (keyed by Catalan text), shared across levels —
+  // so gather Catalan from every course source file present.
+  const SOURCES = ['course_source.html', 'course_source_a2.html']
+    .map(f => path.join(ROOT, f)).filter(p => fs.existsSync(p));
   const texts = new Set();
-  for (const re of [/<td class="ca">([\s\S]*?)<\/td>/g, /<span class="ca">([\s\S]*?)<\/span>/g]) {
-    for (const m of src.matchAll(re)) {
-      const t = norm(stripTags(m[1]));
-      if (t) texts.add(t);
+  for (const srcPath of SOURCES) {
+    const src = fs.readFileSync(srcPath, 'utf8');
+    for (const re of [/<td class="ca">([\s\S]*?)<\/td>/g, /<span class="ca">([\s\S]*?)<\/span>/g]) {
+      for (const m of src.matchAll(re)) {
+        const t = norm(stripTags(m[1]));
+        if (t) texts.add(t);
+      }
     }
-  }
-  // audio exercises ("Listen and …") + numbers — so they're matched to Lingua Libre
-  for (const ex of src.matchAll(/<div class="ex"[^>]*>([\s\S]*?)<\/div>/g)) {
-    if (!/<h4>\s*Listen\b/.test(ex[1])) continue;
-    for (const li of ex[1].matchAll(/<li>([\s\S]*?)<\/li>/g)) {
-      const t = norm(stripTags(li[1]).split(/\s*=\s*/)[0]);
-      if (t) texts.add(t);
+    // audio exercises ("Listen and …") + numbers — so they're matched to Lingua Libre
+    for (const ex of src.matchAll(/<div class="ex"[^>]*>([\s\S]*?)<\/div>/g)) {
+      if (!/<h4>\s*Listen\b/.test(ex[1])) continue;
+      for (const li of ex[1].matchAll(/<li>([\s\S]*?)<\/li>/g)) {
+        const t = norm(stripTags(li[1]).split(/\s*=\s*/)[0]);
+        if (t) texts.add(t);
+      }
     }
   }
   for (const n of NUMBERS) texts.add(norm(n));

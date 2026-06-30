@@ -68,7 +68,11 @@ function expand(base: typeof A1 | typeof A2, available: boolean): CourseMeta[] {
   }));
 }
 
-export const COURSES: CourseMeta[] = [...expand(A1, true), ...expand(A2, true)];
+// A2 is content-complete + engine-wired, but kept unavailable until its
+// marketing copy is localized (dict.course.* is A1-specific), the content is
+// translated to es/fr/ru/de, audio is generated, the Paddle price exists, and
+// the Catalan spine passes native review. Flip to `true` to launch.
+export const COURSES: CourseMeta[] = [...expand(A1, true), ...expand(A2, false)];
 
 /** A sellable course variant by slug (only `available` ones). */
 export function getCourseMeta(slug: string): CourseMeta | undefined {

@@ -87,7 +87,7 @@ export default async function CatalogPage() {
           <div className="card course-card coming-soon">
             <div className="course-card-head"><span className="badge">COMING NEXT</span></div>
             <h2>Catalan A2</h2>
-            <p>The next level is in the works. Finish A1 first — it’s the foundation for everything that follows.</p>
+            <p>The next level is written and in final preparation. Finish A1 first — it’s the foundation for everything that follows.</p>
           </div>
         </div>
         <p className="catalog-pricing-link">
