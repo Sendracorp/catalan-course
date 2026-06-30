@@ -76,6 +76,7 @@ export interface Dict {
     previewLead: string; previewLink: string;   // previewLink uses {n}
     alreadyBought: string;
   };
+  courseA2?: Dict['course'];                     // A2 marketing copy; English-fallback per locale until localized
   footer: { tagline: string; learn: string; legal: string; help: string;
     terms: string; refunds: string; privacy: string; cookies: string; contact: string; mor: string };
   pricing: { title: string; sub: string; faqHeading: string; faq: { q: string; a: string }[] };
@@ -124,6 +125,24 @@ const en: Dict = {
       'Full mock A1 exam with timers and attempt history',
       'Complete glossary ({glossary} entries) with native-speaker audio and IPA',
       'Listening, dictation and translation drills',
+      'Progress saved to your account — continue on any device',
+    ],
+    taughtInEnglish: 'Taught in English (explanations and translations in English).',
+    previewLead: 'Try before you buy:', previewLink: 'Unit {n} is free — no account needed.',
+    alreadyBought: 'Already bought it? Log in',
+  },
+  courseA2: {
+    subject: 'Catalan',
+    name: 'Catalan: Next Steps (A2)',
+    tagline: 'The A2 (bàsic) course — master the past tenses, pronouns and everyday Catalan, built to pass the official A2 exam.',
+    metaTitle: 'Catalan A2 Course Online — past tenses, pronouns & exam prep',
+    metaDesc: 'Continue Catalan to A2 (nivell bàsic): past tenses, weak & combined pronouns, future and conditional — with native audio, 140+ exercises and a full mock exam for the official A2 exam.',
+    salesHeading: 'Get the full A2 course — {price}, yours forever',
+    bullets: [
+      'All {units} units with {exercises} interactive, auto-marked exercises',
+      'The full past-tense system, weak & combined pronouns, future & conditional',
+      'Full mock A2 exam (the official areas) with timers and attempt history',
+      'Glossary ({glossary} entries) with native-speaker audio and IPA',
       'Progress saved to your account — continue on any device',
     ],
     taughtInEnglish: 'Taught in English (explanations and translations in English).',
@@ -536,6 +555,13 @@ const de: Dict = {
 
 const DICTS: Partial<Record<Locale, Dict>> = { en, ca, es, fr, ru, de };
 export function getDict(locale: Locale): Dict { return DICTS[locale] ?? en; }
+
+/** Course marketing copy for a family. A2 falls back to English copy per locale
+    until that locale's courseA2 is translated; A1 uses the locale's `course`. */
+export function courseCopy(d: Dict, family: string | undefined): Dict['course'] {
+  if (family === 'catalan-a2') return d.courseA2 ?? en.courseA2 ?? d.course;
+  return d.course;
+}
 
 /** Fill {key} placeholders. */
 export function t(tpl: string, vars: Record<string, string | number>): string {
