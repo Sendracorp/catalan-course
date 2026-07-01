@@ -76,6 +76,8 @@ export interface Dict {
     purchased: string; cont: string; start: string; progress: string;  // progress uses {passed} {total}
     availableIn: string;     // "Available in" — precedes the list of teaching languages
     nextStep: string; comingSoon: string };   // A1→A2 "next step" CTA under the checklist
+  lead: { heading: string; sub: string; placeholder: string; button: string;
+    busy: string; success: string; consent: string; error: string };   // free-preview email capture
   course: {
     subject: string;                 // the subject language's name, in this locale (badge)
     name: string; tagline: string; metaTitle: string; metaDesc: string;
@@ -123,6 +125,16 @@ const en: Dict = {
     purchased: 'Purchased ✓', cont: 'Continue learning', start: 'Start the course', progress: '{passed} of {total} exercises passed',
     availableIn: 'Available in',
     nextStep: 'Next step:', comingSoon: 'coming soon' },
+  lead: {
+    heading: 'Get the free IPA cheat sheet',
+    sub: 'One email with the Catalan pronunciation cheat sheet — the fastest way to read any word correctly. No spam, unsubscribe anytime.',
+    placeholder: 'your@email.com',
+    button: 'Send me the cheat sheet',
+    busy: 'Sending…',
+    success: 'Check your inbox — your IPA cheat sheet is on its way.',
+    consent: 'By subscribing you agree to receive occasional course emails. Unsubscribe anytime.',
+    error: 'Something went wrong. Please try again.',
+  },
   course: {
     subject: 'Catalan',
     name: 'Catalan from Scratch (A1)',
@@ -214,6 +226,16 @@ const ca: Dict = {
     purchased: 'Comprat ✓', cont: 'Continua aprenent', start: 'Comença el curs', progress: '{passed} de {total} exercicis superats',
     availableIn: 'Disponible en',
     nextStep: 'Següent pas:', comingSoon: 'properament' },
+  lead: {
+    heading: 'Aconsegueix la guia ràpida d’AFI gratuïta',
+    sub: 'Un correu amb la guia ràpida de pronunciació catalana — la manera més ràpida de llegir bé qualsevol paraula. Sense spam, dona’t de baixa quan vulguis.',
+    placeholder: 'el-teu@correu.com',
+    button: 'Envia’m la guia',
+    busy: 'Enviant…',
+    success: 'Mira la safata d’entrada — la teva guia d’AFI ja va de camí.',
+    consent: 'En subscriure’t acceptes rebre correus ocasionals del curs. Dona’t de baixa quan vulguis.',
+    error: 'Alguna cosa ha anat malament. Torna-ho a provar.',
+  },
   course: {
     subject: 'Català',
     name: 'Català des de zero (A1)',
@@ -305,6 +327,16 @@ const es: Dict = {
     purchased: 'Comprado ✓', cont: 'Continuar aprendiendo', start: 'Empezar el curso', progress: '{passed} de {total} ejercicios superados',
     availableIn: 'Disponible en',
     nextStep: 'Siguiente paso:', comingSoon: 'próximamente' },
+  lead: {
+    heading: 'Consigue la chuleta de AFI gratis',
+    sub: 'Un correo con la chuleta de pronunciación catalana — la forma más rápida de leer bien cualquier palabra. Sin spam, cancela cuando quieras.',
+    placeholder: 'tu@correo.com',
+    button: 'Envíame la chuleta',
+    busy: 'Enviando…',
+    success: 'Revisa tu bandeja de entrada — tu chuleta de AFI ya está en camino.',
+    consent: 'Al suscribirte aceptas recibir correos ocasionales del curso. Cancela cuando quieras.',
+    error: 'Algo ha salido mal. Inténtalo de nuevo.',
+  },
   course: {
     subject: 'Catalán',
     name: 'Catalán desde cero (A1)',
@@ -396,6 +428,16 @@ const fr: Dict = {
     purchased: 'Acheté ✓', cont: 'Continuer l’apprentissage', start: 'Commencer le cours', progress: '{passed} sur {total} exercices réussis',
     availableIn: 'Disponible en',
     nextStep: 'Prochaine étape :', comingSoon: 'bientôt disponible' },
+  lead: {
+    heading: 'Recevez l’aide-mémoire API gratuit',
+    sub: 'Un e-mail avec l’aide-mémoire de prononciation catalane — le moyen le plus rapide de bien lire n’importe quel mot. Pas de spam, désabonnement à tout moment.',
+    placeholder: 'votre@email.com',
+    button: 'Envoyez-moi l’aide-mémoire',
+    busy: 'Envoi…',
+    success: 'Vérifiez votre boîte de réception — votre aide-mémoire API arrive.',
+    consent: 'En vous inscrivant, vous acceptez de recevoir des e-mails occasionnels sur le cours. Désabonnement à tout moment.',
+    error: 'Une erreur s’est produite. Veuillez réessayer.',
+  },
   course: {
     subject: 'Catalan',
     name: 'Le catalan à partir de zéro (A1)',
@@ -487,6 +529,16 @@ const ru: Dict = {
     purchased: 'Куплено ✓', cont: 'Продолжить обучение', start: 'Начать курс', progress: '{passed} из {total} упражнений пройдено',
     availableIn: 'Доступно на языках',
     nextStep: 'Следующий шаг:', comingSoon: 'скоро' },
+  lead: {
+    heading: 'Получите бесплатную шпаргалку по МФА',
+    sub: 'Одно письмо со шпаргалкой по каталанскому произношению — самый быстрый способ правильно прочитать любое слово. Без спама, отписка в любой момент.',
+    placeholder: 'ваш@email.com',
+    button: 'Прислать шпаргалку',
+    busy: 'Отправляем…',
+    success: 'Проверьте почту — ваша шпаргалка по МФА уже в пути.',
+    consent: 'Подписываясь, вы соглашаетесь получать редкие письма о курсе. Отписаться можно в любой момент.',
+    error: 'Что-то пошло не так. Попробуйте ещё раз.',
+  },
   course: {
     subject: 'Каталанский',
     name: 'Каталанский с нуля (A1)',
@@ -579,6 +631,16 @@ const de: Dict = {
     purchased: 'Gekauft ✓', cont: 'Weiterlernen', start: 'Kurs starten', progress: '{passed} von {total} Übungen bestanden',
     availableIn: 'Verfügbar auf',
     nextStep: 'Nächster Schritt:', comingSoon: 'in Kürze' },
+  lead: {
+    heading: 'Hol dir den kostenlosen IPA-Spickzettel',
+    sub: 'Eine E-Mail mit dem katalanischen Aussprache-Spickzettel — der schnellste Weg, jedes Wort richtig zu lesen. Kein Spam, jederzeit abbestellbar.',
+    placeholder: 'deine@email.com',
+    button: 'Spickzettel senden',
+    busy: 'Senden…',
+    success: 'Schau in dein Postfach — dein IPA-Spickzettel ist unterwegs.',
+    consent: 'Mit der Anmeldung erklärst du dich einverstanden, gelegentliche Kurs-E-Mails zu erhalten. Jederzeit abbestellbar.',
+    error: 'Etwas ist schiefgelaufen. Bitte versuche es erneut.',
+  },
   course: {
     subject: 'Katalanisch',
     name: 'Katalanisch von Grund auf (A1)',

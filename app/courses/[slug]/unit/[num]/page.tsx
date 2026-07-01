@@ -3,11 +3,13 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getCourseContent } from '@/lib/content';
 import { tUI } from '@/lib/ui';
+import { getDict } from '@/lib/i18n';
 import { mediumForSlug } from '@/lib/courses';
 import { canAccessUnit, getCourseAccess, getViewableCourse } from '@/lib/access';
 import SpeechScope from '@/components/SpeechScope';
 import ExerciseCard from '@/components/exercises';
 import Paywall from '@/components/Paywall';
+import LeadCapture from '@/components/LeadCapture';
 
 type Params = Promise<{ slug: string; num: string }>;
 
@@ -69,6 +71,16 @@ export default async function UnitPage({ params }: { params: Params }) {
           </span>
         );
       })}
+      {/* Free-preview email capture — anonymous visitors only (signed-in users
+          already have an email on file). */}
+      {!access.user && (
+        <LeadCapture
+          copy={getDict(medium).lead}
+          source={`unit-preview:${slug}:${unit.num}`}
+          locale={medium}
+          slug={slug}
+        />
+      )}
       <div className="pager">
         <Link href={prev.href}>← {prev.label}</Link>
         <Link href={next.href}>{next.label} →</Link>
