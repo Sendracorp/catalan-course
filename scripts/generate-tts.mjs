@@ -56,7 +56,10 @@ const NUMBERS = [
 
 // ── collect every speakable text, mirroring components/SpeechScope.tsx ──
 function collect() {
-  const src = fs.readFileSync(SRC, 'utf8');
+  // TTS is course-agnostic (keyed by Catalan text) — scan every course source.
+  const src = ['course_source.html', 'course_source_a2.html']
+    .map(f => path.join(ROOT, f)).filter(p => fs.existsSync(p))
+    .map(p => fs.readFileSync(p, 'utf8')).join('\n');
   const out = new Map();                       // key → { text, pitch }
   const add = (raw, pitch) => {
     const text = cleanSpeak(plain(raw));

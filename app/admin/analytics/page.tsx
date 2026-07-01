@@ -5,29 +5,46 @@ import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import { getSessionUser, isUserAdmin } from '@/lib/access';
 import { getCourseAnalytics } from '@/lib/admin';
+import { COURSES } from '@/lib/courses';
 
 export const metadata: Metadata = { title: 'Learning analytics · Admin' };
 export const dynamic = 'force-dynamic';
 
-const FAMILY = 'catalan-a1';
+// One meta per family (the English variant); includes not-yet-available courses
+// so admins can inspect a course's data before it launches.
+const FAMILIES = COURSES.filter(c => c.medium === 'en');
 
-export default async function AnalyticsPage() {
+export default async function AnalyticsPage({ searchParams }: {
+  searchParams: Promise<{ family?: string }>;
+}) {
   const user = await getSessionUser();
   if (!user) redirect('/login?next=/admin/analytics');
   if (!(await isUserAdmin(user.id))) notFound();
 
-  const a = await getCourseAnalytics(FAMILY);
+  const sp = await searchParams;
+  const family = FAMILIES.some(f => f.family === sp.family) ? sp.family! : FAMILIES[0].family;
+  const a = await getCourseAnalytics(family);
 
   return (
     <>
       <SiteHeader />
       <main className="site-main">
         <p className="admin-back"><Link href="/admin">← Admin</Link></p>
+        {FAMILIES.length > 1 && (
+          <div className="card" style={{ display: 'flex', gap: '.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
+            {FAMILIES.map(f => (
+              <Link key={f.family} href={`/admin/analytics?family=${f.family}`}
+                className={`btn${f.family === family ? ' btn-primary' : ''}`}>
+                {f.language} {f.level}{f.available ? '' : ' · soon'}
+              </Link>
+            ))}
+          </div>
+        )}
         <div className="card">
           <h1>Learning analytics</h1>
           <p className="note">
             First-party, aggregated from your own progress data across all language variants of{' '}
-            <code>{FAMILY}</code>. No cookies, no third party.
+            <code>{family}</code>. No cookies, no third party.
           </p>
           {!a ? (
             <p className="note">Service-role key not configured — analytics unavailable.</p>

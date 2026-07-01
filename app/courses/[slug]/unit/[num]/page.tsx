@@ -3,11 +3,13 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getCourseContent } from '@/lib/content';
 import { tUI } from '@/lib/ui';
-import { getCourseMeta, mediumForSlug } from '@/lib/courses';
-import { canAccessUnit, getCourseAccess } from '@/lib/access';
+import { getDict } from '@/lib/i18n';
+import { mediumForSlug } from '@/lib/courses';
+import { canAccessUnit, getCourseAccess, getViewableCourse } from '@/lib/access';
 import SpeechScope from '@/components/SpeechScope';
 import ExerciseCard from '@/components/exercises';
 import Paywall from '@/components/Paywall';
+import LeadCapture from '@/components/LeadCapture';
 
 type Params = Promise<{ slug: string; num: string }>;
 
@@ -19,7 +21,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 
 export default async function UnitPage({ params }: { params: Params }) {
   const { slug, num } = await params;
-  const meta = getCourseMeta(slug);
+  const meta = await getViewableCourse(slug);    // pre-launch courses: owners/admins only
   const medium = mediumForSlug(slug);            // the variant's teaching language
   const access = await getCourseAccess(slug);
   const course = getCourseContent(slug);
@@ -69,6 +71,16 @@ export default async function UnitPage({ params }: { params: Params }) {
           </span>
         );
       })}
+      {/* Free-preview email capture — anonymous visitors only (signed-in users
+          already have an email on file). */}
+      {!access.user && (
+        <LeadCapture
+          copy={getDict(medium).lead}
+          source={`unit-preview:${slug}:${unit.num}`}
+          locale={medium}
+          slug={slug}
+        />
+      )}
       <div className="pager">
         <Link href={prev.href}>← {prev.label}</Link>
         <Link href={next.href}>{next.label} →</Link>

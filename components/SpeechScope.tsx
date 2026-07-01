@@ -45,7 +45,9 @@ export default function SpeechScope({ html, className }: { html: string; classNa
     }
 
     root.querySelectorAll('td.ca, span.ca, p .ca').forEach(el => {
-      if (el.closest('.model-answer') || el.querySelector('.say')) return;
+      // Dialogue lines are handled below (one 🔊 per line); skip their inner .ca
+      // so a line doesn't get a duplicate button.
+      if (el.closest('.model-answer') || el.closest('.dialogue') || el.querySelector('.say')) return;
       const t = caTextOf(el);
       if (!t) return;
       el.appendChild(document.createTextNode(' '));
@@ -56,8 +58,16 @@ export default function SpeechScope({ html, className }: { html: string; classNa
       const lines: { p: HTMLElement; text: string }[] = [];
       dlg.querySelectorAll('p').forEach(p => {
         if (p.classList.contains('gloss')) return;
+        // Only actual dialogue turns are spoken: an A1 turn has a speaker label
+        // (.spk), an A2 turn has a Catalan span (.ca). Section titles / stage
+        // directions (e.g. "El cap de setmana — The weekend") have neither, so
+        // they're skipped — otherwise their English half would be read aloud.
+        if (!p.querySelector('.ca, .spk')) return;
         const clone = p.cloneNode(true) as Element;
-        clone.querySelectorAll('.spk, .say').forEach(k => k.remove());
+        // Strip everything that isn't Catalan: speaker labels, existing buttons,
+        // the translation gloss (.en) and IPA (.pron) — the A2 markup keeps the
+        // gloss inline in the same <p>, so it must be removed before speaking.
+        clone.querySelectorAll('.spk, .say, .en, .pron').forEach(k => k.remove());
         const text = cleanSpeak(clone.textContent || '');
         if (!text) return;
         lines.push({ p, text });

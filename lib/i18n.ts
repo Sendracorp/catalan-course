@@ -22,6 +22,14 @@ export const PATHS = {
     ru: '/ru/kurs-katalanskogo',
     de: '/de/katalanisch-kurs',
   },
+  courseA2: {
+    en: '/courses/catalan-a2',
+    ca: '/ca/curs-de-catala-a2',
+    es: '/es/curso-de-catalan-a2',
+    fr: '/fr/cours-de-catalan-a2',
+    ru: '/ru/kurs-katalanskogo-a2',
+    de: '/de/katalanisch-kurs-a2',
+  },
   pricing: {
     en: '/pricing',
     ca: '/ca/preus',
@@ -66,7 +74,10 @@ export interface Dict {
   home: { badge: string; h1: string; sub: string; seeCourse: string };
   card: { level: string; buy: string; preview: string; lifetime: string;
     purchased: string; cont: string; start: string; progress: string;  // progress uses {passed} {total}
-    availableIn: string };   // "Available in" — precedes the list of teaching languages
+    availableIn: string;     // "Available in" — precedes the list of teaching languages
+    nextStep: string; comingSoon: string };   // A1→A2 "next step" CTA under the checklist
+  lead: { heading: string; sub: string; placeholder: string; button: string;
+    busy: string; success: string; consent: string; error: string };   // free-preview email capture
   course: {
     subject: string;                 // the subject language's name, in this locale (badge)
     name: string; tagline: string; metaTitle: string; metaDesc: string;
@@ -76,6 +87,7 @@ export interface Dict {
     previewLead: string; previewLink: string;   // previewLink uses {n}
     alreadyBought: string;
   };
+  courseA2?: Dict['course'];                     // A2 marketing copy; English-fallback per locale until localized
   footer: { tagline: string; learn: string; legal: string; help: string;
     terms: string; refunds: string; privacy: string; cookies: string; contact: string; mor: string };
   pricing: { title: string; sub: string; faqHeading: string; faq: { q: string; a: string }[] };
@@ -111,7 +123,18 @@ const en: Dict = {
     seeCourse: 'See the course' },
   card: { level: 'Beginner · A1', buy: 'Get the course', preview: 'Free preview', lifetime: 'One payment · lifetime access',
     purchased: 'Purchased ✓', cont: 'Continue learning', start: 'Start the course', progress: '{passed} of {total} exercises passed',
-    availableIn: 'Available in' },
+    availableIn: 'Available in',
+    nextStep: 'Next step:', comingSoon: 'coming soon' },
+  lead: {
+    heading: 'Get the free IPA cheat sheet',
+    sub: 'One email with the Catalan pronunciation cheat sheet — the fastest way to read any word correctly. No spam, unsubscribe anytime.',
+    placeholder: 'your@email.com',
+    button: 'Send me the cheat sheet',
+    busy: 'Sending…',
+    success: 'Check your inbox — your IPA cheat sheet is on its way.',
+    consent: 'By subscribing you agree to receive occasional course emails. Unsubscribe anytime.',
+    error: 'Something went wrong. Please try again.',
+  },
   course: {
     subject: 'Catalan',
     name: 'Catalan from Scratch (A1)',
@@ -124,6 +147,24 @@ const en: Dict = {
       'Full mock A1 exam with timers and attempt history',
       'Complete glossary ({glossary} entries) with native-speaker audio and IPA',
       'Listening, dictation and translation drills',
+      'Progress saved to your account — continue on any device',
+    ],
+    taughtInEnglish: 'Taught in English (explanations and translations in English).',
+    previewLead: 'Try before you buy:', previewLink: 'Unit {n} is free — no account needed.',
+    alreadyBought: 'Already bought it? Log in',
+  },
+  courseA2: {
+    subject: 'Catalan',
+    name: 'Catalan: Next Steps (A2)',
+    tagline: 'The A2 (bàsic) course — master the past tenses, pronouns and everyday Catalan, built to pass the official A2 exam.',
+    metaTitle: 'Catalan A2 Course Online — past tenses, pronouns & exam prep',
+    metaDesc: 'Continue Catalan to A2 (nivell bàsic): past tenses, weak & combined pronouns, future and conditional — with native audio, 140+ exercises and a full mock exam for the official A2 exam.',
+    salesHeading: 'Get the full A2 course — {price}, yours forever',
+    bullets: [
+      'All {units} units with {exercises} interactive, auto-marked exercises',
+      'The full past-tense system, weak & combined pronouns, future & conditional',
+      'Full mock A2 exam (the official areas) with timers and attempt history',
+      'Glossary ({glossary} entries) with native-speaker audio and IPA',
       'Progress saved to your account — continue on any device',
     ],
     taughtInEnglish: 'Taught in English (explanations and translations in English).',
@@ -183,7 +224,18 @@ const ca: Dict = {
     seeCourse: 'Veure el curs' },
   card: { level: 'Principiant · A1', buy: 'Aconsegueix el curs', preview: 'Prova gratuïta', lifetime: 'Un sol pagament · accés de per vida',
     purchased: 'Comprat ✓', cont: 'Continua aprenent', start: 'Comença el curs', progress: '{passed} de {total} exercicis superats',
-    availableIn: 'Disponible en' },
+    availableIn: 'Disponible en',
+    nextStep: 'Següent pas:', comingSoon: 'properament' },
+  lead: {
+    heading: 'Aconsegueix la guia ràpida d’AFI gratuïta',
+    sub: 'Un correu amb la guia ràpida de pronunciació catalana — la manera més ràpida de llegir bé qualsevol paraula. Sense spam, dona’t de baixa quan vulguis.',
+    placeholder: 'el-teu@correu.com',
+    button: 'Envia’m la guia',
+    busy: 'Enviant…',
+    success: 'Mira la safata d’entrada — la teva guia d’AFI ja va de camí.',
+    consent: 'En subscriure’t acceptes rebre correus ocasionals del curs. Dona’t de baixa quan vulguis.',
+    error: 'Alguna cosa ha anat malament. Torna-ho a provar.',
+  },
   course: {
     subject: 'Català',
     name: 'Català des de zero (A1)',
@@ -196,6 +248,24 @@ const ca: Dict = {
       'Examen de mostra d’A1 complet amb cronòmetres i historial d’intents',
       'Glossari complet ({glossary} entrades) amb àudio de parlants nadius i AFI',
       'Exercicis d’escolta, dictat i traducció',
+      'El progrés es desa al teu compte — continua des de qualsevol dispositiu',
+    ],
+    taughtInEnglish: 'El curs s’imparteix en anglès (explicacions i traduccions en anglès).',
+    previewLead: 'Prova-ho abans de comprar:', previewLink: 'la unitat {n} és gratuïta, sense compte.',
+    alreadyBought: 'Ja l’has comprat? Inicia sessió',
+  },
+  courseA2: {
+    subject: 'Català',
+    name: 'Català: el següent pas (A2)',
+    tagline: 'El curs d’A2 (bàsic) — domina els temps passats, els pronoms i el català quotidià, fet per aprovar l’examen oficial d’A2.',
+    metaTitle: 'Curs de català A2 en línia — temps passats, pronoms i examen',
+    metaDesc: 'Continua el català fins a l’A2 (nivell bàsic): temps passats, pronoms febles i combinats, futur i condicional, amb àudio nadiu, més de 140 exercicis i examen de mostra per a l’examen oficial d’A2.',
+    salesHeading: 'Aconsegueix el curs complet d’A2 — {price}, per sempre',
+    bullets: [
+      'Les {units} unitats amb {exercises} exercicis interactius i autocorregits',
+      'Tot el sistema de temps passats, pronoms febles i combinats, futur i condicional',
+      'Examen de mostra d’A2 complet amb cronòmetres i historial d’intents',
+      'Glossari ({glossary} entrades) amb àudio de parlants nadius i AFI',
       'El progrés es desa al teu compte — continua des de qualsevol dispositiu',
     ],
     taughtInEnglish: 'El curs s’imparteix en anglès (explicacions i traduccions en anglès).',
@@ -255,7 +325,18 @@ const es: Dict = {
     seeCourse: 'Ver el curso' },
   card: { level: 'Principiante · A1', buy: 'Consigue el curso', preview: 'Prueba gratis', lifetime: 'Un solo pago · acceso de por vida',
     purchased: 'Comprado ✓', cont: 'Continuar aprendiendo', start: 'Empezar el curso', progress: '{passed} de {total} ejercicios superados',
-    availableIn: 'Disponible en' },
+    availableIn: 'Disponible en',
+    nextStep: 'Siguiente paso:', comingSoon: 'próximamente' },
+  lead: {
+    heading: 'Consigue la chuleta de AFI gratis',
+    sub: 'Un correo con la chuleta de pronunciación catalana — la forma más rápida de leer bien cualquier palabra. Sin spam, cancela cuando quieras.',
+    placeholder: 'tu@correo.com',
+    button: 'Envíame la chuleta',
+    busy: 'Enviando…',
+    success: 'Revisa tu bandeja de entrada — tu chuleta de AFI ya está en camino.',
+    consent: 'Al suscribirte aceptas recibir correos ocasionales del curso. Cancela cuando quieras.',
+    error: 'Algo ha salido mal. Inténtalo de nuevo.',
+  },
   course: {
     subject: 'Catalán',
     name: 'Catalán desde cero (A1)',
@@ -268,6 +349,24 @@ const es: Dict = {
       'Examen de prueba de A1 completo con cronómetros e historial de intentos',
       'Glosario completo ({glossary} entradas) con audio de hablantes nativos y AFI',
       'Ejercicios de escucha, dictado y traducción',
+      'El progreso se guarda en tu cuenta — continúa desde cualquier dispositivo',
+    ],
+    taughtInEnglish: 'El curso se imparte en español (explicaciones y traducciones en español).',
+    previewLead: 'Pruébalo antes de comprar:', previewLink: 'la unidad {n} es gratis, sin cuenta.',
+    alreadyBought: '¿Ya lo compraste? Inicia sesión',
+  },
+  courseA2: {
+    subject: 'Catalán',
+    name: 'Catalán: el siguiente paso (A2)',
+    tagline: 'El curso de A2 (básico) — domina los tiempos pasados, los pronombres y el catalán cotidiano, diseñado para aprobar el examen oficial de A2.',
+    metaTitle: 'Curso de catalán A2 online — tiempos pasados, pronombres y examen',
+    metaDesc: 'Continúa el catalán hasta el A2 (nivel básico): tiempos pasados, pronombres débiles y combinados, futuro y condicional, con audio nativo, más de 140 ejercicios y examen de prueba para el examen oficial de A2.',
+    salesHeading: 'Consigue el curso completo de A2 — {price}, para siempre',
+    bullets: [
+      'Las {units} unidades con {exercises} ejercicios interactivos y autocorregidos',
+      'Todo el sistema de tiempos pasados, pronombres débiles y combinados, futuro y condicional',
+      'Examen de prueba de A2 completo con cronómetros e historial de intentos',
+      'Glosario ({glossary} entradas) con audio de hablantes nativos y AFI',
       'El progreso se guarda en tu cuenta — continúa desde cualquier dispositivo',
     ],
     taughtInEnglish: 'El curso se imparte en español (explicaciones y traducciones en español).',
@@ -327,7 +426,18 @@ const fr: Dict = {
     seeCourse: 'Voir le cours' },
   card: { level: 'Débutant · A1', buy: 'Obtenir le cours', preview: 'Aperçu gratuit', lifetime: 'Un seul paiement · accès à vie',
     purchased: 'Acheté ✓', cont: 'Continuer l’apprentissage', start: 'Commencer le cours', progress: '{passed} sur {total} exercices réussis',
-    availableIn: 'Disponible en' },
+    availableIn: 'Disponible en',
+    nextStep: 'Prochaine étape :', comingSoon: 'bientôt disponible' },
+  lead: {
+    heading: 'Recevez l’aide-mémoire API gratuit',
+    sub: 'Un e-mail avec l’aide-mémoire de prononciation catalane — le moyen le plus rapide de bien lire n’importe quel mot. Pas de spam, désabonnement à tout moment.',
+    placeholder: 'votre@email.com',
+    button: 'Envoyez-moi l’aide-mémoire',
+    busy: 'Envoi…',
+    success: 'Vérifiez votre boîte de réception — votre aide-mémoire API arrive.',
+    consent: 'En vous inscrivant, vous acceptez de recevoir des e-mails occasionnels sur le cours. Désabonnement à tout moment.',
+    error: 'Une erreur s’est produite. Veuillez réessayer.',
+  },
   course: {
     subject: 'Catalan',
     name: 'Le catalan à partir de zéro (A1)',
@@ -340,6 +450,24 @@ const fr: Dict = {
       'Examen blanc A1 complet avec minuteurs et historique des tentatives',
       'Glossaire complet ({glossary} entrées) avec audio de locuteurs natifs et API',
       'Exercices d’écoute, de dictée et de traduction',
+      'La progression est enregistrée sur votre compte — continuez sur n’importe quel appareil',
+    ],
+    taughtInEnglish: 'Cours dispensé en français (explications et traductions en français).',
+    previewLead: 'Essayez avant d’acheter :', previewLink: 'l’unité {n} est gratuite, sans compte.',
+    alreadyBought: 'Déjà acheté ? Connectez-vous',
+  },
+  courseA2: {
+    subject: 'Catalan',
+    name: 'Le catalan : la suite (A2)',
+    tagline: 'Le cours A2 (basique) — maîtrisez les temps du passé, les pronoms et le catalan du quotidien, conçu pour réussir l’examen officiel A2.',
+    metaTitle: 'Cours de catalan A2 en ligne — temps du passé, pronoms et examen',
+    metaDesc: 'Continuez le catalan jusqu’au niveau A2 (bàsic) : temps du passé, pronoms faibles et combinés, futur et conditionnel, avec audio natif, plus de 140 exercices et un examen blanc pour l’examen officiel A2.',
+    salesHeading: 'Obtenez le cours complet A2 — {price}, pour toujours',
+    bullets: [
+      'Les {units} unités avec {exercises} exercices interactifs et autocorrigés',
+      'Tout le système des temps du passé, pronoms faibles et combinés, futur et conditionnel',
+      'Examen blanc A2 complet avec minuteurs et historique des tentatives',
+      'Glossaire ({glossary} entrées) avec audio de locuteurs natifs et API',
       'La progression est enregistrée sur votre compte — continuez sur n’importe quel appareil',
     ],
     taughtInEnglish: 'Cours dispensé en français (explications et traductions en français).',
@@ -399,7 +527,18 @@ const ru: Dict = {
     seeCourse: 'Посмотреть курс' },
   card: { level: 'Начальный · A1', buy: 'Получить курс', preview: 'Бесплатный доступ', lifetime: 'Разовая оплата · доступ навсегда',
     purchased: 'Куплено ✓', cont: 'Продолжить обучение', start: 'Начать курс', progress: '{passed} из {total} упражнений пройдено',
-    availableIn: 'Доступно на языках' },
+    availableIn: 'Доступно на языках',
+    nextStep: 'Следующий шаг:', comingSoon: 'скоро' },
+  lead: {
+    heading: 'Получите бесплатную шпаргалку по МФА',
+    sub: 'Одно письмо со шпаргалкой по каталанскому произношению — самый быстрый способ правильно прочитать любое слово. Без спама, отписка в любой момент.',
+    placeholder: 'ваш@email.com',
+    button: 'Прислать шпаргалку',
+    busy: 'Отправляем…',
+    success: 'Проверьте почту — ваша шпаргалка по МФА уже в пути.',
+    consent: 'Подписываясь, вы соглашаетесь получать редкие письма о курсе. Отписаться можно в любой момент.',
+    error: 'Что-то пошло не так. Попробуйте ещё раз.',
+  },
   course: {
     subject: 'Каталанский',
     name: 'Каталанский с нуля (A1)',
@@ -412,6 +551,24 @@ const ru: Dict = {
       'Полный пробный экзамен A1 с таймерами и историей попыток',
       'Полный глоссарий ({glossary} записей) с аудио носителей языка и МФА',
       'Упражнения на аудирование, диктант и перевод',
+      'Прогресс сохраняется в вашем аккаунте — продолжайте с любого устройства',
+    ],
+    taughtInEnglish: 'Преподавание ведётся на русском языке (объяснения и переводы на русском).',
+    previewLead: 'Попробуйте перед покупкой:', previewLink: 'раздел {n} бесплатный, без регистрации.',
+    alreadyBought: 'Уже купили? Войдите',
+  },
+  courseA2: {
+    subject: 'Каталанский',
+    name: 'Каталанский: следующий шаг (A2)',
+    tagline: 'Курс A2 (bàsic) — освойте прошедшие времена, местоимения и повседневный каталанский, созданный для сдачи официального экзамена A2.',
+    metaTitle: 'Курс каталанского A2 онлайн — прошедшие времена, местоимения и экзамен',
+    metaDesc: 'Продолжайте каталанский до уровня A2 (nivell bàsic): прошедшие времена, слабые и комбинированные местоимения, будущее и условное наклонение, с аудио носителей языка, более 140 упражнений и пробным экзаменом для официального экзамена A2.',
+    salesHeading: 'Получите полный курс A2 — {price}, навсегда',
+    bullets: [
+      'Все {units} разделов с {exercises} интерактивными упражнениями с автопроверкой',
+      'Вся система прошедших времён, слабые и комбинированные местоимения, будущее и условное',
+      'Полный пробный экзамен A2 с таймерами и историей попыток',
+      'Глоссарий ({glossary} записей) с аудио носителей языка и МФА',
       'Прогресс сохраняется в вашем аккаунте — продолжайте с любого устройства',
     ],
     taughtInEnglish: 'Преподавание ведётся на русском языке (объяснения и переводы на русском).',
@@ -472,7 +629,18 @@ const de: Dict = {
     seeCourse: 'Zum Kurs' },
   card: { level: 'Anfänger · A1', buy: 'Kurs holen', preview: 'Kostenlose Vorschau', lifetime: 'Einmalige Zahlung · lebenslanger Zugang',
     purchased: 'Gekauft ✓', cont: 'Weiterlernen', start: 'Kurs starten', progress: '{passed} von {total} Übungen bestanden',
-    availableIn: 'Verfügbar auf' },
+    availableIn: 'Verfügbar auf',
+    nextStep: 'Nächster Schritt:', comingSoon: 'in Kürze' },
+  lead: {
+    heading: 'Hol dir den kostenlosen IPA-Spickzettel',
+    sub: 'Eine E-Mail mit dem katalanischen Aussprache-Spickzettel — der schnellste Weg, jedes Wort richtig zu lesen. Kein Spam, jederzeit abbestellbar.',
+    placeholder: 'deine@email.com',
+    button: 'Spickzettel senden',
+    busy: 'Senden…',
+    success: 'Schau in dein Postfach — dein IPA-Spickzettel ist unterwegs.',
+    consent: 'Mit der Anmeldung erklärst du dich einverstanden, gelegentliche Kurs-E-Mails zu erhalten. Jederzeit abbestellbar.',
+    error: 'Etwas ist schiefgelaufen. Bitte versuche es erneut.',
+  },
   course: {
     subject: 'Katalanisch',
     name: 'Katalanisch von Grund auf (A1)',
@@ -485,6 +653,24 @@ const de: Dict = {
       'Komplette A1-Musterprüfung mit Timern und Versuchsverlauf',
       'Vollständiges Glossar ({glossary} Einträge) mit Muttersprachler-Audio und IPA',
       'Hörverstehen-, Diktat- und Übersetzungsübungen',
+      'Fortschritt wird in deinem Konto gespeichert — weiter auf jedem Gerät',
+    ],
+    taughtInEnglish: 'Der Kurs wird auf Deutsch unterrichtet (Erklärungen und Übersetzungen auf Deutsch).',
+    previewLead: 'Erst testen, dann kaufen:', previewLink: 'Einheit {n} ist kostenlos — kein Konto nötig.',
+    alreadyBought: 'Schon gekauft? Anmelden',
+  },
+  courseA2: {
+    subject: 'Katalanisch',
+    name: 'Katalanisch: der nächste Schritt (A2)',
+    tagline: 'Der A2-Kurs (bàsic) — meistere die Vergangenheitszeiten, Pronomen und Alltagskatalanisch, konzipiert zum Bestehen der offiziellen A2-Prüfung.',
+    metaTitle: 'Katalanisch-Kurs A2 online — Vergangenheitszeiten, Pronomen & Prüfung',
+    metaDesc: 'Setze Katalanisch bis A2 (nivell bàsic) fort: Vergangenheitszeiten, schwache und kombinierte Pronomen, Futur und Konditional — mit Muttersprachler-Audio, über 140 Übungen und einer Musterprüfung für die offizielle A2-Prüfung.',
+    salesHeading: 'Hol dir den kompletten A2-Kurs — {price}, für immer',
+    bullets: [
+      'Alle {units} Einheiten mit {exercises} interaktiven, automatisch korrigierten Übungen',
+      'Das komplette Vergangenheitssystem, schwache & kombinierte Pronomen, Futur & Konditional',
+      'Komplette A2-Musterprüfung mit Timern und Versuchsverlauf',
+      'Glossar ({glossary} Einträge) mit Muttersprachler-Audio und IPA',
       'Fortschritt wird in deinem Konto gespeichert — weiter auf jedem Gerät',
     ],
     taughtInEnglish: 'Der Kurs wird auf Deutsch unterrichtet (Erklärungen und Übersetzungen auf Deutsch).',
@@ -536,6 +722,13 @@ const de: Dict = {
 
 const DICTS: Partial<Record<Locale, Dict>> = { en, ca, es, fr, ru, de };
 export function getDict(locale: Locale): Dict { return DICTS[locale] ?? en; }
+
+/** Course marketing copy for a family. A2 falls back to English copy per locale
+    until that locale's courseA2 is translated; A1 uses the locale's `course`. */
+export function courseCopy(d: Dict, family: string | undefined): Dict['course'] {
+  if (family === 'catalan-a2') return d.courseA2 ?? en.courseA2 ?? d.course;
+  return d.course;
+}
 
 /** Fill {key} placeholders. */
 export function t(tpl: string, vars: Record<string, string | number>): string {

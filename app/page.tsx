@@ -4,10 +4,11 @@ import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import { hreflang } from '@/lib/i18n';
 
-// Auth/ownership state must be evaluated per request, even when the build
-// runs with unconfigured placeholder credentials.
-export const dynamic = 'force-dynamic';
-
+// Static/ISR: the catalog is impersonal (no per-user state), so it's served
+// from the CDN for a fast LCP. The price comes from a cached fetch
+// (revalidates hourly). Ownership/"continue" is intentionally not shown here —
+// it's a marketing page; owners get it on /account and the course page (this
+// matches the already-static localized homes /es, /fr, …).
 export const metadata: Metadata = {
   alternates: { canonical: '/', languages: hreflang('home') },
 };
@@ -16,8 +17,6 @@ import CourseFamilyCard, { type FamilyCardData } from '@/components/CourseFamily
 import JsonLd from '@/components/JsonLd';
 import { buyLabels } from '@/lib/ui';
 import { courseFamilies } from '@/lib/courses';
-import { getSessionUser, paywallBypassed, userOwnsCourse } from '@/lib/access';
-import { countPassedExercises } from '@/lib/progress-server';
 import { resolveCoursePrice } from '@/lib/pricing';
 import { SITE } from '@/lib/site';
 
@@ -44,21 +43,13 @@ const siteLd = {
 export default async function CatalogPage() {
   // The root catalog is the English page; localized visitors use /es, /fr, … —
   // so this card renders in English and never mixes languages with the page.
-  const user = await getSessionUser();
-  const bypass = paywallBypassed();
-
-  // One card per family; each language variant carries its own ownership,
-  // progress, price and (localized) buy labels.
+  // One card per family; price is a cached lookup (keeps the page static/ISR).
   const cards: FamilyCardData[] = await Promise.all(courseFamilies().map(async ({ family, variants }) => {
     const views = await Promise.all(variants.map(async v => {
-      const owns = bypass || (user ? await userOwnsCourse(user.id, v.slug) : false);
-      const [passed, price] = await Promise.all([
-        owns && user ? countPassedExercises(user.id, v.slug) : Promise.resolve(0),
-        resolveCoursePrice(v.slug),
-      ]);
+      const price = await resolveCoursePrice(v.slug);
       return {
         medium: v.medium, slug: v.slug, audienceLanguage: v.audienceLanguage,
-        owns, passed, priceLabel: price.label, buyLabels: buyLabels(v.medium),
+        owns: false, passed: 0, priceLabel: price.label, buyLabels: buyLabels(v.medium),
       };
     }));
     const primary = variants[0];
@@ -84,11 +75,14 @@ export default async function CatalogPage() {
         </div>
         <div className="catalog-grid" data-test="catalog">
           {cards.map(card => <CourseFamilyCard key={card.family} card={card} />)}
-          <div className="card course-card coming-soon">
-            <div className="course-card-head"><span className="badge">COMING NEXT</span></div>
-            <h2>Catalan A2</h2>
-            <p>The next level is in the works. Finish A1 first — it’s the foundation for everything that follows.</p>
-          </div>
+          {/* Placeholder until A2 is live; once it's a real card, drop this. */}
+          {!cards.some(c => c.family === 'catalan-a2') && (
+            <div className="card course-card coming-soon">
+              <div className="course-card-head"><span className="badge">COMING NEXT</span></div>
+              <h2>Catalan A2</h2>
+              <p>The next level is written and in final preparation. Finish A1 first — it’s the foundation for everything that follows.</p>
+            </div>
+          )}
         </div>
         <p className="catalog-pricing-link">
           See <Link href="/pricing">full pricing &amp; what’s included →</Link>

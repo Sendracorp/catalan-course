@@ -665,6 +665,18 @@ body.exam-mode .paper-timer { display: inline-flex; }
 .auth-notice { color: var(--warn); background: var(--warn-bg); border-radius: 10px; padding: 9px 12px; font-size: .88rem; }
 .auth-links { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; font-size: .9rem; text-align: center; }
 
+/* ---------- lead capture (free-preview email opt-in) ---------- */
+.lead-capture { border-color: var(--vb-grape); background: var(--vb-accent-soft); }
+.lead-capture h3 { margin: 0 0 6px; }
+.lead-form { display: flex; gap: 10px; margin: 12px 0 8px; flex-wrap: wrap; }
+.lead-form input { flex: 1 1 220px; min-width: 0; font: inherit; font-size: 1rem; color: var(--vb-ink);
+  border: 1.5px solid var(--vb-line); border-radius: 12px; padding: 11px 13px; background: var(--vb-surface);
+  transition: border-color .15s, box-shadow .15s; }
+.lead-form input:focus { outline: none; border-color: var(--vb-grape); box-shadow: 0 0 0 3px var(--vb-accent-soft); }
+.lead-form .btn-primary { flex: 0 0 auto; }
+.lead-consent { font-size: .76rem; color: #777; margin: 6px 0 0; }
+.lead-success { font-size: 1rem; font-weight: 600; color: #0c7a69; margin: 0; }
+
 /* ---------- sidebar account section ---------- */
 .nav-account { margin-top: auto; }
 .nav-lock { font-size: .8rem; }

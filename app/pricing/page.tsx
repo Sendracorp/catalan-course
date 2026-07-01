@@ -9,7 +9,6 @@ import { buyLabels } from '@/lib/ui';
 import { hreflang } from '@/lib/i18n';
 import { courseFamilies } from '@/lib/courses';
 import { resolveAllPrices } from '@/lib/pricing';
-import { getSessionUser, userOwnsCourse, paywallBypassed } from '@/lib/access';
 
 export const metadata: Metadata = {
   title: 'Pricing — one-time €25, lifetime access',
@@ -17,7 +16,8 @@ export const metadata: Metadata = {
     'Verbadium pricing: buy the Catalan A1 course once for €25 and keep it forever — no subscription. Includes every unit, 100+ exercises, the mock exam, audio glossary and progress tracking. Free preview, no account needed.',
   alternates: { canonical: '/pricing', languages: hreflang('pricing') },
 };
-export const dynamic = 'force-dynamic';
+// Static/ISR (prices are a cached lookup) so it's CDN-served for a fast LCP.
+// Impersonal, like the already-static localized pricing pages (/es/precios …).
 
 const FAQ: { q: string; a: React.ReactNode; text: string }[] = [
   {
@@ -63,16 +63,6 @@ export default async function PricingPage() {
   const families = courseFamilies();
   const priced = await resolveAllPrices(families.map(f => f.variants[0]));
 
-  // which of these courses the current user already owns (don't show "buy")
-  const user = await getSessionUser();
-  const owned = new Set<string>();
-  if (paywallBypassed()) priced.forEach(({ meta }) => owned.add(meta.slug));
-  else if (user) {
-    await Promise.all(priced.map(async ({ meta }) => {
-      if (await userOwnsCourse(user.id, meta.slug)) owned.add(meta.slug);
-    }));
-  }
-
   return (
     <>
       <SiteHeader page="pricing" />
@@ -87,7 +77,7 @@ export default async function PricingPage() {
         <div className="pricing-grid" data-test="pricing">
           {priced.map(({ meta, price }) => {
             const base = `/courses/${meta.slug}`;
-            const isOwned = owned.has(meta.slug);
+            const isOwned = false;   // impersonal marketing page — always show the buy CTA
             const mediums = families.find(f => f.family === meta.family)?.variants.map(v => v.medium) ?? [];
             return (
               <div className="card pricing-card" key={meta.slug} data-test={`pricing-${meta.slug}`} data-owned={isOwned || undefined}>
