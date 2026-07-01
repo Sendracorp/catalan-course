@@ -5,23 +5,17 @@ import JsonLd from '../JsonLd';
 import SetMedium from '../SetMedium';
 import BuyButton from '../BuyButton';
 import AvailableLanguages from '../AvailableLanguages';
-import { getDict, t, PATHS, type Locale } from '@/lib/i18n';
-import { getCourseMeta, variantForMedium, courseFamilies } from '@/lib/courses';
+import { getDict, courseCopy, t, type Locale } from '@/lib/i18n';
+import { variantForMedium, courseFamilies } from '@/lib/courses';
 import { buyLabels } from '@/lib/ui';
 
 /* Localized pricing page (price + what's included + FAQ), mirroring /pricing.
-   Sells the course variant taught in this language; locales with no variant
-   (ca) funnel to the English course. Static — the live price is charged at
-   checkout; this shows the fixed label. */
+   One card per sellable family; each sells the variant taught in this language
+   (locales with no variant — e.g. ca — funnel to the English course). Static —
+   the live price is charged at checkout; this shows the fixed label. */
 export default function LocalizedPricing({ lang }: { lang: Locale }) {
   const d = getDict(lang);
-  const meta = getCourseMeta('catalan-a1')!;
-  const variant = variantForMedium('catalan-a1', lang) ?? meta;
-  const base = `/courses/${variant.slug}`;
-  const familyMediums = (courseFamilies().find(f => f.family === 'catalan-a1')?.variants ?? []).map(v => v.medium);
-  const price = meta.priceLabel;
-  const preview = `${base}/unit/${meta.freeUnits[0]}`;
-  const vars = { units: meta.stats.units, exercises: meta.stats.exercises, glossary: meta.stats.glossary, price };
+  const families = courseFamilies();
 
   const faqLd = {
     '@context': 'https://schema.org',
@@ -44,20 +38,31 @@ export default function LocalizedPricing({ lang }: { lang: Locale }) {
         </div>
 
         <div className="pricing-grid" data-test="pricing">
-          <div className="card pricing-card">
-            <div className="badge">{d.course.subject} · {meta.level}</div>
-            <h2>{d.course.name}</h2>
-            <p className="pricing-amount" data-test="pricing-amount">{price}</p>
-            <p className="pricing-amount-note">{d.card.lifetime}</p>
-            <ul className="sales-list">
-              {d.course.bullets.map((b, i) => <li key={i}>{t(b, vars)}</li>)}
-            </ul>
-            <div className="paywall-actions">
-              <BuyButton courseSlug={variant.slug} priceLabel={price} returnTo={base} labels={buyLabels(lang)} />
-              <Link className="btn" href={preview}>{d.card.preview}</Link>
-            </div>
-            <AvailableLanguages mediums={familyMediums} label={d.card.availableIn} />
-          </div>
+          {families.map(({ family, variants }) => {
+            const meta = variants[0];
+            const cc = courseCopy(d, family);
+            const variant = variantForMedium(family, lang) ?? meta;
+            const base = `/courses/${variant.slug}`;
+            const price = meta.priceLabel;
+            const preview = `${base}/unit/${meta.freeUnits[0]}`;
+            const vars = { units: meta.stats.units, exercises: meta.stats.exercises, glossary: meta.stats.glossary, price };
+            return (
+              <div key={family} className="card pricing-card" data-test={`pricing-${variant.slug}`}>
+                <div className="badge">{cc.subject} · {meta.level}</div>
+                <h2>{cc.name}</h2>
+                <p className="pricing-amount" data-test="pricing-amount">{price}</p>
+                <p className="pricing-amount-note">{d.card.lifetime}</p>
+                <ul className="sales-list">
+                  {cc.bullets.map((b, i) => <li key={i}>{t(b, vars)}</li>)}
+                </ul>
+                <div className="paywall-actions">
+                  <BuyButton courseSlug={variant.slug} priceLabel={price} returnTo={base} labels={buyLabels(lang)} />
+                  <Link className="btn" href={preview}>{d.card.preview}</Link>
+                </div>
+                <AvailableLanguages mediums={variants.map(v => v.medium)} label={d.card.availableIn} />
+              </div>
+            );
+          })}
         </div>
 
         <div className="card">

@@ -24,7 +24,8 @@ function langs(page: PageKey): Record<string, string> {
    in robots. Non-English course variants are noindex (see course layout). */
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  const homeL = langs('home'), courseL = langs('course'), pricingL = langs('pricing');
+  const homeL = langs('home'), courseL = langs('course'), courseA2L = langs('courseA2'), pricingL = langs('pricing');
+  const courseLangs = (family: string) => (family === 'catalan-a2' ? courseA2L : courseL);
   const entries: MetadataRoute.Sitemap = [
     { url: SITE_URL, lastModified: now, changeFrequency: 'weekly', priority: 1, alternates: { languages: homeL } },
     { url: `${SITE_URL}/pricing`, lastModified: now, changeFrequency: 'monthly', priority: 0.8, alternates: { languages: pricingL } },
@@ -34,11 +35,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/cookies`, changeFrequency: 'yearly', priority: 0.2 },
     { url: `${SITE_URL}/contact`, changeFrequency: 'yearly', priority: 0.3 },
   ];
-  // English course (the en member of the course cluster) + its free sub-pages.
+  // English course (the en member of each family's cluster) + its free sub-pages.
   for (const c of courseFamilies().map(f => f.variants[0])) {
     const b = `${SITE_URL}/courses/${c.slug}`;
     entries.push(
-      { url: b, lastModified: now, changeFrequency: 'weekly', priority: 0.9, alternates: { languages: courseL } },
+      { url: b, lastModified: now, changeFrequency: 'weekly', priority: 0.9, alternates: { languages: courseLangs(c.family) } },
       { url: `${b}/ipa`, changeFrequency: 'monthly', priority: 0.6 },
       { url: `${b}/exam`, changeFrequency: 'monthly', priority: 0.6 },
     );
@@ -55,6 +56,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       { url: abs(course[l]!), lastModified: now, changeFrequency: 'weekly', priority: 0.9, alternates: { languages: courseL } },
     );
     if (pricing[l]) entries.push({ url: abs(pricing[l]!), changeFrequency: 'monthly', priority: 0.7, alternates: { languages: pricingL } });
+  }
+  // Localized A2 course landings — only once the A2 family is sellable (the
+  // routes 404 until then); the English A2 page is emitted in the loop above.
+  if (courseFamilies().some(f => f.family === 'catalan-a2')) {
+    const courseA2 = PATHS.courseA2 as Record<string, string | undefined>;
+    for (const l of LOCALES) {
+      if (l === 'en' || !courseA2[l]) continue;
+      entries.push({ url: abs(courseA2[l]!), lastModified: now, changeFrequency: 'weekly', priority: 0.9, alternates: { languages: courseA2L } });
+    }
   }
   // Content hub (/guides) + cornerstone articles.
   entries.push({ url: `${SITE_URL}/guides`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 });

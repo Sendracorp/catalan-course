@@ -26,10 +26,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const title = cc.metaTitle;
   const description = cc.metaDesc;
   const url = `/courses/${slug}`;
+  // hreflang links the localized landing pages — only the English member of a
+  // family has them (other variants are noindex). Each family has its own cluster.
+  const langs = meta.medium === 'en'
+    ? hreflang(meta.family === 'catalan-a2' ? 'courseA2' : 'course')
+    : null;
   return {
     title, description,
-    // hreflang links the localized landing pages (only the Catalan A1 course has them)
-    alternates: { canonical: url, ...(slug === 'catalan-a1' ? { languages: hreflang('course') } : {}) },
+    alternates: { canonical: url, ...(langs ? { languages: langs } : {}) },
     openGraph: { title, description, url, type: 'website', siteName: SITE.brand, images: ['/opengraph-image'] },
     twitter: { card: 'summary_large_image', title, description, images: ['/opengraph-image'] },
   };
